@@ -10,17 +10,7 @@ import MapKit
 
 struct ContentView: View {
     var body: some View {
-        TabView {
-            VStack {
-                Text("hello")
-                Spacer()
-                BottomSheet()
-            }
-            .tabItem {
-                Image(systemName: "person")
-                Text("test")
-            }
-        }
+        BottomSheet()
     }
 }
 
