@@ -10,7 +10,11 @@ import MapKit
 
 struct ContentView: View {
     var body: some View {
-        BottomSheet()
+        ZStack {
+            MapView()
+            BottomSheet()
+                .ignoresSafeArea(.all, edges: .bottom)
+        }
     }
 }
 
