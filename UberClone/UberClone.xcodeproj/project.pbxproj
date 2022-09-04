@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		246D3FD128C4CA3700A71BF4 /* SelectRideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */; };
 		24C7A9DF28BE46990022105E /* UberCloneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9DE28BE46990022105E /* UberCloneApp.swift */; };
 		24C7A9E128BE46990022105E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9E028BE46990022105E /* ContentView.swift */; };
 		24C7A9E328BE469B0022105E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C7A9E228BE469B0022105E /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRideView.swift; sourceTree = "<group>"; };
 		24C7A9DB28BE46980022105E /* UberClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24C7A9DE28BE46990022105E /* UberCloneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UberCloneApp.swift; sourceTree = "<group>"; };
 		24C7A9E028BE46990022105E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 				24C7A9E028BE46990022105E /* ContentView.swift */,
 				24C7A9EC28BE48910022105E /* MapView.swift */,
 				24C7A9EE28BE499B0022105E /* BottomSheet.swift */,
+				246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */,
 				24C7A9E228BE469B0022105E /* Assets.xcassets */,
 				24C7A9E428BE469B0022105E /* Preview Content */,
 			);
@@ -147,6 +150,7 @@
 				24C7A9ED28BE48910022105E /* MapView.swift in Sources */,
 				24C7A9EF28BE499B0022105E /* BottomSheet.swift in Sources */,
 				24C7A9DF28BE46990022105E /* UberCloneApp.swift in Sources */,
+				246D3FD128C4CA3700A71BF4 /* SelectRideView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
