@@ -14,6 +14,9 @@
 		24C7A9E628BE469B0022105E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C7A9E528BE469B0022105E /* Preview Assets.xcassets */; };
 		24C7A9ED28BE48910022105E /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9EC28BE48910022105E /* MapView.swift */; };
 		24C7A9EF28BE499B0022105E /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9EE28BE499B0022105E /* BottomSheet.swift */; };
+		24E155DF28C76A6C003313E7 /* DriverInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E155DE28C76A6C003313E7 /* DriverInformation.swift */; };
+		24E155E128C76E3A003313E7 /* TimeInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E155E028C76E3A003313E7 /* TimeInformation.swift */; };
+		24E155E328C77AC6003313E7 /* map.json in Resources */ = {isa = PBXBuildFile; fileRef = 24E155E228C77AC6003313E7 /* map.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +28,9 @@
 		24C7A9E528BE469B0022105E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		24C7A9EC28BE48910022105E /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		24C7A9EE28BE499B0022105E /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
+		24E155DE28C76A6C003313E7 /* DriverInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverInformation.swift; sourceTree = "<group>"; };
+		24E155E028C76E3A003313E7 /* TimeInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInformation.swift; sourceTree = "<group>"; };
+		24E155E228C77AC6003313E7 /* map.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = map.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +67,10 @@
 				24C7A9E028BE46990022105E /* ContentView.swift */,
 				24C7A9EC28BE48910022105E /* MapView.swift */,
 				24C7A9EE28BE499B0022105E /* BottomSheet.swift */,
+				24E155DE28C76A6C003313E7 /* DriverInformation.swift */,
+				24E155E028C76E3A003313E7 /* TimeInformation.swift */,
 				246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */,
+				24E155E228C77AC6003313E7 /* map.json */,
 				24C7A9E228BE469B0022105E /* Assets.xcassets */,
 				24C7A9E428BE469B0022105E /* Preview Content */,
 			);
@@ -136,6 +145,7 @@
 			files = (
 				24C7A9E628BE469B0022105E /* Preview Assets.xcassets in Resources */,
 				24C7A9E328BE469B0022105E /* Assets.xcassets in Resources */,
+				24E155E328C77AC6003313E7 /* map.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +157,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				24C7A9E128BE46990022105E /* ContentView.swift in Sources */,
+				24E155E128C76E3A003313E7 /* TimeInformation.swift in Sources */,
 				24C7A9ED28BE48910022105E /* MapView.swift in Sources */,
+				24E155DF28C76A6C003313E7 /* DriverInformation.swift in Sources */,
 				24C7A9EF28BE499B0022105E /* BottomSheet.swift in Sources */,
 				24C7A9DF28BE46990022105E /* UberCloneApp.swift in Sources */,
 				246D3FD128C4CA3700A71BF4 /* SelectRideView.swift in Sources */,

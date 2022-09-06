@@ -45,7 +45,6 @@ struct CustomDraggableComponent: View {
               .gesture(
                 DragGesture()
                   .onChanged { value in
-                      print(value.translation.height)
                       if value.translation.height < 0 {
                           height = max(MIN_HEIGHT, height + abs(value.translation.height))
                       } else {
@@ -57,7 +56,7 @@ struct CustomDraggableComponent: View {
                   .onEnded({ _ in
                       if height > 500.00 {
                           withAnimation() {
-                              height = UIScreen.main.bounds.height - 100
+                              height = UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6
                           }
                       } else if height < 200 {
                           withAnimation() {
@@ -74,12 +73,6 @@ struct CustomDraggableComponent: View {
                 Rectangle()
                     .fill(Color.white)
                   .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: height)
-                  
-//                if height == UIScreen.main.bounds.height - 50 {
-//                     LargeView()
-//                } else if height == UIScreen.main.bounds.height / 2 {
-//                    MediumView()
-//                }
                   .overlay(
                     VStack {
                         if height >= UIScreen.main.bounds.height / 2 {
@@ -178,9 +171,12 @@ struct CustomDraggableComponent: View {
                                 })
                                 
                             }
-                            .padding(.horizontal)
+                            .frame(width: UIScreen.main.bounds.width - 30)
                             
-                            
+                            if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
+                                DriverInformation()
+                                TimeInformation()
+                            }
                             
                             Button {
                                 
