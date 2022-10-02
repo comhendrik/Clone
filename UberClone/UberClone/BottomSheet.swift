@@ -31,7 +31,11 @@ struct BottomSheet_Previews: PreviewProvider {
 let MIN_HEIGHT: CGFloat = 30
 
 struct CustomDraggableComponent: View {
-  @State var height: CGFloat = MIN_HEIGHT
+    @State var height: CGFloat = MIN_HEIGHT
+    
+    let rides = [Ride(id: 0, image: "Car", price: 10.99, drivingMode: .standard), Ride(id: 1, image: "Car", price: 15.99, drivingMode: .medium), Ride(id: 2, image: "Car", price: 21.99, drivingMode: .luxus)]
+    
+    @State private var currentDrivingMode: DrivingMode = .standard
   
   var body: some View {
       VStack(spacing: 0) {
@@ -109,66 +113,33 @@ struct CustomDraggableComponent: View {
                             }
                             .padding(.leading)
                             HStack {
-                                Button(action: {
-                                    
-                                }, label: {
-                                    VStack {
-                                        Image("Car")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: UIScreen.main.bounds.width / 6)
-                                        VStack(alignment: .leading) {
-                                            Text("Standard")
-                                                .foregroundColor(.white)
-                                                .fontWeight(.bold)
-                                            Text("15.99$")
-                                                .foregroundColor(.white)
-                                        }
-                                    }
-                                    .padding()
-                                    .background(Color.blue.cornerRadius(20))
-                                })
                                 
-                                Spacer()
-                                Button(action: {
+                                ForEach(rides) { ride in
                                     
-                                }, label: {
-                                    VStack {
-                                        Image("Car")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: UIScreen.main.bounds.width / 6)
-                                        VStack(alignment: .leading) {
-                                            Text("Standard")
-                                                .foregroundColor(.black)
-                                                .fontWeight(.bold)
-                                            Text("15.99$")
-                                                .foregroundColor(.gray)
-                                        }
-                                    }
-                                    .padding()
-                                    .background(Color.gray.opacity(0.25).cornerRadius(20))
-                                })
-                                Spacer()
-                                Button(action: {
+                                    Spacer()
                                     
-                                }, label: {
-                                    VStack {
-                                        Image("Car")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: UIScreen.main.bounds.width / 6)
-                                        VStack(alignment: .leading) {
-                                            Text("Standard")
-                                                .foregroundColor(.black)
-                                                .fontWeight(.bold)
-                                            Text("15.99$")
-                                                .foregroundColor(.gray)
+                                    Button(action: {
+                                        currentDrivingMode = ride.drivingMode
+                                    }, label: {
+                                        VStack {
+                                            Image(ride.image)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: UIScreen.main.bounds.width / 6)
+                                            VStack(alignment: .leading) {
+                                                Text(ride.drivingMode.stringValue)
+                                                    .foregroundColor(currentDrivingMode == ride.drivingMode ? .white : .black)
+                                                    .fontWeight(.bold)
+                                                Text("\(String(format: "%.2f", ride.price))$")
+                                                    .foregroundColor(currentDrivingMode == ride.drivingMode ? .white : .gray)
+                                            }
                                         }
-                                    }
-                                    .padding()
-                                    .background(Color.gray.opacity(0.25).cornerRadius(20))
-                                })
+                                        .padding()
+                                        .background(currentDrivingMode == ride.drivingMode ? Color.blue.cornerRadius(20) : Color.gray.opacity(0.25).cornerRadius(20))
+                                    })
+                                    Spacer()
+                                }
+                                
                                 
                             }
                             .frame(width: UIScreen.main.bounds.width - 30)
@@ -202,4 +173,27 @@ struct CustomDraggableComponent: View {
         }
     }
     
+}
+
+enum DrivingMode {
+    
+    case standard, medium, luxus
+    
+    var stringValue: String {
+        switch self {
+        case .standard:
+            return "Standard"
+        case .medium:
+            return "Medium"
+        case .luxus:
+            return "Luxus"
+        }
+    }
+}
+
+struct Ride: Identifiable {
+    var id: Int
+    var image: String
+    var price: Double
+    var drivingMode: DrivingMode
 }
