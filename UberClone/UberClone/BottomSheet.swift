@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct BottomSheet: View {
-    
+    @State var clvm: CoreLocationViewModel
     var body: some View {
         VStack {
             Spacer()
-            CustomDraggableComponent()
+            CustomDraggableComponent(clvm: clvm)
 
             
         }
@@ -21,24 +21,13 @@ struct BottomSheet: View {
 }
 
 
-struct BottomSheet_Previews: PreviewProvider {
-    static var previews: some View {
-        BottomSheet()
-    }
-}
-
 
 let MIN_HEIGHT: CGFloat = 30
 
 struct CustomDraggableComponent: View {
     @State var height: CGFloat = MIN_HEIGHT
+    @State var clvm: CoreLocationViewModel
     
-    
-    
-    
-    
-    
-  
   var body: some View {
       VStack(spacing: 0) {
             Rectangle()
@@ -83,7 +72,7 @@ struct CustomDraggableComponent: View {
                     VStack {
                         if height >= UIScreen.main.bounds.height / 2 {
                             
-                            SearchBottomSheet()
+                            SearchBottomSheet(clvm: clvm)
                             
                             
 //                            if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
@@ -120,13 +109,13 @@ struct CustomDraggableComponent: View {
 struct SearchBottomSheet: View {
     @State private var startPosition = ""
     
-    @State private var destinationPosition = ""
+    @State private var endPosition = ""
     
     let rides = [Ride(id: 0, image: "Car", price: 10.99, drivingMode: .standard), Ride(id: 1, image: "Car", price: 15.99, drivingMode: .medium), Ride(id: 2, image: "Car", price: 21.99, drivingMode: .luxus)]
     
     @State private var currentDrivingMode: DrivingMode = .standard
     
-    @State private var clvm = CoreLocationViewModel()
+    @State var clvm: CoreLocationViewModel
     
     var body: some View {
         VStack {
@@ -147,7 +136,7 @@ struct SearchBottomSheet: View {
                     Rectangle()
                         .fill(Color.clear)
                         .frame(width: 1, height: UIScreen.main.bounds.height / 20)
-                    TextField("destination", text: $destinationPosition)
+                    TextField("destination", text: $endPosition)
                 }
                 Spacer()
                 
@@ -193,25 +182,7 @@ struct SearchBottomSheet: View {
             .frame(width: UIScreen.main.bounds.width - 30)
             
             Button {
-                clvm.getLocation(forPlaceCalled: startPosition) { location in
-                    print("Start position:")
-                    if location != nil {
-                        print(location!)
-                        
-                    } else {
-                        print("no location")
-                    }
-                    
-                }
-                clvm.getLocation(forPlaceCalled: destinationPosition) { location in
-                    print("end position:")
-                    if location != nil {
-                        print(location!)
-                    } else {
-                        print("no location")
-                    }
-                    
-                }
+                clvm.setRouteLocations(start: startPosition, end: endPosition)
             } label: {
                 Text("Search")
             }

@@ -9,10 +9,12 @@ import SwiftUI
 import MapKit
 
 struct ContentView: View {
+    @StateObject var clvm = CoreLocationViewModel()
+    @State private var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 50, longitude: 0), span: MKCoordinateSpan(latitudeDelta: 25, longitudeDelta: 25))
     var body: some View {
         ZStack {
-            MapView()
-            BottomSheet()
+            MapView(requestLocation: $clvm.startLocation, destinationLocation: $clvm.endLocation)
+            BottomSheet(clvm: clvm)
                 .ignoresSafeArea(.all, edges: .bottom)
         }
     }
