@@ -33,9 +33,11 @@ let MIN_HEIGHT: CGFloat = 30
 struct CustomDraggableComponent: View {
     @State var height: CGFloat = MIN_HEIGHT
     
-    let rides = [Ride(id: 0, image: "Car", price: 10.99, drivingMode: .standard), Ride(id: 1, image: "Car", price: 15.99, drivingMode: .medium), Ride(id: 2, image: "Car", price: 21.99, drivingMode: .luxus)]
     
-    @State private var currentDrivingMode: DrivingMode = .standard
+    
+    
+    
+    
   
   var body: some View {
       VStack(spacing: 0) {
@@ -80,85 +82,25 @@ struct CustomDraggableComponent: View {
                   .overlay(
                     VStack {
                         if height >= UIScreen.main.bounds.height / 2 {
-                            HStack {
-                                VStack {
-                                    Image(systemName: "location.circle.fill")
-                                        .font(.largeTitle)
-                                        .foregroundColor(.blue)
-                                    Rectangle()
-                                        .frame(width: 1, height: UIScreen.main.bounds.height / 25)
-                                    Image(systemName: "figure.wave")
-                                        .font(.largeTitle)
-                                        .foregroundColor(.blue)
-                                }
-                                VStack(alignment: .leading) {
-                                    
-                                    Text("Your position")
-                                        .fontWeight(.bold)
-                                    Rectangle()
-                                        .fill(Color.clear)
-                                        .frame(width: 1, height: UIScreen.main.bounds.height / 20)
-                                    Text("Your destination")
-                                        .fontWeight(.bold)
-                                }
-                                Spacer()
-                                
-                            }
-                            .padding()
                             
-                            HStack {
-                                Text("Suggested Rides:")
-                                    .fontWeight(.bold)
-                                Spacer()
-                            }
-                            .padding(.leading)
-                            HStack {
-                                
-                                ForEach(rides) { ride in
-                                    
-                                    Spacer()
-                                    
-                                    Button(action: {
-                                        currentDrivingMode = ride.drivingMode
-                                    }, label: {
-                                        VStack {
-                                            Image(ride.image)
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: UIScreen.main.bounds.width / 6)
-                                            VStack(alignment: .leading) {
-                                                Text(ride.drivingMode.stringValue)
-                                                    .foregroundColor(currentDrivingMode == ride.drivingMode ? .white : .black)
-                                                    .fontWeight(.bold)
-                                                Text("\(String(format: "%.2f", ride.price))$")
-                                                    .foregroundColor(currentDrivingMode == ride.drivingMode ? .white : .gray)
-                                            }
-                                        }
-                                        .padding()
-                                        .background(currentDrivingMode == ride.drivingMode ? Color.blue.cornerRadius(20) : Color.gray.opacity(0.25).cornerRadius(20))
-                                    })
-                                    Spacer()
-                                }
-                                
-                                
-                            }
-                            .frame(width: UIScreen.main.bounds.width - 30)
+                            SearchBottomSheet()
                             
-                            if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
-                                DriverInformation()
-                                TimeInformation()
-                            }
                             
-                            Button {
-                                
-                            } label: {
-                                Text("BOOK NOW")
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .background(Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
-                            }
-
-                            Spacer()
+//                            if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
+//                                DriverInformation()
+//                                TimeInformation()
+//                            }
+//
+//                            Button {
+//
+//                            } label: {
+//                                Text("BOOK NOW")
+//                                    .foregroundColor(.white)
+//                                    .padding()
+//                                    .background(Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
+//                            }
+//
+//                            Spacer()
                         }
                     }
                   )
@@ -173,6 +115,109 @@ struct CustomDraggableComponent: View {
         }
     }
     
+}
+
+struct SearchBottomSheet: View {
+    @State private var startPosition = ""
+    
+    @State private var destinationPosition = ""
+    
+    let rides = [Ride(id: 0, image: "Car", price: 10.99, drivingMode: .standard), Ride(id: 1, image: "Car", price: 15.99, drivingMode: .medium), Ride(id: 2, image: "Car", price: 21.99, drivingMode: .luxus)]
+    
+    @State private var currentDrivingMode: DrivingMode = .standard
+    
+    @State private var clvm = CoreLocationViewModel()
+    
+    var body: some View {
+        VStack {
+            HStack {
+                VStack {
+                    Image(systemName: "location.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.blue)
+                    Rectangle()
+                        .frame(width: 1, height: UIScreen.main.bounds.height / 25)
+                    Image(systemName: "figure.wave")
+                        .font(.largeTitle)
+                        .foregroundColor(.blue)
+                }
+                VStack(alignment: .leading) {
+                    
+                    TextField("start", text: $startPosition)
+                    Rectangle()
+                        .fill(Color.clear)
+                        .frame(width: 1, height: UIScreen.main.bounds.height / 20)
+                    TextField("destination", text: $destinationPosition)
+                }
+                Spacer()
+                
+            }
+            .padding()
+            
+            HStack {
+                Text("Which type do you want?")
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            .padding(.leading)
+            HStack {
+                
+                ForEach(rides) { ride in
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        currentDrivingMode = ride.drivingMode
+                    }, label: {
+                        VStack {
+                            Image(ride.image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: UIScreen.main.bounds.width / 6)
+                            VStack(alignment: .leading) {
+                                Text(ride.drivingMode.stringValue)
+                                    .foregroundColor(currentDrivingMode == ride.drivingMode ? .white : .black)
+                                    .fontWeight(.bold)
+                                Text("\(String(format: "%.2f", ride.price))$")
+                                    .foregroundColor(currentDrivingMode == ride.drivingMode ? .white : .gray)
+                            }
+                        }
+                        .padding()
+                        .background(currentDrivingMode == ride.drivingMode ? Color.blue.cornerRadius(20) : Color.gray.opacity(0.25).cornerRadius(20))
+                    })
+                    Spacer()
+                }
+                
+                
+            }
+            .frame(width: UIScreen.main.bounds.width - 30)
+            
+            Button {
+                clvm.getLocation(forPlaceCalled: startPosition) { location in
+                    print("Start position:")
+                    if location != nil {
+                        print(location!)
+                        
+                    } else {
+                        print("no location")
+                    }
+                    
+                }
+                clvm.getLocation(forPlaceCalled: destinationPosition) { location in
+                    print("end position:")
+                    if location != nil {
+                        print(location!)
+                    } else {
+                        print("no location")
+                    }
+                    
+                }
+            } label: {
+                Text("Search")
+            }
+
+        }
+    }
 }
 
 enum DrivingMode {

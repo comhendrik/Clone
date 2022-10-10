@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2457858528F40326001AF31D /* CoreLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2457858428F40326001AF31D /* CoreLocationViewModel.swift */; };
 		246D3FD128C4CA3700A71BF4 /* SelectRideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */; };
 		24C7A9DF28BE46990022105E /* UberCloneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9DE28BE46990022105E /* UberCloneApp.swift */; };
 		24C7A9E128BE46990022105E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9E028BE46990022105E /* ContentView.swift */; };
@@ -16,10 +17,10 @@
 		24C7A9EF28BE499B0022105E /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9EE28BE499B0022105E /* BottomSheet.swift */; };
 		24E155DF28C76A6C003313E7 /* DriverInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E155DE28C76A6C003313E7 /* DriverInformation.swift */; };
 		24E155E128C76E3A003313E7 /* TimeInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E155E028C76E3A003313E7 /* TimeInformation.swift */; };
-		24E155E328C77AC6003313E7 /* map.json in Resources */ = {isa = PBXBuildFile; fileRef = 24E155E228C77AC6003313E7 /* map.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2457858428F40326001AF31D /* CoreLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreLocationViewModel.swift; sourceTree = "<group>"; };
 		246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRideView.swift; sourceTree = "<group>"; };
 		24C7A9DB28BE46980022105E /* UberClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24C7A9DE28BE46990022105E /* UberCloneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UberCloneApp.swift; sourceTree = "<group>"; };
@@ -30,7 +31,6 @@
 		24C7A9EE28BE499B0022105E /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		24E155DE28C76A6C003313E7 /* DriverInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverInformation.swift; sourceTree = "<group>"; };
 		24E155E028C76E3A003313E7 /* TimeInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInformation.swift; sourceTree = "<group>"; };
-		24E155E228C77AC6003313E7 /* map.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = map.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,13 +64,13 @@
 			isa = PBXGroup;
 			children = (
 				24C7A9DE28BE46990022105E /* UberCloneApp.swift */,
+				2457858428F40326001AF31D /* CoreLocationViewModel.swift */,
 				24C7A9E028BE46990022105E /* ContentView.swift */,
 				24C7A9EC28BE48910022105E /* MapView.swift */,
 				24C7A9EE28BE499B0022105E /* BottomSheet.swift */,
 				24E155DE28C76A6C003313E7 /* DriverInformation.swift */,
 				24E155E028C76E3A003313E7 /* TimeInformation.swift */,
 				246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */,
-				24E155E228C77AC6003313E7 /* map.json */,
 				24C7A9E228BE469B0022105E /* Assets.xcassets */,
 				24C7A9E428BE469B0022105E /* Preview Content */,
 			);
@@ -145,7 +145,6 @@
 			files = (
 				24C7A9E628BE469B0022105E /* Preview Assets.xcassets in Resources */,
 				24C7A9E328BE469B0022105E /* Assets.xcassets in Resources */,
-				24E155E328C77AC6003313E7 /* map.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +159,7 @@
 				24E155E128C76E3A003313E7 /* TimeInformation.swift in Sources */,
 				24C7A9ED28BE48910022105E /* MapView.swift in Sources */,
 				24E155DF28C76A6C003313E7 /* DriverInformation.swift in Sources */,
+				2457858528F40326001AF31D /* CoreLocationViewModel.swift in Sources */,
 				24C7A9EF28BE499B0022105E /* BottomSheet.swift in Sources */,
 				24C7A9DF28BE46990022105E /* UberCloneApp.swift in Sources */,
 				246D3FD128C4CA3700A71BF4 /* SelectRideView.swift in Sources */,
