@@ -9,6 +9,8 @@ import Foundation
 import Combine
 import CoreLocation
 
+
+@MainActor
 class CoreLocationViewModel: ObservableObject {
     
     @Published var startLocation : CLLocationCoordinate2D? = nil
@@ -19,28 +21,40 @@ class CoreLocationViewModel: ObservableObject {
     
     @Published var showAlert: Bool = false
     
-    func setRouteLocations(start: String, end: String) {
+    func setRouteLocations(start: String, end: String, ride: DrivingMode) async {
         
-        getLocation(forPlaceCalled: start) { location in
-            self.startLocation = location?.coordinate
-        }
         
-        getLocation(forPlaceCalled: end) { location in
-            self.endLocation = location?.coordinate
-        }
+        
+        startLocation = nil
+        
+        endLocation = nil
+        
+        self.startLocation = await getLocation(forPlaceCalled: start)
+        
+        self.endLocation = await getLocation(forPlaceCalled: end)
         
         if startLocation == nil {
+            print("yea")
             alertMsg = "Be more precisely when describing your start location."
             showAlert.toggle()
         } else if endLocation == nil {
+            print("No")
             alertMsg = "Be more precisely when describing your end location."
             showAlert.toggle()
         } else {
+            let rideRequest = RideRequest(rideType: ride, start: startLocation!, destination: endLocation!)
+            print(rideRequest)
             alertMsg = "Your Route is shown on the map"
             showAlert.toggle()
         }
     }
     
+}
+
+struct RideRequest {
+    var rideType: DrivingMode
+    var start: CLLocationCoordinate2D
+    var destination: CLLocationCoordinate2D
 }
 
 struct Location: Identifiable {
@@ -51,31 +65,14 @@ struct Location: Identifiable {
 }
 
 //TODO: Find fitting place for function
-func getLocation(forPlaceCalled name: String,
-                 completion: @escaping(CLLocation?) -> Void) {
+func getLocation(forPlaceCalled name: String) async -> CLLocationCoordinate2D? {
     
     let geocoder = CLGeocoder()
-    geocoder.geocodeAddressString(name) { placemarks, error in
-        
-        guard error == nil else {
-            print("*** Error in \(#function): \(error!.localizedDescription)")
-            completion(nil)
-            return
-        }
-        
-        guard let placemark = placemarks?[0] else {
-            print("*** Error in \(#function): placemark is nil")
-            completion(nil)
-            return
-        }
-        
-        guard let location = placemark.location else {
-            print("*** Error in \(#function): placemark is nil")
-            completion(nil)
-            return
-        }
-
-        completion(location)
+    do {
+        let placemark = try await geocoder.geocodeAddressString(name)
+        return placemark[0].location?.coordinate
+    } catch {
+        return nil
     }
 }
     

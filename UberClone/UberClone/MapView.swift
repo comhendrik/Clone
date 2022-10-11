@@ -18,6 +18,8 @@ struct MapView: UIViewRepresentable {
     @Binding var destinationLocation: CLLocationCoordinate2D?
 
     private let mapView = WrappableMapView()
+    
+    
 
     func makeUIView(context: UIViewRepresentableContext<MapView>) -> WrappableMapView {
         mapView.delegate = mapView
@@ -26,10 +28,15 @@ struct MapView: UIViewRepresentable {
 
     func updateUIView(_ uiView: WrappableMapView, context: UIViewRepresentableContext<MapView>) {
         
+        print("update")
+        
+        let _annotations = mapView.annotations
+        print(_annotations)
+        
         if requestLocation != nil && destinationLocation != nil {
             let requestAnnotation = MKPointAnnotation()
             requestAnnotation.coordinate = requestLocation!
-            requestAnnotation.title = "Package Title"
+            requestAnnotation.title = "Start"
             uiView.addAnnotation(requestAnnotation)
             
             let destinationAnnotation = MKPointAnnotation()
@@ -56,18 +63,10 @@ struct MapView: UIViewRepresentable {
 
                       let route = response.routes[0]
                       uiView.addOverlay(route.polyline, level: .aboveRoads)
-                      
-                      let routezs = response.routes[0]
-                      uiView.addOverlay(route.polyline, level: .aboveRoads)
-
                       let rect = route.polyline.boundingMapRect
                       uiView.setRegion(MKCoordinateRegion(rect), animated: true)
-                      
-                      
-                      let rect2 = routezs.polyline.boundingMapRect
                       uiView.setRegion(MKCoordinateRegion(rect), animated: true)
-
-                      // if you want insets use this instead of setRegion
+                      
                        uiView.setVisibleMapRect(rect, edgePadding: .init(top: 10.0, left: 50.0, bottom: 50.0, right: 50.0), animated: true)
                       
                   }
@@ -85,20 +84,15 @@ class WrappableMapView: MKMapView, MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
-        renderer.strokeColor = getRandomColor()
+        renderer.strokeColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
         renderer.lineWidth = 4.0
         return renderer
     }
-    
-    
-    
-    func getRandomColor() -> UIColor{
-         let randomRed = CGFloat.random(in: 0...1)
-         let randomGreen = CGFloat.random(in: 0...1)
-         let randomBlue = CGFloat.random(in: 0...1)
-        return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
-    }
   
+}
+
+extension Notification.Name {
+    public static let refreshMap = Notification.Name("refreshMap")
 }
 
 

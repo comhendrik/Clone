@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct BottomSheet: View {
     @State var clvm: CoreLocationViewModel
@@ -182,7 +183,12 @@ struct SearchBottomSheet: View {
             .frame(width: UIScreen.main.bounds.width - 30)
             
             Button {
-                clvm.setRouteLocations(start: startPosition, end: endPosition)
+                
+                Task {
+                    await clvm.setRouteLocations(start: startPosition, end: endPosition, ride: currentDrivingMode)
+                }
+                
+                
             } label: {
                 Text("Search")
             }
@@ -190,6 +196,8 @@ struct SearchBottomSheet: View {
         }
     }
 }
+
+//TODO: Refactor Ride and Driving Mode to get them in one enum
 
 enum DrivingMode {
     
@@ -206,6 +214,8 @@ enum DrivingMode {
         }
     }
 }
+
+
 
 struct Ride: Identifiable {
     var id: Int
