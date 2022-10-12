@@ -91,8 +91,4 @@ class WrappableMapView: MKMapView, MKMapViewDelegate {
   
 }
 
-extension Notification.Name {
-    public static let refreshMap = Notification.Name("refreshMap")
-}
-
 

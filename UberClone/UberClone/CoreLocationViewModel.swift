@@ -10,8 +10,12 @@ import Combine
 import CoreLocation
 
 
+//TODO: Bring them in one class together
+
 @MainActor
 class CoreLocationViewModel: ObservableObject {
+    
+    
     
     @Published var startLocation : CLLocationCoordinate2D? = nil
     
@@ -21,26 +25,18 @@ class CoreLocationViewModel: ObservableObject {
     
     @Published var showAlert: Bool = false
     
-    func setRouteLocations(start: String, end: String, ride: DrivingMode) async {
-        
-        
-        
-        startLocation = nil
-        
-        endLocation = nil
-        
-        self.startLocation = await getLocation(forPlaceCalled: start)
+    func setRouteLocations(end: String, ride: DrivingMode) async {
         
         self.endLocation = await getLocation(forPlaceCalled: end)
         
         if startLocation == nil {
-            print("yea")
+            print(1)
             alertMsg = "Be more precisely when describing your start location."
-            showAlert.toggle()
+            showAlert = true
         } else if endLocation == nil {
-            print("No")
+            print(2)
             alertMsg = "Be more precisely when describing your end location."
-            showAlert.toggle()
+            showAlert = true
         } else {
             let rideRequest = RideRequest(rideType: ride, start: startLocation!, destination: endLocation!)
             print(rideRequest)
@@ -67,19 +63,44 @@ struct Location: Identifiable {
 //TODO: Find fitting place for function
 func getLocation(forPlaceCalled name: String) async -> CLLocationCoordinate2D? {
     
-    let geocoder = CLGeocoder()
+    
     do {
+        let geocoder = CLGeocoder()
         let placemark = try await geocoder.geocodeAddressString(name)
         return placemark[0].location?.coordinate
     } catch {
         return nil
     }
 }
+
+
+class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
+    @Published var authorizationStatus: CLAuthorizationStatus
     
+    @Published var userLocation: CLLocation?
     
+    private let locationManager: CLLocationManager
     
+    override init() {
+        locationManager = CLLocationManager()
+        authorizationStatus = locationManager.authorizationStatus
+        
+        super.init()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
+    }
     
+    func requestPermission() {
+        locationManager.requestWhenInUseAuthorization()
+    }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        authorizationStatus = manager.authorizationStatus
+    }
     
-    
-    
-    
+    func getUserLocation() -> CLLocation? {
+        userLocation = locationManager.location
+        return userLocation
+    }
+}

@@ -10,13 +10,10 @@ import MapKit
 
 struct ContentView: View {
     @StateObject var clvm = CoreLocationViewModel()
+    @StateObject var lvm = LocationViewModel()
     @State private var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 50, longitude: 0), span: MKCoordinateSpan(latitudeDelta: 25, longitudeDelta: 25))
     var body: some View {
-        ZStack {
-            
-            BottomSheet(clvm: clvm)
-                .ignoresSafeArea(.all, edges: .bottom)
-        }
+        UserLocationViews(locationViewModel: lvm, clvm: clvm)
     }
 }
 

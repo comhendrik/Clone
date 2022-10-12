@@ -9,12 +9,14 @@ import SwiftUI
 import MapKit
 
 struct BottomSheet: View {
-    @State var clvm: CoreLocationViewModel
+    @EnvironmentObject var clvm: CoreLocationViewModel
+    @EnvironmentObject var lvm: LocationViewModel
     var body: some View {
         VStack {
             Spacer()
-            CustomDraggableComponent(clvm: clvm)
-
+            CustomDraggableComponent()
+                .environmentObject(lvm)
+                .environmentObject(clvm)
             
         }
         
@@ -27,7 +29,8 @@ let MIN_HEIGHT: CGFloat = 30
 
 struct CustomDraggableComponent: View {
     @State var height: CGFloat = MIN_HEIGHT
-    @State var clvm: CoreLocationViewModel
+    @EnvironmentObject var clvm: CoreLocationViewModel
+    @EnvironmentObject var lvm: LocationViewModel
     
   var body: some View {
       VStack(spacing: 0) {
@@ -73,7 +76,9 @@ struct CustomDraggableComponent: View {
                     VStack {
                         if height >= UIScreen.main.bounds.height / 2 {
                             
-                            SearchBottomSheet(clvm: clvm)
+                            SearchBottomSheet()
+                                .environmentObject(lvm)
+                                .environmentObject(clvm)
                             
                             
 //                            if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
@@ -108,38 +113,21 @@ struct CustomDraggableComponent: View {
 }
 
 struct SearchBottomSheet: View {
-    @State private var startPosition = ""
     
     @State private var endPosition = ""
     
-    let rides = [Ride(id: 0, image: "Car", price: 10.99, drivingMode: .standard), Ride(id: 1, image: "Car", price: 15.99, drivingMode: .medium), Ride(id: 2, image: "Car", price: 21.99, drivingMode: .luxus)]
-    
     @State private var currentDrivingMode: DrivingMode = .standard
     
-    @State var clvm: CoreLocationViewModel
+    @EnvironmentObject var clvm: CoreLocationViewModel
+    @EnvironmentObject var lvm: LocationViewModel
     
     var body: some View {
         VStack {
             HStack {
-                VStack {
-                    Image(systemName: "location.circle.fill")
-                        .font(.largeTitle)
-                        .foregroundColor(.blue)
-                    Rectangle()
-                        .frame(width: 1, height: UIScreen.main.bounds.height / 25)
-                    Image(systemName: "figure.wave")
-                        .font(.largeTitle)
-                        .foregroundColor(.blue)
-                }
-                VStack(alignment: .leading) {
-                    
-                    TextField("start", text: $startPosition)
-                    Rectangle()
-                        .fill(Color.clear)
-                        .frame(width: 1, height: UIScreen.main.bounds.height / 20)
-                    TextField("destination", text: $endPosition)
-                }
-                Spacer()
+                Image(systemName: "location.circle.fill")
+                    .font(.largeTitle)
+                    .foregroundColor(.blue)
+                TextField("destination", text: $endPosition)
                 
             }
             .padding()
@@ -152,28 +140,15 @@ struct SearchBottomSheet: View {
             .padding(.leading)
             HStack {
                 
-                ForEach(rides) { ride in
+                ForEach(DrivingMode.allCases, id: \.rawValue) { drivingMode in
                     
                     Spacer()
                     
                     Button(action: {
-                        currentDrivingMode = ride.drivingMode
+                        currentDrivingMode = drivingMode
                     }, label: {
-                        VStack {
-                            Image(ride.image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: UIScreen.main.bounds.width / 6)
-                            VStack(alignment: .leading) {
-                                Text(ride.drivingMode.stringValue)
-                                    .foregroundColor(currentDrivingMode == ride.drivingMode ? .white : .black)
-                                    .fontWeight(.bold)
-                                Text("\(String(format: "%.2f", ride.price))$")
-                                    .foregroundColor(currentDrivingMode == ride.drivingMode ? .white : .gray)
-                            }
-                        }
-                        .padding()
-                        .background(currentDrivingMode == ride.drivingMode ? Color.blue.cornerRadius(20) : Color.gray.opacity(0.25).cornerRadius(20))
+                        Text(drivingMode.stringValue)
+                            .foregroundColor(currentDrivingMode == drivingMode ? .blue : .gray)
                     })
                     Spacer()
                 }
@@ -183,23 +158,24 @@ struct SearchBottomSheet: View {
             .frame(width: UIScreen.main.bounds.width - 30)
             
             Button {
-                
                 Task {
-                    await clvm.setRouteLocations(start: startPosition, end: endPosition, ride: currentDrivingMode)
+                    await clvm.setRouteLocations(end: endPosition, ride: currentDrivingMode)
                 }
-                
-                
             } label: {
                 Text("Search")
             }
+            .alert(clvm.alertMsg, isPresented: $clvm.showAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
 
+            
         }
+        
     }
 }
 
-//TODO: Refactor Ride and Driving Mode to get them in one enum
 
-enum DrivingMode {
+enum DrivingMode: String, CaseIterable {
     
     case standard, medium, luxus
     
@@ -213,13 +189,20 @@ enum DrivingMode {
             return "Luxus"
         }
     }
+    
+    var image: String {
+        "Car"
+    }
+    
+    var price: Double {
+        switch self {
+        case .standard:
+            return 10.99
+        case .medium:
+            return 15.99
+        case .luxus:
+            return 20.99
+        }
+    }
 }
 
-
-
-struct Ride: Identifiable {
-    var id: Int
-    var image: String
-    var price: Double
-    var drivingMode: DrivingMode
-}
