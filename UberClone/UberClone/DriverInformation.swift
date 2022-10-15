@@ -24,7 +24,7 @@ struct DriverInformation: View {
                     .cornerRadius(15)
                     .padding(.leading)
                 VStack(alignment: .leading) {
-                    Text("Hendrik Steen")
+                    Text("Max Mustermann")
                         .fontWeight(.bold)
                     Text("3 min away")
                         .foregroundColor(.gray)

@@ -12,9 +12,8 @@ import SwiftUI
 import MapKit
 
 struct UserLocationViews: View {
-    @StateObject var locationViewModel: LocationViewModel
-    @StateObject var clvm: CoreLocationViewModel
-    
+    @StateObject var locationViewModel = LocationViewModel()
+    @StateObject var applicationViewModel = ApplicationViewModel()
     var body: some View {
         switch locationViewModel.authorizationStatus {
         case .notDetermined:
@@ -27,7 +26,7 @@ struct UserLocationViews: View {
         case .authorizedAlways, .authorizedWhenInUse:
             TrackingView()
                 .environmentObject(locationViewModel)
-                .environmentObject(clvm)
+                .environmentObject(applicationViewModel)
         default:
             Text("Unexpected status")
         }
@@ -77,23 +76,37 @@ struct ErrorView: View {
 
 struct TrackingView: View {
     @EnvironmentObject var locationViewModel: LocationViewModel
-    
-    @EnvironmentObject var clvm: CoreLocationViewModel
+    @EnvironmentObject var applicationViewModel: ApplicationViewModel
     
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region, showsUserLocation: true)
+            Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: locationViewModel.driveOptions) { option in
+                MapAnnotation(coordinate: option.driver.coordinate) {
+                    Button {
+                        applicationViewModel.currentDrive = option
+                    } label: {
+                        VStack(spacing: 0) {
+                              Image(systemName: "mappin.circle.fill")
+                                .font(.title)
+                                .foregroundColor(.red)
+                              
+                              Image(systemName: "arrowtriangle.down.fill")
+                                .font(.caption)
+                                .foregroundColor(.red)
+                                .offset(x: 0, y: -5)
+                            }
+                    }
+                }
+
+            }
             BottomSheet()
                 .onAppear() {
-                    print("Start")
-                    print(locationViewModel.getUserLocation())
-                    clvm.startLocation = locationViewModel.getUserLocation()?.coordinate
-                    print(clvm.startLocation)
+                    locationViewModel.startLocation = locationViewModel.getUserLocation()?.coordinate
                 }
                 .environmentObject(locationViewModel)
-                .environmentObject(clvm)
+                .environmentObject(applicationViewModel)
                .ignoresSafeArea(.all, edges: .bottom)
         }
     }

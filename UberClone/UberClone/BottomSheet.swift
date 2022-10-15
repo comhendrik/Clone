@@ -9,14 +9,14 @@ import SwiftUI
 import MapKit
 
 struct BottomSheet: View {
-    @EnvironmentObject var clvm: CoreLocationViewModel
     @EnvironmentObject var lvm: LocationViewModel
+    @EnvironmentObject var applicationViewModel: ApplicationViewModel
     var body: some View {
         VStack {
             Spacer()
             CustomDraggableComponent()
                 .environmentObject(lvm)
-                .environmentObject(clvm)
+                .environmentObject(applicationViewModel)
             
         }
         
@@ -29,8 +29,8 @@ let MIN_HEIGHT: CGFloat = 30
 
 struct CustomDraggableComponent: View {
     @State var height: CGFloat = MIN_HEIGHT
-    @EnvironmentObject var clvm: CoreLocationViewModel
     @EnvironmentObject var lvm: LocationViewModel
+    @EnvironmentObject var applicationViewModel: ApplicationViewModel
     
   var body: some View {
       VStack(spacing: 0) {
@@ -78,13 +78,14 @@ struct CustomDraggableComponent: View {
                             
                             SearchBottomSheet()
                                 .environmentObject(lvm)
-                                .environmentObject(clvm)
                             
                             
-//                            if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
-//                                DriverInformation()
-//                                TimeInformation()
-//                            }
+                            if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
+                                if applicationViewModel.currentDrive != nil {
+                                    DriverInformation()
+                                }
+                                TimeInformation()
+                            }
 //
 //                            Button {
 //
@@ -118,7 +119,6 @@ struct SearchBottomSheet: View {
     
     @State private var currentDrivingMode: DrivingMode = .standard
     
-    @EnvironmentObject var clvm: CoreLocationViewModel
     @EnvironmentObject var lvm: LocationViewModel
     
     var body: some View {
@@ -159,12 +159,12 @@ struct SearchBottomSheet: View {
             
             Button {
                 Task {
-                    await clvm.setRouteLocations(end: endPosition, ride: currentDrivingMode)
+                    await lvm.setRouteLocations(end: endPosition, ride: currentDrivingMode)
                 }
             } label: {
                 Text("Search")
             }
-            .alert(clvm.alertMsg, isPresented: $clvm.showAlert) {
+            .alert(lvm.alertMsg, isPresented: $lvm.showAlert) {
                         Button("OK", role: .cancel) { }
                     }
 
@@ -175,34 +175,5 @@ struct SearchBottomSheet: View {
 }
 
 
-enum DrivingMode: String, CaseIterable {
-    
-    case standard, medium, luxus
-    
-    var stringValue: String {
-        switch self {
-        case .standard:
-            return "Standard"
-        case .medium:
-            return "Medium"
-        case .luxus:
-            return "Luxus"
-        }
-    }
-    
-    var image: String {
-        "Car"
-    }
-    
-    var price: Double {
-        switch self {
-        case .standard:
-            return 10.99
-        case .medium:
-            return 15.99
-        case .luxus:
-            return 20.99
-        }
-    }
-}
+
 
