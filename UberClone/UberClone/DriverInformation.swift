@@ -6,8 +6,13 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct DriverInformation: View {
+    let userLocation: CLLocation
+    let driver: Driver
+    let action: () -> Void
+    
     var body: some View {
         VStack {
             HStack {
@@ -24,28 +29,31 @@ struct DriverInformation: View {
                     .cornerRadius(15)
                     .padding(.leading)
                 VStack(alignment: .leading) {
-                    Text("Max Mustermann")
+                    Text("\(driver.firstName) \(driver.lastName)")
                         .fontWeight(.bold)
-                    Text("3 min away")
+                    Text("\(String(format:"%.02f", driver.getDistanceFromUser(userLocation: userLocation))) KMs away")
                         .foregroundColor(.gray)
-                    Text("Rating: 4.5")
+                    Text("Rating: \(driver.rating)")
                         .foregroundColor(.gray)
-                    Text("Tesla Model S")
+                    Text("\(driver.car.name)")
                         .foregroundColor(.gray)
                 }
+                
                 Spacer()
             }
             .padding()
             .background(Color.gray.opacity(0.1).cornerRadius(20).frame(width: UIScreen.main.bounds.width - 30))
             .padding(.bottom)
+            
+            Button {
+                action()
+            } label: {
+                Text("Delete current Driver")
+                    .foregroundColor(.gray)
+            }
         }
         
         
     }
 }
 
-struct DriverInformation_Previews: PreviewProvider {
-    static var previews: some View {
-        DriverInformation()
-    }
-}

@@ -10,15 +10,15 @@ import CoreLocation
 
 struct RideRequest {
     var rideType: DrivingMode
-    var start: CLLocationCoordinate2D
-    var destination: CLLocationCoordinate2D
+    var start: CLLocation
+    var destination: CLLocation
     
     func sendRequest() -> [Drive] {
         //Normal Logic with Server Request to get real data
         
         //Dummy data:
         print(self.destination)
-        return [Drive(driver: Driver(firstName: "Max", lastName: "Mustermann", rating: 4.5, coordinate: CLLocationCoordinate2D(latitude: 36.1642836, longitude: -86.7856302), car: Car(name: "Tesla Model 3", type: .standard)), cost: 12.99)]
+        return [Drive(driver: Driver(firstName: "Max", lastName: "Mustermann", rating: 4.5, location: CLLocation(latitude: 36.1642836, longitude: -86.7856302), car: Car(name: "Tesla Model 3", type: .standard)), cost: 12.99)]
     }
 }
 
@@ -26,14 +26,26 @@ struct Drive: Identifiable {
     var id = UUID().uuidString
     var driver: Driver
     var cost: Double
+    
+    func bookDrive() -> Bool {
+        //Logic for book Drive
+        
+        //Dummy data:
+        return true
+    }
 }
 
 struct Driver {
     var firstName: String
     var lastName: String
     var rating: Double
-    var coordinate: CLLocationCoordinate2D
+    var location: CLLocation
     var car: Car
+    
+    func getDistanceFromUser(userLocation: CLLocation) -> Double {
+        let distanceInMeters = location.distance(from: userLocation)
+        return distanceInMeters / 1000
+    }
 }
 
 struct Car {

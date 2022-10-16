@@ -82,8 +82,8 @@ struct TrackingView: View {
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: locationViewModel.driveOptions) { option in
-                MapAnnotation(coordinate: option.driver.coordinate) {
+            Map(coordinateRegion: $locationViewModel.region, showsUserLocation: true, annotationItems: locationViewModel.driveOptions) { option in
+                MapAnnotation(coordinate: option.driver.location.coordinate) {
                     Button {
                         applicationViewModel.currentDrive = option
                     } label: {
@@ -103,7 +103,7 @@ struct TrackingView: View {
             }
             BottomSheet()
                 .onAppear() {
-                    locationViewModel.startLocation = locationViewModel.getUserLocation()?.coordinate
+                    locationViewModel.startLocation = locationViewModel.getUserLocation()
                 }
                 .environmentObject(locationViewModel)
                 .environmentObject(applicationViewModel)

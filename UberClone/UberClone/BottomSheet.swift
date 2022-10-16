@@ -23,7 +23,7 @@ struct BottomSheet: View {
     }
 }
 
-
+//TODO: refactor this view into multiple sub views
 
 let MIN_HEIGHT: CGFloat = 30
 
@@ -82,22 +82,28 @@ struct CustomDraggableComponent: View {
                             
                             if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
                                 if applicationViewModel.currentDrive != nil {
-                                    DriverInformation()
+                                    DriverInformation(userLocation: lvm.userLocation!, driver: applicationViewModel.currentDrive!.driver) {
+                                        applicationViewModel.currentDrive = nil
+                                    }
+                                    Button {
+                                        applicationViewModel.driveIsBooked = applicationViewModel.currentDrive!.bookDrive()
+                                    } label: {
+                                        Text("BOOK NOW")
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .background(applicationViewModel.driveIsBooked ? Color.gray.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20) : Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
+                                            .disabled(applicationViewModel.driveIsBooked)
+                                        
+                                    }
+                                } else if lvm.driveOptions.count > 0 {
+                                    Text("Search for rides on the map. \n We found \(lvm.driveOptions.count) option(s) for you!")
+                                        .frame(height: UIScreen.main.bounds.height / 6 ,alignment: .center)
+                                    
                                 }
                                 TimeInformation()
                             }
-//
-//                            Button {
-//
-//                            } label: {
-//                                Text("BOOK NOW")
-//                                    .foregroundColor(.white)
-//                                    .padding()
-//                                    .background(Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
-//                            }
-//
-//                            Spacer()
                         }
+                        Spacer()
                     }
                   )
                 
@@ -109,6 +115,7 @@ struct CustomDraggableComponent: View {
           
           
         }
+      
     }
     
 }
@@ -142,15 +149,29 @@ struct SearchBottomSheet: View {
                 
                 ForEach(DrivingMode.allCases, id: \.rawValue) { drivingMode in
                     
-                    Spacer()
                     
                     Button(action: {
                         currentDrivingMode = drivingMode
                     }, label: {
-                        Text(drivingMode.stringValue)
-                            .foregroundColor(currentDrivingMode == drivingMode ? .blue : .gray)
+                        VStack(alignment: .leading) {
+                            Image(drivingMode.image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(alignment: .center)
+                            VStack(alignment: .leading) {
+                                Text(drivingMode.stringValue)
+                                    .foregroundColor(currentDrivingMode == drivingMode ? .white : .black)
+                                    .fontWeight(.black)
+                                Text("$ \(drivingMode.price, specifier: "%.2f")")
+                                    .foregroundColor(currentDrivingMode == drivingMode ? .white : .gray)
+                                    .font(.subheadline)
+                                    .fontWeight(.bold)
+                            }
+                        }
+                        .padding()
+                        .background(currentDrivingMode == drivingMode ? .blue : .gray.opacity(0.1))
+                        .cornerRadius(20)
                     })
-                    Spacer()
                 }
                 
                 
@@ -163,6 +184,10 @@ struct SearchBottomSheet: View {
                 }
             } label: {
                 Text("Search")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(lvm.driveOptions.count > 0 ? Color.gray.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20) : Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
+                    .disabled(lvm.driveOptions.count > 0)
             }
             .alert(lvm.alertMsg, isPresented: $lvm.showAlert) {
                         Button("OK", role: .cancel) { }

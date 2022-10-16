@@ -8,13 +8,14 @@
 import Foundation
 import Combine
 import CoreLocation
+import MapKit
 
 
 
 class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
-    var startLocation : CLLocationCoordinate2D? = nil
+    var startLocation : CLLocation? = nil
     
-    var endLocation : CLLocationCoordinate2D? = nil
+    var endLocation : CLLocation? = nil
     
     @Published var alertMsg: String = ""
     
@@ -26,6 +27,8 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     @Published var driveOptions: [Drive] = []
     
+    @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+    
     private let locationManager: CLLocationManager
     
     override init() {
@@ -36,6 +39,7 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.startUpdatingLocation()
+        region.center = getUserLocation()?.coordinate ?? CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275)
     }
     
     func requestPermission() {
@@ -76,11 +80,11 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
 
 
 //TODO: Find fitting place for function
-func getLocation(forPlaceCalled name: String) async -> CLLocationCoordinate2D? {
+func getLocation(forPlaceCalled name: String) async -> CLLocation? {
     do {
         let geocoder = CLGeocoder()
         let placemark = try await geocoder.geocodeAddressString(name)
-        return placemark[0].location?.coordinate
+        return placemark[0].location
     } catch {
         return nil
     }

@@ -13,6 +13,8 @@ class ApplicationViewModel: ObservableObject {
     
     @Published var currentDrive: Drive? = nil
     
+    @Published var driveIsBooked = false
+    
     func setDrive(with drive: Drive) {
         currentDrive = drive
     }
