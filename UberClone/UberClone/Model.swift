@@ -16,9 +16,9 @@ struct RideRequest {
     func sendRequest() -> [Drive] {
         //Normal Logic with Server Request to get real data
         
-        //Dummy data:
-        print(self.destination)
-        return [Drive(driver: Driver(firstName: "Max", lastName: "Mustermann", rating: 4.5, location: CLLocation(latitude: 36.1642836, longitude: -86.7856302), car: Car(name: "Tesla Model 3", type: .standard)), cost: 12.99)]
+        //To test input the driver location is set to the destination which doesn't make sense in the normal use of the application but will be changed when real data is used.
+        //Dummy data:,
+        return [Drive(driver: Driver(firstName: "Max", lastName: "Mustermann", rating: 4.5, location: destination, car: Car(name: "Tesla Model 3", type: .standard)), cost: 12.99)]
     }
 }
 

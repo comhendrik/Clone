@@ -51,9 +51,28 @@ struct DriverInformation: View {
                 Text("Delete current Driver")
                     .foregroundColor(.gray)
             }
+            
+            TimeInformation()
         }
         
         
+    }
+}
+
+struct SmallDriverInformation: View {
+    let driver: Driver
+    let action: () -> Void
+    var body: some View {
+        HStack {
+            Text(driver.firstName)
+            Text("Open Sheet to see more")
+            Button {
+                action()
+            } label: {
+                Text("Delete")
+                    .foregroundColor(.gray)
+            }
+        }
     }
 }
 

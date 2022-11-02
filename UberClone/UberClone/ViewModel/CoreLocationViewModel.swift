@@ -57,6 +57,8 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func setRouteLocations(end: String, ride: DrivingMode) async {
         
+        driveOptions = []
+        
         self.endLocation = await getLocation(forPlaceCalled: end)
         
         await MainActor.run {
@@ -70,7 +72,12 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             } else {
                 let rideRequest = RideRequest(rideType: ride, start: startLocation!, destination: endLocation!)
                 driveOptions = rideRequest.sendRequest()
-                alertMsg = "Your Drive options are shown on the map"
+                
+                if driveOptions.isEmpty {
+                    alertMsg = "We haven't found any options"
+                } else {
+                    alertMsg = "Your Drive options are shown on the map"
+                }
                 showAlert.toggle()
             }
         }

@@ -18,4 +18,8 @@ class ApplicationViewModel: ObservableObject {
     func setDrive(with drive: Drive) {
         currentDrive = drive
     }
+    
+    func deleteDrive() {
+        currentDrive = nil
+    }
 }

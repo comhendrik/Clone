@@ -78,6 +78,7 @@ struct CustomDraggableComponent: View {
                             
                             SearchBottomSheet()
                                 .environmentObject(lvm)
+                                .environmentObject(applicationViewModel)
                             
                             
                             if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
@@ -85,22 +86,39 @@ struct CustomDraggableComponent: View {
                                     DriverInformation(userLocation: lvm.userLocation!, driver: applicationViewModel.currentDrive!.driver) {
                                         applicationViewModel.currentDrive = nil
                                     }
-                                    Button {
-                                        applicationViewModel.driveIsBooked = applicationViewModel.currentDrive!.bookDrive()
-                                    } label: {
-                                        Text("BOOK NOW")
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .background(applicationViewModel.driveIsBooked ? Color.gray.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20) : Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
-                                            .disabled(applicationViewModel.driveIsBooked)
-                                        
-                                    }
-                                } else if lvm.driveOptions.count > 0 {
-                                    Text("Search for rides on the map. \n We found \(lvm.driveOptions.count) option(s) for you!")
-                                        .frame(height: UIScreen.main.bounds.height / 6 ,alignment: .center)
                                     
                                 }
-                                TimeInformation()
+                                
+                            } else {
+                                if applicationViewModel.currentDrive != nil {
+                                    SmallDriverInformation(driver: applicationViewModel.currentDrive!.driver) {
+                                        applicationViewModel.currentDrive = nil
+                                    }
+                                }
+                            }
+                            
+                            if applicationViewModel.currentDrive != nil {
+                                Button {
+                                    applicationViewModel.driveIsBooked = applicationViewModel.currentDrive!.bookDrive()
+                                } label: {
+                                    Text("Book now")
+                                        .foregroundColor(.white)
+                                        .padding()
+                                        .background(applicationViewModel.driveIsBooked ? Color.gray.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20) : Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
+                                        
+                                    
+                                }
+                                .disabled(applicationViewModel.driveIsBooked)
+                                
+                                if applicationViewModel.driveIsBooked {
+                                    HStack {
+                                        Text("Thank you for booking. We will charge your account:")
+                                        Text("\(String(format:"%.02f", applicationViewModel.currentDrive!.cost))$")
+                                    }
+                                }
+                                
+                            } else if lvm.driveOptions.count > 0 {
+                                Text("Search for rides on the map. \n We found \(lvm.driveOptions.count) option(s) for you!")
                             }
                         }
                         Spacer()
@@ -127,6 +145,8 @@ struct SearchBottomSheet: View {
     @State private var currentDrivingMode: DrivingMode = .standard
     
     @EnvironmentObject var lvm: LocationViewModel
+    
+    @EnvironmentObject var avm: ApplicationViewModel
     
     var body: some View {
         VStack {
@@ -180,14 +200,15 @@ struct SearchBottomSheet: View {
             
             Button {
                 Task {
+                    avm.deleteDrive()
                     await lvm.setRouteLocations(end: endPosition, ride: currentDrivingMode)
                 }
             } label: {
                 Text("Search")
                     .foregroundColor(.white)
                     .padding()
-                    .background(lvm.driveOptions.count > 0 ? Color.gray.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20) : Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
-                    .disabled(lvm.driveOptions.count > 0)
+                    .background(Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
+                    
             }
             .alert(lvm.alertMsg, isPresented: $lvm.showAlert) {
                         Button("OK", role: .cancel) { }
