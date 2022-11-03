@@ -85,16 +85,18 @@ struct TrackingView: View {
             Map(coordinateRegion: $locationViewModel.region, showsUserLocation: true, annotationItems: locationViewModel.driveOptions) { option in
                 MapAnnotation(coordinate: option.driver.location.coordinate) {
                     Button {
-                        applicationViewModel.currentDrive = option
+                        withAnimation() {
+                            applicationViewModel.currentDrive = option
+                        }
                     } label: {
                         VStack(spacing: 0) {
                               Image(systemName: "mappin.circle.fill")
                                 .font(.title)
-                                .foregroundColor(.red)
+                                .foregroundColor(.blue)
                               
                               Image(systemName: "arrowtriangle.down.fill")
                                 .font(.caption)
-                                .foregroundColor(.red)
+                                .foregroundColor(.blue)
                                 .offset(x: 0, y: -5)
                             }
                     }

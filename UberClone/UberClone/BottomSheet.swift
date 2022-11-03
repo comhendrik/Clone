@@ -53,11 +53,7 @@ struct CustomDraggableComponent: View {
                       
                   }
                   .onEnded({ _ in
-                      if height > 500.00 {
-                          withAnimation() {
-                              height = UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6
-                          }
-                      } else if height < 200 {
+                      if height < 200 {
                           withAnimation() {
                               height = MIN_HEIGHT
                           }
@@ -74,51 +70,119 @@ struct CustomDraggableComponent: View {
                   .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: height)
                   .overlay(
                     VStack {
-                        if height >= UIScreen.main.bounds.height / 2 {
-                            
-                            SearchBottomSheet()
-                                .environmentObject(lvm)
-                                .environmentObject(applicationViewModel)
+                        if height >= 200 {
                             
                             
-                            if height == UIScreen.main.bounds.height - UIScreen.main.bounds.height / 6 {
-                                if applicationViewModel.currentDrive != nil {
-                                    DriverInformation(userLocation: lvm.userLocation!, driver: applicationViewModel.currentDrive!.driver) {
-                                        applicationViewModel.currentDrive = nil
-                                    }
-                                    
-                                }
-                                
-                            } else {
-                                if applicationViewModel.currentDrive != nil {
-                                    SmallDriverInformation(driver: applicationViewModel.currentDrive!.driver) {
-                                        applicationViewModel.currentDrive = nil
-                                    }
-                                }
-                            }
                             
                             if applicationViewModel.currentDrive != nil {
-                                Button {
-                                    applicationViewModel.driveIsBooked = applicationViewModel.currentDrive!.bookDrive()
-                                } label: {
-                                    Text("Book now")
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .background(applicationViewModel.driveIsBooked ? Color.gray.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20) : Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
-                                        
-                                    
-                                }
-                                .disabled(applicationViewModel.driveIsBooked)
+                                DriverInformation(userLocation: lvm.userLocation!, driver: applicationViewModel.currentDrive!.driver)
                                 
-                                if applicationViewModel.driveIsBooked {
+                                if applicationViewModel.driveState == .notBooked {
                                     HStack {
-                                        Text("Thank you for booking. We will charge your account:")
-                                        Text("\(String(format:"%.02f", applicationViewModel.currentDrive!.cost))$")
+                                        Button {
+                                            withAnimation() {
+                                                applicationViewModel.driveState = applicationViewModel.currentDrive!.bookDrive()
+                                                if applicationViewModel.driveState != .notBooked {
+                                                    lvm.driveOptions = []
+                                                }
+                                                
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Spacer()
+                                                Text("Book \(String(format: "%.02f", applicationViewModel.currentDrive!.cost))$")
+                                                    .foregroundColor(.white)
+                                                    .padding()
+                                                Spacer()
+                                            }
+                                                
+                                                .background(applicationViewModel.driveState != .notBooked ? Color.gray.cornerRadius(20) : Color.blue.cornerRadius(20))
+                                                .padding(.leading)
+                                            
+                                        }
+                                        
+                                        Button {
+                                            withAnimation() {
+                                                applicationViewModel.currentDrive = nil
+                                            }
+                                        } label: {
+                                            Text("Cancel")
+                                                .foregroundColor(.white)
+                                                .padding()
+                                                .background(applicationViewModel.driveState != .notBooked ? Color.gray.cornerRadius(20) : Color.red.cornerRadius(20))
+                                                .padding(.horizontal)
+                                        }
                                     }
                                 }
                                 
-                            } else if lvm.driveOptions.count > 0 {
-                                Text("Search for rides on the map. \n We found \(lvm.driveOptions.count) option(s) for you!")
+                                
+                                
+                                
+                                HStack {
+                                    Image(systemName: applicationViewModel.driveState.systemImage)
+                                        .font(.largeTitle)
+                                        .foregroundColor(applicationViewModel.driveState.systemImageColor)
+                                    Text(applicationViewModel.driveState.responseValue)
+                                        .fontWeight(.bold)
+                                }
+                                
+                                if applicationViewModel.driveState == .success {
+                                    Button {
+                                        withAnimation() {
+                                            applicationViewModel.deleteDrive()
+                                        }
+                                    } label: {
+                                        Text("Get Next Ride")
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .background(Color.blue.cornerRadius(30))
+                                            .padding()
+                                    }
+
+                                } else if applicationViewModel.driveState == .arriving {
+                                    Button {
+                                        withAnimation() {
+                                            applicationViewModel.stepIntoCar()
+                                        }
+                                    } label: {
+                                        Text("Step into car")
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .background(Color.blue.cornerRadius(30))
+                                            .padding()
+                                    }
+                                }
+                                
+                                
+                                
+                                if applicationViewModel.driveState != .notBooked {
+                                    Button {
+                                        applicationViewModel.driveState = .arriving
+                                    } label: {
+                                        Text("trigger arriving")
+                                    }
+                                }
+
+                                
+                            } else {
+                                SearchBottomSheet()
+                                    .environmentObject(lvm)
+                                    .environmentObject(applicationViewModel)
+                                if lvm.driveOptions.count > 0 {
+                                    HStack {
+                                        VStack(spacing: 0) {
+                                              Image(systemName: "mappin.circle.fill")
+                                                .font(.title)
+                                                .foregroundColor(.blue)
+                                              
+                                              Image(systemName: "arrowtriangle.down.fill")
+                                                .font(.caption)
+                                                .foregroundColor(.blue)
+                                                .offset(x: 0, y: -5)
+                                        }
+                                        Text("Use one of the \(lvm.driveOptions.count) option(s) on the map.")
+                                    }
+                                }
                             }
                         }
                         Spacer()
@@ -204,10 +268,15 @@ struct SearchBottomSheet: View {
                     await lvm.setRouteLocations(end: endPosition, ride: currentDrivingMode)
                 }
             } label: {
-                Text("Search")
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue.frame(width: UIScreen.main.bounds.width - 30).cornerRadius(20))
+                HStack {
+                    Spacer()
+                    Text("Search")
+                        .foregroundColor(.white)
+                        .padding()
+                    Spacer()
+                }
+                .background(Color.blue.cornerRadius(20))
+                .padding()
                     
             }
             .alert(lvm.alertMsg, isPresented: $lvm.showAlert) {

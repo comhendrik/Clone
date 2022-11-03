@@ -19,7 +19,6 @@
 		24C7A9ED28BE48910022105E /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9EC28BE48910022105E /* MapView.swift */; };
 		24C7A9EF28BE499B0022105E /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9EE28BE499B0022105E /* BottomSheet.swift */; };
 		24E155DF28C76A6C003313E7 /* DriverInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E155DE28C76A6C003313E7 /* DriverInformation.swift */; };
-		24E155E128C76E3A003313E7 /* TimeInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E155E028C76E3A003313E7 /* TimeInformation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,7 +35,6 @@
 		24C7A9EC28BE48910022105E /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		24C7A9EE28BE499B0022105E /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		24E155DE28C76A6C003313E7 /* DriverInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverInformation.swift; sourceTree = "<group>"; };
-		24E155E028C76E3A003313E7 /* TimeInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInformation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +84,6 @@
 				24C7A9EE28BE499B0022105E /* BottomSheet.swift */,
 				24C452EB28F6C9E400A362F8 /* UserLocationViews.swift */,
 				24E155DE28C76A6C003313E7 /* DriverInformation.swift */,
-				24E155E028C76E3A003313E7 /* TimeInformation.swift */,
 				246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */,
 				24C7A9E228BE469B0022105E /* Assets.xcassets */,
 				24C7A9E428BE469B0022105E /* Preview Content */,
@@ -174,7 +171,6 @@
 			files = (
 				24C7A9E128BE46990022105E /* ContentView.swift in Sources */,
 				245B5DA428FB168F00F4FD10 /* ApplicationViewModel.swift in Sources */,
-				24E155E128C76E3A003313E7 /* TimeInformation.swift in Sources */,
 				24C7A9ED28BE48910022105E /* MapView.swift in Sources */,
 				24E155DF28C76A6C003313E7 /* DriverInformation.swift in Sources */,
 				2457858528F40326001AF31D /* CoreLocationViewModel.swift in Sources */,

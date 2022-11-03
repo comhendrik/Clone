@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import SwiftUI
 
 struct RideRequest {
     var rideType: DrivingMode
@@ -27,11 +28,12 @@ struct Drive: Identifiable {
     var driver: Driver
     var cost: Double
     
-    func bookDrive() -> Bool {
+    func bookDrive() -> DriveStatus {
         //Logic for book Drive
         
+        //Send Notification to driver and add it to user
         //Dummy data:
-        return true
+        return .pending
     }
 }
 
@@ -58,6 +60,55 @@ struct Location: Identifiable {
     var name: String
     var description: String
     let location: CLLocation
+}
+
+enum DriveStatus {
+    case cancelled, success, pending, arriving, notBooked
+    
+    var responseValue: String {
+        switch self {
+        case .cancelled:
+            return "Drive was cancelled."
+        case .success:
+            return "Drive finished"
+        case .pending:
+            return "pending..."
+        case .arriving:
+            return "Drive is arriving"
+        case .notBooked:
+            return "No booked Drive"
+        }
+    }
+    
+    var systemImage: String {
+        switch self {
+        case .cancelled:
+            return "xmark.seal"
+        case .success:
+            return "checkmark.seal"
+        case .pending:
+            return "car.fill"
+        case .arriving:
+            return "car"
+        case .notBooked:
+            return "car"
+        }
+    }
+        
+    var systemImageColor: Color {
+        switch self {
+        case .cancelled:
+            return .red
+        case .success:
+            return .green
+        case .pending:
+            return .gray
+        case .arriving:
+            return .green
+        case .notBooked:
+            return .red
+        }
+    }
 }
 
 enum DrivingMode: String, CaseIterable {

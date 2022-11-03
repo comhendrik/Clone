@@ -11,12 +11,11 @@ import CoreLocation
 struct DriverInformation: View {
     let userLocation: CLLocation
     let driver: Driver
-    let action: () -> Void
     
     var body: some View {
         VStack {
             HStack {
-                Text("Driver:")
+                Text("Selected Driver:")
                     .fontWeight(.bold)
                     .padding(.leading)
                 Spacer()
@@ -33,7 +32,7 @@ struct DriverInformation: View {
                         .fontWeight(.bold)
                     Text("\(String(format:"%.02f", driver.getDistanceFromUser(userLocation: userLocation))) KMs away")
                         .foregroundColor(.gray)
-                    Text("Rating: \(driver.rating)")
+                    Text("Rating: \(String(format: "%.01f", driver.rating))")
                         .foregroundColor(.gray)
                     Text("\(driver.car.name)")
                         .foregroundColor(.gray)
@@ -45,14 +44,8 @@ struct DriverInformation: View {
             .background(Color.gray.opacity(0.1).cornerRadius(20).frame(width: UIScreen.main.bounds.width - 30))
             .padding(.bottom)
             
-            Button {
-                action()
-            } label: {
-                Text("Delete current Driver")
-                    .foregroundColor(.gray)
-            }
             
-            TimeInformation()
+            
         }
         
         

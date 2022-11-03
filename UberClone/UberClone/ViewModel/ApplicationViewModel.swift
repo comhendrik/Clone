@@ -13,7 +13,9 @@ class ApplicationViewModel: ObservableObject {
     
     @Published var currentDrive: Drive? = nil
     
-    @Published var driveIsBooked = false
+    
+    @Published var driveState: DriveStatus = .notBooked
+    
     
     func setDrive(with drive: Drive) {
         currentDrive = drive
@@ -21,5 +23,10 @@ class ApplicationViewModel: ObservableObject {
     
     func deleteDrive() {
         currentDrive = nil
+        driveState = .notBooked
+    }
+    
+    func stepIntoCar() {
+        driveState = .success
     }
 }
