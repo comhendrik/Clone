@@ -27,6 +27,8 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     @Published var driveOptions: [Drive] = []
     
+    @Published var mapAnnotations: [CustomMapAnnotation] = []
+    
     @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     
     private let locationManager: CLLocationManager
@@ -58,6 +60,7 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     func setRouteLocations(end: String, ride: DrivingMode) async {
         
         driveOptions = []
+        mapAnnotations = []
         
         self.endLocation = await getLocation(forPlaceCalled: end)
         
@@ -72,7 +75,11 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             } else {
                 let rideRequest = RideRequest(rideType: ride, start: startLocation!, destination: endLocation!)
                 driveOptions = rideRequest.sendRequest()
+                for option in driveOptions {
+                    mapAnnotations.append(CustomMapAnnotation(location: option.driver.location, type: .drive, drive: option))
+                }
                 
+                mapAnnotations.append(CustomMapAnnotation(location: endLocation!, type: .destination))
                 if driveOptions.isEmpty {
                     alertMsg = "We haven't found any options"
                 } else {

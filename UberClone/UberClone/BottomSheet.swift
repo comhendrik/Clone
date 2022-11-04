@@ -155,11 +155,17 @@ struct CustomDraggableComponent: View {
                                 
                                 
                                 
-                                if applicationViewModel.driveState != .notBooked {
+                                if applicationViewModel.driveState == .pending {
                                     Button {
                                         applicationViewModel.driveState = .arriving
                                     } label: {
                                         Text("trigger arriving")
+                                    }
+                                } else if applicationViewModel.driveState == .driving {
+                                    Button {
+                                        applicationViewModel.driveState = .success
+                                    } label: {
+                                        Text("trigger end")
                                     }
                                 }
 
@@ -171,7 +177,7 @@ struct CustomDraggableComponent: View {
                                 if lvm.driveOptions.count > 0 {
                                     HStack {
                                         VStack(spacing: 0) {
-                                              Image(systemName: "mappin.circle.fill")
+                                              Image(systemName: "car.circle")
                                                 .font(.title)
                                                 .foregroundColor(.blue)
                                               
@@ -241,7 +247,7 @@ struct SearchBottomSheet: View {
                             Image(drivingMode.image)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(alignment: .center)
+                                .frame(width: UIScreen.main.bounds.width / 5,alignment: .center)
                             VStack(alignment: .leading) {
                                 Text(drivingMode.stringValue)
                                     .foregroundColor(currentDrivingMode == drivingMode ? .white : .black)
@@ -260,7 +266,7 @@ struct SearchBottomSheet: View {
                 
                 
             }
-            .frame(width: UIScreen.main.bounds.width - 30)
+            .padding(.horizontal)
             
             Button {
                 Task {

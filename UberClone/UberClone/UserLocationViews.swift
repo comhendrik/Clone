@@ -82,24 +82,24 @@ struct TrackingView: View {
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $locationViewModel.region, showsUserLocation: true, annotationItems: locationViewModel.driveOptions) { option in
-                MapAnnotation(coordinate: option.driver.location.coordinate) {
+            Map(coordinateRegion: $locationViewModel.region, showsUserLocation: true, annotationItems: locationViewModel.mapAnnotations) { annotation in
+                MapAnnotation(coordinate: annotation.location.coordinate) {
                     Button {
                         withAnimation() {
-                            applicationViewModel.currentDrive = option
+                            applicationViewModel.currentDrive = annotation.drive!
                         }
                     } label: {
                         VStack(spacing: 0) {
-                              Image(systemName: "mappin.circle.fill")
+                            Image(systemName: annotation.type.systemImage)
                                 .font(.title)
-                                .foregroundColor(.blue)
+                                .foregroundColor(annotation.type.imageColor)
                               
                               Image(systemName: "arrowtriangle.down.fill")
                                 .font(.caption)
-                                .foregroundColor(.blue)
+                                .foregroundColor(annotation.type.imageColor)
                                 .offset(x: 0, y: -5)
                             }
-                    }
+                    }.disabled(annotation.type == .destination)
                 }
 
             }

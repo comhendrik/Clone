@@ -19,7 +19,8 @@ struct RideRequest {
         
         //To test input the driver location is set to the destination which doesn't make sense in the normal use of the application but will be changed when real data is used.
         //Dummy data:,
-        return [Drive(driver: Driver(firstName: "Max", lastName: "Mustermann", rating: 4.5, location: destination, car: Car(name: "Tesla Model 3", type: .standard)), cost: 12.99)]
+        let location = CLLocation(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude - 0.075)
+        return [Drive(driver: Driver(firstName: "Max", lastName: "Mustermann", rating: 4.5, location: location, car: Car(name: "Tesla Model 3", type: .standard)), cost: 12.99)]
     }
 }
 
@@ -28,6 +29,8 @@ struct Drive: Identifiable {
     var driver: Driver
     var cost: Double
     
+    //TODO: Get the logic from avm here
+    
     func bookDrive() -> DriveStatus {
         //Logic for book Drive
         
@@ -35,6 +38,7 @@ struct Drive: Identifiable {
         //Dummy data:
         return .pending
     }
+    
 }
 
 struct Driver {
@@ -55,15 +59,8 @@ struct Car {
     var type: DrivingMode
 }
 
-struct Location: Identifiable {
-    let id: UUID
-    var name: String
-    var description: String
-    let location: CLLocation
-}
-
 enum DriveStatus {
-    case cancelled, success, pending, arriving, notBooked
+    case cancelled, success, pending, arriving, notBooked, driving
     
     var responseValue: String {
         switch self {
@@ -77,6 +74,8 @@ enum DriveStatus {
             return "Drive is arriving"
         case .notBooked:
             return "No booked Drive"
+        case .driving:
+            return "You are on the way"
         }
     }
     
@@ -91,6 +90,8 @@ enum DriveStatus {
         case .arriving:
             return "car"
         case .notBooked:
+            return "car"
+        case .driving:
             return "car"
         }
     }
@@ -107,6 +108,8 @@ enum DriveStatus {
             return .green
         case .notBooked:
             return .red
+        case .driving:
+            return .blue
         }
     }
 }
@@ -138,6 +141,36 @@ enum DrivingMode: String, CaseIterable {
             return 15.99
         case .luxus:
             return 20.99
+        }
+    }
+}
+
+
+struct CustomMapAnnotation: Identifiable {
+    var id = UUID().uuidString
+    var location: CLLocation
+    var type: AnnotationType
+    var drive: Drive?
+}
+
+enum AnnotationType {
+    case drive, destination
+    
+    var systemImage: String {
+        switch self {
+        case .drive:
+            return "car.circle"
+        case .destination:
+            return "mappin.circle.fill"
+        }
+    }
+    
+    var imageColor: Color {
+        switch self {
+        case .drive:
+            return .blue
+        case .destination:
+            return .green
         }
     }
 }

@@ -27,6 +27,7 @@ class ApplicationViewModel: ObservableObject {
     }
     
     func stepIntoCar() {
-        driveState = .success
+        driveState = .driving
     }
+    
 }
