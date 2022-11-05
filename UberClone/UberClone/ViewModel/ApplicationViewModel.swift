@@ -21,9 +21,13 @@ class ApplicationViewModel: ObservableObject {
         currentDrive = drive
     }
     
-    func deleteDrive() {
+    func deleteDrive(afterBooking: Bool) {
         currentDrive = nil
         driveState = .notBooked
+        
+        if afterBooking {
+            //Send some data to the driver
+        }
     }
     
     func stepIntoCar() {

@@ -80,6 +80,7 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                 }
                 
                 mapAnnotations.append(CustomMapAnnotation(location: endLocation!, type: .destination))
+                
                 if driveOptions.isEmpty {
                     alertMsg = "We haven't found any options"
                 } else {

@@ -77,20 +77,27 @@ struct CustomDraggableComponent: View {
                             if applicationViewModel.currentDrive != nil {
                                 DriverInformation(userLocation: lvm.userLocation!, driver: applicationViewModel.currentDrive!.driver)
                                 
+                                
+                                
                                 if applicationViewModel.driveState == .notBooked {
+                                    
+                                    MoneyInformationView(drive: applicationViewModel.currentDrive!)
+                                    
                                     HStack {
                                         Button {
                                             withAnimation() {
                                                 applicationViewModel.driveState = applicationViewModel.currentDrive!.bookDrive()
                                                 if applicationViewModel.driveState != .notBooked {
                                                     lvm.driveOptions = []
+                                                    lvm.mapAnnotations = []
+                                                    lvm.mapAnnotations.append(CustomMapAnnotation(location: applicationViewModel.currentDrive!.destination, type: .destination))
                                                 }
                                                 
                                             }
                                         } label: {
                                             HStack {
                                                 Spacer()
-                                                Text("Book \(String(format: "%.02f", applicationViewModel.currentDrive!.cost))$")
+                                                Text("Book \(String(format: "%.02f", applicationViewModel.currentDrive!.calculateDriveCost()))$")
                                                     .foregroundColor(.white)
                                                     .padding()
                                                 Spacer()
@@ -125,12 +132,15 @@ struct CustomDraggableComponent: View {
                                     Text(applicationViewModel.driveState.responseValue)
                                         .fontWeight(.bold)
                                 }
+                                .padding()
                                 
                                 if applicationViewModel.driveState == .success {
                                     Button {
                                         withAnimation() {
-                                            applicationViewModel.deleteDrive()
+                                            applicationViewModel.deleteDrive(afterBooking: false)
+                                            
                                         }
+                                        lvm.mapAnnotations.removeAll()
                                     } label: {
                                         Text("Get Next Ride")
                                             .foregroundColor(.white)
@@ -156,6 +166,24 @@ struct CustomDraggableComponent: View {
                                 
                                 
                                 if applicationViewModel.driveState == .pending {
+                                    Button {
+                                        withAnimation() {
+                                            applicationViewModel.deleteDrive(afterBooking: true)
+                                        }
+                                    } label: {
+                                        VStack {
+                                            Text("Cancel Booking")
+                                                .foregroundColor(.white)
+                                            Text("(You have to pay a fee to the driver.)")
+                                                .foregroundColor(.gray.opacity(0.5))
+                                                .font(.subheadline)
+                                            
+                                        }
+                                            
+                                            .padding()
+                                            .background(Color.red.cornerRadius(20))
+                                            .padding(.horizontal)
+                                    }
                                     Button {
                                         applicationViewModel.driveState = .arriving
                                     } label: {
@@ -240,14 +268,10 @@ struct SearchBottomSheet: View {
                 ForEach(DrivingMode.allCases, id: \.rawValue) { drivingMode in
                     
                     
-                    Button(action: {
-                        currentDrivingMode = drivingMode
-                    }, label: {
-                        VStack(alignment: .leading) {
-                            Image(drivingMode.image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: UIScreen.main.bounds.width / 5,alignment: .center)
+                    HStack {
+                        Button(action: {
+                            currentDrivingMode = drivingMode
+                        }, label: {
                             VStack(alignment: .leading) {
                                 Text(drivingMode.stringValue)
                                     .foregroundColor(currentDrivingMode == drivingMode ? .white : .black)
@@ -257,11 +281,14 @@ struct SearchBottomSheet: View {
                                     .font(.subheadline)
                                     .fontWeight(.bold)
                             }
+                            .padding()
+                            .background(currentDrivingMode == drivingMode ? .blue : .gray.opacity(0.1))
+                            .cornerRadius(20)
+                        })
+                        if drivingMode != .luxus {
+                            Spacer()
                         }
-                        .padding()
-                        .background(currentDrivingMode == drivingMode ? .blue : .gray.opacity(0.1))
-                        .cornerRadius(20)
-                    })
+                    }
                 }
                 
                 
@@ -270,7 +297,6 @@ struct SearchBottomSheet: View {
             
             Button {
                 Task {
-                    avm.deleteDrive()
                     await lvm.setRouteLocations(end: endPosition, ride: currentDrivingMode)
                 }
             } label: {

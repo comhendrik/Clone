@@ -42,30 +42,12 @@ struct DriverInformation: View {
             }
             .padding()
             .background(Color.gray.opacity(0.1).cornerRadius(20).frame(width: UIScreen.main.bounds.width - 30))
-            .padding(.bottom)
             
             
             
         }
         
         
-    }
-}
-
-struct SmallDriverInformation: View {
-    let driver: Driver
-    let action: () -> Void
-    var body: some View {
-        HStack {
-            Text(driver.firstName)
-            Text("Open Sheet to see more")
-            Button {
-                action()
-            } label: {
-                Text("Delete")
-                    .foregroundColor(.gray)
-            }
-        }
     }
 }
 

@@ -20,15 +20,15 @@ struct RideRequest {
         //To test input the driver location is set to the destination which doesn't make sense in the normal use of the application but will be changed when real data is used.
         //Dummy data:,
         let location = CLLocation(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude - 0.075)
-        return [Drive(driver: Driver(firstName: "Max", lastName: "Mustermann", rating: 4.5, location: location, car: Car(name: "Tesla Model 3", type: .standard)), cost: 12.99)]
+        return [Drive(driver: Driver(firstName: "Max", lastName: "Mustermann", rating: 4.5, location: location, car: Car(name: "Tesla Model 3", type: rideType), pricePerKM: 2.5, pricePerArrivingKM: 1.5), start: start, destination: destination)]
     }
 }
 
 struct Drive: Identifiable {
     var id = UUID().uuidString
     var driver: Driver
-    var cost: Double
-    
+    var start: CLLocation
+    var destination: CLLocation
     //TODO: Get the logic from avm here
     
     func bookDrive() -> DriveStatus {
@@ -39,6 +39,25 @@ struct Drive: Identifiable {
         return .pending
     }
     
+    //TODO: Calculate cost with real street km data and not just a straight line over the map
+    func calculateDrivingDistance() -> Double {
+         return destination.distance(from: start) / 1000
+    }
+    
+    func calculateCostForRide() -> Double {
+        
+        return calculateDrivingDistance() * driver.pricePerKM
+    }
+    
+    func calculateCostForArriving() -> Double {
+        let distanceInKM = driver.getDistanceFromUser(userLocation: start)
+        return distanceInKM * driver.pricePerArrivingKM
+    }
+    
+    func calculateDriveCost() -> Double {
+        return  driver.car.type.price + calculateCostForArriving() + calculateCostForRide()
+    }
+    
 }
 
 struct Driver {
@@ -47,6 +66,8 @@ struct Driver {
     var rating: Double
     var location: CLLocation
     var car: Car
+    var pricePerKM: Double
+    var pricePerArrivingKM: Double
     
     func getDistanceFromUser(userLocation: CLLocation) -> Double {
         let distanceInMeters = location.distance(from: userLocation)
@@ -127,10 +148,6 @@ enum DrivingMode: String, CaseIterable {
         case .luxus:
             return "Luxus"
         }
-    }
-    
-    var image: String {
-        "Car"
     }
     
     var price: Double {
