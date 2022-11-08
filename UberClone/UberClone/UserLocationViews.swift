@@ -12,21 +12,21 @@ import SwiftUI
 import MapKit
 
 struct UserLocationViews: View {
-    @StateObject var locationViewModel = LocationViewModel()
-    @StateObject var applicationViewModel = ApplicationViewModel()
+    @StateObject var lvm = LocationViewModel()
+    @StateObject var avm = ApplicationViewModel()
     var body: some View {
-        switch locationViewModel.authorizationStatus {
+        switch lvm.authorizationStatus {
         case .notDetermined:
             AnyView(RequestLocationView())
-                .environmentObject(locationViewModel)
+                .environmentObject(lvm)
         case .restricted:
             ErrorView(errorText: "Location use is restricted.")
         case .denied:
             ErrorView(errorText: "The app does not have location permissions. Please enable them in settings.")
         case .authorizedAlways, .authorizedWhenInUse:
             TrackingView()
-                .environmentObject(locationViewModel)
-                .environmentObject(applicationViewModel)
+                .environmentObject(lvm)
+                .environmentObject(avm)
         default:
             Text("Unexpected status")
         }
@@ -34,7 +34,7 @@ struct UserLocationViews: View {
 }
 
 struct RequestLocationView: View {
-    @EnvironmentObject var locationViewModel: LocationViewModel
+    @EnvironmentObject var lvm: LocationViewModel
     
     var body: some View {
         VStack {
@@ -43,7 +43,7 @@ struct RequestLocationView: View {
                 .frame(width: 100, height: 100, alignment: .center)
                 .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
             Button(action: {
-                locationViewModel.requestPermission()
+                lvm.requestPermission()
             }, label: {
                 Label("Allow tracking", systemImage: "location")
             })
@@ -75,18 +75,18 @@ struct ErrorView: View {
 }
 
 struct TrackingView: View {
-    @EnvironmentObject var locationViewModel: LocationViewModel
-    @EnvironmentObject var applicationViewModel: ApplicationViewModel
+    @EnvironmentObject var lvm: LocationViewModel
+    @EnvironmentObject var avm: ApplicationViewModel
     
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $locationViewModel.region, showsUserLocation: true, annotationItems: locationViewModel.mapAnnotations) { annotation in
+            Map(coordinateRegion: $lvm.region, showsUserLocation: true, annotationItems: avm.mapAnnotations) { annotation in
                 MapAnnotation(coordinate: annotation.location.coordinate) {
                     Button {
                         withAnimation() {
-                            applicationViewModel.currentDrive = annotation.drive!
+                            avm.currentDrive = annotation.drive!
                         }
                     } label: {
                         VStack(spacing: 0) {
@@ -105,10 +105,10 @@ struct TrackingView: View {
             }
             BottomSheet()
                 .onAppear() {
-                    locationViewModel.startLocation = locationViewModel.getUserLocation()
+                    let _ = lvm.getUserLocation()
                 }
-                .environmentObject(locationViewModel)
-                .environmentObject(applicationViewModel)
+                .environmentObject(lvm)
+                .environmentObject(avm)
                .ignoresSafeArea(.all, edges: .bottom)
         }
     }

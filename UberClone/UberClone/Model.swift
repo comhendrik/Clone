@@ -8,21 +8,80 @@
 import Foundation
 import CoreLocation
 import SwiftUI
+import GeoFire
+import FirebaseFirestore
+
+let db = Firestore.firestore()
 
 struct RideRequest {
-    var rideType: DrivingMode
+    var drivingMode: DrivingMode
     var start: CLLocation
     var destination: CLLocation
     
-    func sendRequest() -> [Drive] {
-        //Normal Logic with Server Request to get real data
+    func sendRequest(radius: Int) async -> [Drive] {
+        let center = CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude)
+        let radiusInM = Double(radius) * 1000
         
-        //To test input the driver location is set to the destination which doesn't make sense in the normal use of the application but will be changed when real data is used.
-        //Dummy data:,
-        let location = CLLocation(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude - 0.075)
-        return [Drive(driver: Driver(firstName: "Max", lastName: "Mustermann", rating: 4.5, location: location, car: Car(name: "Tesla Model 3", type: rideType), pricePerKM: 2.5, pricePerArrivingKM: 1.5), start: start, destination: destination)]
+        
+        let queryBounds = GFUtils.queryBounds(forLocation: center,
+                                              withRadius: radiusInM)
+        
+    
+        let queries = queryBounds.map { bound -> Query in
+            return db.collection("Driver")
+                .order(by: "geohash")
+                .start(at: [bound.startValue])
+                .end(at: [bound.endValue])
+                
+        }
+        
+        do {
+            var drivingOptions: [Drive] = []
+            for query in queries {
+                let documents = try await query.getDocuments()
+                
+                
+                let allDocs = documents.documents
+
+                for document in allDocs {
+                    let firstName = document.data()["firstName"] as? String ?? "no firstName"
+                    let lastName = document.data()["lastName"] as? String ?? "no lastName"
+                    let rating = document.data()["rating"] as? Double ?? 0
+                    
+                    let pricePerKM = document.data()["pricePerKM"] as? Double ?? 0
+                    let pricePerArrivingKM = document.data()["pricePerArrivingKM"] as? Double ?? 0
+                    
+                    let lat = document.data()["latitude"] as? Double ?? 0
+                    let lng = document.data()["longitude"] as? Double ?? 0
+                    let coordinates = CLLocation(latitude: lat, longitude: lng)
+                    
+                    let carName = document.data()["carName"] as? String ?? "no carName"
+                    
+                    drivingOptions.append(Drive(driver: Driver(firstName: firstName,
+                                                               lastName: lastName,
+                                                               rating: rating,
+                                                               location: coordinates,
+                                                               car: Car(name: carName,
+                                                                        //TODO: Real fetching with driving Mode
+                                                                        type: drivingMode),
+                                                               pricePerKM: pricePerKM,
+                                                               pricePerArrivingKM: pricePerArrivingKM),
+                                                start: start,
+                                                destination: destination))
+                }
+                
+            }
+            return drivingOptions
+        } catch {
+            print("error")
+            return []
+        }
+        
+        
     }
 }
+
+
 
 struct Drive: Identifiable {
     var id = UUID().uuidString
@@ -39,7 +98,13 @@ struct Drive: Identifiable {
         return .pending
     }
     
+    func getNewestInformation(with status: DriveStatus) -> DriveStatus {
+        //with status is dummy data
+        return status
+    }
+    
     //TODO: Calculate cost with real street km data and not just a straight line over the map
+    
     func calculateDrivingDistance() -> Double {
          return destination.distance(from: start) / 1000
     }
@@ -147,6 +212,17 @@ enum DrivingMode: String, CaseIterable {
             return "Medium"
         case .luxus:
             return "Luxus"
+        }
+    }
+    
+    var intValue: Int {
+        switch self {
+        case .standard:
+            return 1
+        case .medium:
+            return 2
+        case .luxus:
+            return 3
         }
     }
     

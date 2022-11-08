@@ -13,21 +13,10 @@ import MapKit
 
 
 class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
-    var startLocation : CLLocation? = nil
-    
-    var endLocation : CLLocation? = nil
-    
-    @Published var alertMsg: String = ""
-    
-    @Published var showAlert: Bool = false
     
     @Published var authorizationStatus: CLAuthorizationStatus
     
     @Published var userLocation: CLLocation?
-    
-    @Published var driveOptions: [Drive] = []
-    
-    @Published var mapAnnotations: [CustomMapAnnotation] = []
     
     @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     
@@ -55,40 +44,6 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     func getUserLocation() -> CLLocation? {
         userLocation = locationManager.location
         return userLocation
-    }
-    
-    func setRouteLocations(end: String, ride: DrivingMode) async {
-        
-        driveOptions = []
-        mapAnnotations = []
-        
-        self.endLocation = await getLocation(forPlaceCalled: end)
-        
-        await MainActor.run {
-            
-            if startLocation == nil {
-                alertMsg = "Be more precisely when describing your start location."
-                showAlert = true
-            } else if endLocation == nil {
-                alertMsg = "Be more precisely when describing your end location."
-                showAlert = true
-            } else {
-                let rideRequest = RideRequest(rideType: ride, start: startLocation!, destination: endLocation!)
-                driveOptions = rideRequest.sendRequest()
-                for option in driveOptions {
-                    mapAnnotations.append(CustomMapAnnotation(location: option.driver.location, type: .drive, drive: option))
-                }
-                
-                mapAnnotations.append(CustomMapAnnotation(location: endLocation!, type: .destination))
-                
-                if driveOptions.isEmpty {
-                    alertMsg = "We haven't found any options"
-                } else {
-                    alertMsg = "Your Drive options are shown on the map"
-                }
-                showAlert.toggle()
-            }
-        }
     }
 }
 

@@ -1,0 +1,9 @@
+use_frameworks! :linkage => :static
+
+target 'UberClone' do
+
+pod 'FirebaseFirestore'
+pod 'FirebaseStorage'
+pod 'GeoFire/Utils'
+
+end
