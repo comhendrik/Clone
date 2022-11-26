@@ -7,3 +7,11 @@ pod 'FirebaseStorage'
 pod 'GeoFire/Utils'
 
 end
+
+target 'Driver' do
+
+pod 'FirebaseFirestore'
+pod 'FirebaseStorage'
+pod 'GeoFire/Utils'
+
+end

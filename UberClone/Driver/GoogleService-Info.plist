@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>306950599477-16d4sn0vllmppmemm09i4pdqs3dc9p89.apps.googleusercontent.com</string>
+	<string>306950599477-il65f799nbln7nfoqrp8k7d6tmm41k0a.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.306950599477-16d4sn0vllmppmemm09i4pdqs3dc9p89</string>
+	<string>com.googleusercontent.apps.306950599477-il65f799nbln7nfoqrp8k7d6tmm41k0a</string>
 	<key>API_KEY</key>
 	<string>AIzaSyA06dCDWpS9uK4EmXlcCwW3yG3IPhCGFq4</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>HendrikSteen.de.UberClone</string>
+	<string>HendrikSteen.de.Driver</string>
 	<key>PROJECT_ID</key>
 	<string>taxi-2dbfa</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:306950599477:ios:8b09c659b652b7a3bd127c</string>
+	<string>1:306950599477:ios:e8c1a2a6096e7368bd127c</string>
 </dict>
 </plist>

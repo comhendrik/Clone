@@ -267,3 +267,51 @@ enum AnnotationType {
         }
     }
 }
+
+struct DriverAccount {
+    var firstName: String
+    var lastName: String
+    var rating: Double
+    var location: CLLocation
+    var car: Car
+    var pricePerKM: Double
+    var pricePerArrivingKM: Double
+    
+    init() async {
+        do {
+            let document = try await db.collection("Driver").document("kV8UifsbilBjYraH5L7D").getDocument()
+            self.firstName = document.data()?["firstName"] as? String ?? "no firstName"
+            self.lastName = document.data()?["lastName"] as? String ?? "no lastName"
+            self.rating = document.data()?["rating"] as? Double ?? 0
+            
+            self.pricePerKM = document.data()?["pricePerKM"] as? Double ?? 0
+            self.pricePerArrivingKM = document.data()?["pricePerArrivingKM"] as? Double ?? 0
+            
+            let lat = document.data()?["latitude"] as? Double ?? 0
+            let lng = document.data()?["longitude"] as? Double ?? 0
+            self.location = CLLocation(latitude: lat, longitude: lng)
+            
+            let carName = document.data()?["carName"] as? String ?? "no carName"
+            let carType = document.data()?["carType"] as? Int ?? 1
+            
+            if carType == 1 {
+                self.car = Car(name: carName, type: .standard)
+            } else if carType == 2 {
+                self.car = Car(name: carName, type: .medium)
+            } else {
+                self.car = Car(name: carName, type: .luxus)
+            }
+        } catch {
+            print(error.localizedDescription)
+            self.firstName = "err"
+            self.lastName = "err"
+            self.rating = 0.0
+            self.location = CLLocation(latitude: 0, longitude: 0)
+            self.car = Car(name: "err", type: .medium)
+            self.pricePerKM = 0.0
+            self.pricePerArrivingKM = 0.0
+        }
+    }
+    
+    
+}
