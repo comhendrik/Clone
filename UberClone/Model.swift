@@ -44,30 +44,38 @@ struct RideRequest {
                 let allDocs = documents.documents
 
                 for document in allDocs {
-                    let firstName = document.data()["firstName"] as? String ?? "no firstName"
-                    let lastName = document.data()["lastName"] as? String ?? "no lastName"
-                    let rating = document.data()["rating"] as? Double ?? 0
+                    let isWorking = document.data()["isWorking"] as? Bool ?? false
+                    if isWorking {
+                        let firstName = document.data()["firstName"] as? String ?? "no firstName"
+                        let lastName = document.data()["lastName"] as? String ?? "no lastName"
+                        let rating = document.data()["rating"] as? Double ?? 0
+                        
+                        let pricePerKM = document.data()["pricePerKM"] as? Double ?? 0
+                        let pricePerArrivingKM = document.data()["pricePerArrivingKM"] as? Double ?? 0
+                        
+                        let id = document.documentID
+                        
+                        let lat = document.data()["latitude"] as? Double ?? 0
+                        let lng = document.data()["longitude"] as? Double ?? 0
+                        let coordinates = CLLocation(latitude: lat, longitude: lng)
+                        
+                        let carName = document.data()["carName"] as? String ?? "no carName"
+                        drivingOptions.append(Drive(driver: Driver(firstName: firstName,
+                                                                   lastName: lastName,
+                                                                   rating: rating,
+                                                                   location: coordinates,
+                                                                   car: Car(name: carName,
+                                                                            //TODO: Real fetching with driving Mode
+                                                                            type: drivingMode),
+                                                                   pricePerKM: pricePerKM,
+                                                                   pricePerArrivingKM: pricePerArrivingKM,
+                                                                   id: id,
+                                                                   isWorking: isWorking
+                                                                  ),
+                                                    start: start,
+                                                    destination: destination))
+                    }
                     
-                    let pricePerKM = document.data()["pricePerKM"] as? Double ?? 0
-                    let pricePerArrivingKM = document.data()["pricePerArrivingKM"] as? Double ?? 0
-                    
-                    let lat = document.data()["latitude"] as? Double ?? 0
-                    let lng = document.data()["longitude"] as? Double ?? 0
-                    let coordinates = CLLocation(latitude: lat, longitude: lng)
-                    
-                    let carName = document.data()["carName"] as? String ?? "no carName"
-                    
-                    drivingOptions.append(Drive(driver: Driver(firstName: firstName,
-                                                               lastName: lastName,
-                                                               rating: rating,
-                                                               location: coordinates,
-                                                               car: Car(name: carName,
-                                                                        //TODO: Real fetching with driving Mode
-                                                                        type: drivingMode),
-                                                               pricePerKM: pricePerKM,
-                                                               pricePerArrivingKM: pricePerArrivingKM),
-                                                start: start,
-                                                destination: destination))
                 }
                 
             }
@@ -125,6 +133,7 @@ struct Drive: Identifiable {
     
 }
 
+//TODO: Put Driver and DriverAccount together
 struct Driver {
     var firstName: String
     var lastName: String
@@ -133,6 +142,8 @@ struct Driver {
     var car: Car
     var pricePerKM: Double
     var pricePerArrivingKM: Double
+    var id: String
+    var isWorking: Bool
     
     func getDistanceFromUser(userLocation: CLLocation) -> Double {
         let distanceInMeters = location.distance(from: userLocation)
@@ -276,13 +287,18 @@ struct DriverAccount {
     var car: Car
     var pricePerKM: Double
     var pricePerArrivingKM: Double
+    var id: String
+    var isWorking: Bool
     
     init() async {
         do {
+            //TODO: adding dynamic fetching
             let document = try await db.collection("Driver").document("kV8UifsbilBjYraH5L7D").getDocument()
             self.firstName = document.data()?["firstName"] as? String ?? "no firstName"
             self.lastName = document.data()?["lastName"] as? String ?? "no lastName"
             self.rating = document.data()?["rating"] as? Double ?? 0
+            self.isWorking = document.data()?["isWorking"] as? Bool ?? false
+            self.id = document.documentID
             
             self.pricePerKM = document.data()?["pricePerKM"] as? Double ?? 0
             self.pricePerArrivingKM = document.data()?["pricePerArrivingKM"] as? Double ?? 0
@@ -310,6 +326,8 @@ struct DriverAccount {
             self.car = Car(name: "err", type: .medium)
             self.pricePerKM = 0.0
             self.pricePerArrivingKM = 0.0
+            self.id = "err"
+            self.isWorking = false
         }
     }
     
