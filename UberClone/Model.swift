@@ -290,10 +290,10 @@ struct DriverAccount {
     var id: String
     var isWorking: Bool
     
-    init() async {
+    init(id: String) async {
         do {
             //TODO: adding dynamic fetching
-            let document = try await db.collection("Driver").document("kV8UifsbilBjYraH5L7D").getDocument()
+            let document = try await db.collection("Driver").document(id).getDocument()
             self.firstName = document.data()?["firstName"] as? String ?? "no firstName"
             self.lastName = document.data()?["lastName"] as? String ?? "no lastName"
             self.rating = document.data()?["rating"] as? Double ?? 0
@@ -331,5 +331,30 @@ struct DriverAccount {
         }
     }
     
-    
+    func updateDrivingData(id: String, isWorking: Bool, pricePerArrivingKM: String, pricePerKM: String) async -> String {
+        
+        
+        if let pricePerArrivingKM = pricePerArrivingKM.doubleValue, let pricePerKM = pricePerKM.doubleValue {
+            do {
+                try await db.collection("Driver").document(id).updateData([
+                    "isWorking": isWorking,
+                    "pricePerArrivingKM" : pricePerArrivingKM,
+                    "pricePerKM" : pricePerKM
+                ])
+                return "Succesfully changed Driver Status"
+            } catch {
+                return error.localizedDescription
+            }
+            
+        }
+        return "Please check your input for your price changes. Those have to be numbers."
+    }
 }
+
+
+extension String {
+    
+    // get double value from String or nil
+    var doubleValue: Double? { return Double(self) }
+}
+

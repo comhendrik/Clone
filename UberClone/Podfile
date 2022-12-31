@@ -10,6 +10,7 @@ end
 
 target 'Driver' do
 
+pod 'FirebaseAuth'
 pod 'FirebaseFirestore'
 pod 'FirebaseStorage'
 pod 'GeoFire/Utils'

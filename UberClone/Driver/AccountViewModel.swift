@@ -7,33 +7,48 @@
 
 import SwiftUI
 import Foundation
+import FirebaseAuth
 
 class AccountViewModel: ObservableObject {
     @Published var user: DriverAccount? = nil
     
+    @Published var showAlert: Bool = false
+    @Published var alertMsg: String = "No msg"
+    
     @Published var isWorking: Bool = false
-    //TODO: Using integers for text fields
+    //Normal Strings are used because we check on the updateDrivingData() function wether it is a double or not
     @Published var changePricePerArrivingKM = ""
     @Published var changePricePerKM = ""
     
-    init() {
-        Task {
-            user = await DriverAccount()
-            if user != nil {
-                self.isWorking = user!.isWorking
+    
+    func loadDriver() {
+        //DispatchQueue because otherwise the UI will be updated on a background thread
+        if let currentUser = Auth.auth().currentUser {
+            DispatchQueue.main.async {
+                Task {
+                    self.user = await DriverAccount(id: currentUser.uid)
+                    if self.user != nil {
+                        self.isWorking = self.user!.isWorking
+                    }
+                }
             }
         }
+        
     }
     
-    func updateDrivingData() async {
-        do {
-            try await db.collection("Driver").document("kV8UifsbilBjYraH5L7D").updateData([
-                "isWorking": isWorking,
-                "pricePerArrivingKM" : Double(changePricePerArrivingKM),
-                "pricePerKM" : Double(changePricePerKM)
-            ])
-        } catch {
-            print(error)
+    func updateDrivingData() {
+        if user != nil {
+            DispatchQueue.main.async {
+                Task {
+                    self.alertMsg = await self.user!.updateDrivingData(id: self.user!.id, isWorking: self.isWorking, pricePerArrivingKM: self.changePricePerArrivingKM, pricePerKM: self.changePricePerKM)
+                    self.showAlert.toggle()
+                }
+            }
+        } else {
+            alertMsg = "No current user. Please reload"
+            showAlert.toggle()
         }
+        
     }
 }
+

@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct CreateProfileView: View {
     @StateObject var accountViewModel : AccountViewModel
     var body: some View {
         if accountViewModel.user != nil {
             VStack {
+                Button {
+                    print(accountViewModel.user!.id)
+                    print(accountViewModel.user!.firstName)
+                    print(Auth.auth().currentUser!.uid)
+                } label: {
+                    Text("test")
+                }
+
                 Text("Set up your drive")
                 Toggle(isOn: $accountViewModel.isWorking) {
                     Text("Change working status")
@@ -19,12 +28,13 @@ struct CreateProfileView: View {
                 TextField("arrivingKm", text: $accountViewModel.changePricePerArrivingKM)
                 TextField("km", text: $accountViewModel.changePricePerKM)
                 Button {
-                    Task {
-                        await accountViewModel.updateDrivingData()
-                    }
+                    accountViewModel.updateDrivingData()
                 } label: {
                     Text("Start Driving")
                 }
+                .alert(accountViewModel.alertMsg, isPresented: $accountViewModel.showAlert) {
+                            Button("OK", role: .cancel) { }
+                        }
 
             }
         } else {

@@ -10,6 +10,8 @@
 		2457858528F40326001AF31D /* CoreLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2457858428F40326001AF31D /* CoreLocationViewModel.swift */; };
 		245B5DA228FB164C00F4FD10 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245B5DA128FB164C00F4FD10 /* Model.swift */; };
 		245B5DA428FB168F00F4FD10 /* ApplicationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245B5DA328FB168F00F4FD10 /* ApplicationViewModel.swift */; };
+		24600C2A296064310020A649 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24600C29296064310020A649 /* LoginViewModel.swift */; };
+		24600C2C29606C5A0020A649 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24600C2B29606C5A0020A649 /* LoginView.swift */; };
 		2466553A295DBCB3000B3FA6 /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24665539295DBCB3000B3FA6 /* CreateProfileView.swift */; };
 		246D3FD128C4CA3700A71BF4 /* SelectRideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */; };
 		247CC80D291679AF00A3857C /* MoneyInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247CC80C291679AF00A3857C /* MoneyInformationView.swift */; };
@@ -38,6 +40,8 @@
 		2457858428F40326001AF31D /* CoreLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreLocationViewModel.swift; sourceTree = "<group>"; };
 		245B5DA128FB164C00F4FD10 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		245B5DA328FB168F00F4FD10 /* ApplicationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationViewModel.swift; sourceTree = "<group>"; };
+		24600C29296064310020A649 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		24600C2B29606C5A0020A649 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		24665539295DBCB3000B3FA6 /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRideView.swift; sourceTree = "<group>"; };
 		247CC80C291679AF00A3857C /* MoneyInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyInformationView.swift; sourceTree = "<group>"; };
@@ -147,8 +151,10 @@
 			children = (
 				24F2B24B29325C9D00C39F4B /* DriverApp.swift */,
 				24F2B25A2932639400C39F4B /* AccountViewModel.swift */,
+				24600C29296064310020A649 /* LoginViewModel.swift */,
 				24F2B24D29325C9D00C39F4B /* ContentView.swift */,
 				24665539295DBCB3000B3FA6 /* CreateProfileView.swift */,
+				24600C2B29606C5A0020A649 /* LoginView.swift */,
 				24F2B25E2932655000C39F4B /* GoogleService-Info.plist */,
 				24F2B24F29325C9E00C39F4B /* Assets.xcassets */,
 				24F2B25129325C9E00C39F4B /* Preview Content */,
@@ -390,7 +396,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				24F2B25729325DFD00C39F4B /* Model.swift in Sources */,
+				24600C2C29606C5A0020A649 /* LoginView.swift in Sources */,
 				24F2B24E29325C9D00C39F4B /* ContentView.swift in Sources */,
+				24600C2A296064310020A649 /* LoginViewModel.swift in Sources */,
 				24F2B25B2932639400C39F4B /* AccountViewModel.swift in Sources */,
 				24F2B24C29325C9D00C39F4B /* DriverApp.swift in Sources */,
 				2466553A295DBCB3000B3FA6 /* CreateProfileView.swift in Sources */,

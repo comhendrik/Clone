@@ -9,18 +9,29 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var accountViewModel = AccountViewModel()
+    @StateObject var loginViewModel = LoginViewModel()
+    @AppStorage("log_status") var status = false
     var body: some View {
-        Text("Hello, world!")
-            .padding()
-        Button {
-            if accountViewModel.user != nil {
-                print(accountViewModel.user!.firstName)
+        
+        if status {
+            CreateProfileView(accountViewModel: accountViewModel)
+                .onAppear {
+                    accountViewModel.loadDriver()
+                }
+            Button {
+                loginViewModel.logOut()
+                status = false
+            } label: {
+                Text("Logout")
             }
-        } label: {
-            Text("Test")
+            
+        } else {
+            LoginView(loginViewModel: loginViewModel)
         }
         
-        CreateProfileView(accountViewModel: accountViewModel)
+        
+        
+        
 
 
     }
