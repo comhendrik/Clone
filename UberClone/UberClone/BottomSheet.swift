@@ -250,6 +250,9 @@ struct SearchBottomSheet: View {
     
     @State private var showSettings = false
     
+    @State private var showAlert = false
+    @State private var alertMsg = ""
+    
     @EnvironmentObject var lvm: LocationViewModel
     
     @EnvironmentObject var avm: ApplicationViewModel
@@ -283,41 +286,13 @@ struct SearchBottomSheet: View {
                 Spacer()
             }
             .padding(.leading)
-            HStack {
-                
-                ForEach(DrivingMode.allCases, id: \.rawValue) { drivingMode in
-                    
-                    
-                    HStack {
-                        Button(action: {
-                            currentDrivingMode = drivingMode
-                        }, label: {
-                            VStack(alignment: .leading) {
-                                Text(drivingMode.stringValue)
-                                    .foregroundColor(currentDrivingMode == drivingMode ? .white : .black)
-                                    .fontWeight(.black)
-                                Text("$ \(drivingMode.price, specifier: "%.2f")")
-                                    .foregroundColor(currentDrivingMode == drivingMode ? .white : .gray)
-                                    .font(.subheadline)
-                                    .fontWeight(.bold)
-                            }
-                            .padding()
-                            .background(currentDrivingMode == drivingMode ? .blue : .gray.opacity(0.1))
-                            .cornerRadius(20)
-                        })
-                        if drivingMode != .luxus {
-                            Spacer()
-                        }
-                    }
-                }
-                
-                
-            }
-            .padding(.horizontal)
+            
+            SelectDrivingModeView(mode: $currentDrivingMode)
             
             Button {
                 Task {
-                    await avm.setRouteLocations(userLocation: lvm.userLocation, end: endPosition, ride: currentDrivingMode, radius: 50)
+                    self.alertMsg = await avm.setRouteLocations(userLocation: lvm.userLocation, end: endPosition, ride: currentDrivingMode, radius: 50)
+                    self.showAlert.toggle()
                 }
             } label: {
                 HStack {
@@ -331,9 +306,11 @@ struct SearchBottomSheet: View {
                 .padding()
                     
             }
-            .alert(avm.alertMsg, isPresented: $avm.showAlert) {
+            .alert(alertMsg, isPresented: $showAlert) {
                         Button("OK", role: .cancel) { }
                     }
+            
+            
 
             
         }

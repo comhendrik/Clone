@@ -2,44 +2,31 @@
 //  CreateProfileView.swift
 //  Driver
 //
-//  Created by Hendrik Steen on 29.12.22.
+//  Created by Hendrik Steen on 01.01.23.
 //
 
 import SwiftUI
-import FirebaseAuth
 
 struct CreateProfileView: View {
-    @StateObject var accountViewModel : AccountViewModel
+    @StateObject var loginViewModel: LoginViewModel
     var body: some View {
-        if accountViewModel.user != nil {
-            VStack {
-                Button {
-                    print(accountViewModel.user!.id)
-                    print(accountViewModel.user!.firstName)
-                    print(Auth.auth().currentUser!.uid)
-                } label: {
-                    Text("test")
-                }
-
-                Text("Set up your drive")
-                Toggle(isOn: $accountViewModel.isWorking) {
-                    Text("Change working status")
-                }
-                TextField("arrivingKm", text: $accountViewModel.changePricePerArrivingKM)
-                TextField("km", text: $accountViewModel.changePricePerKM)
-                Button {
-                    accountViewModel.updateDrivingData()
-                } label: {
-                    Text("Start Driving")
-                }
-                .alert(accountViewModel.alertMsg, isPresented: $accountViewModel.showAlert) {
-                            Button("OK", role: .cancel) { }
-                        }
-
-            }
-        } else {
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle())
+        VStack {
+            Text("Create your new account")
+            TextField("firstname", text: $loginViewModel.firstName)
+            TextField("lastname", text: $loginViewModel.lastName)
+            Text("Car Information:")
+            TextField("firstname", text: $loginViewModel.car.name)
+            SelectDrivingModeView(mode: $loginViewModel.car.type)
+            TextField("pricePerArrivingKM", text: $loginViewModel.definePricePerArrivingKM)
+            TextField("pricePerKM", text: $loginViewModel.defingePricePerKM)
+            
+            Button(action: {
+                loginViewModel.registerNewUserData()
+            }, label: {
+                Text("Register")
+            })
+            
+            
         }
     }
 }

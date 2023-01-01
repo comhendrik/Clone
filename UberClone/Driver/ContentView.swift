@@ -14,15 +14,19 @@ struct ContentView: View {
     var body: some View {
         
         if status {
-            CreateProfileView(accountViewModel: accountViewModel)
-                .onAppear {
-                    accountViewModel.loadDriver()
+            if loginViewModel.showRegisterView {
+                CreateProfileView(loginViewModel: loginViewModel)
+            } else {
+                UpdateProfileView(accountViewModel: accountViewModel)
+                    .onAppear {
+                        accountViewModel.loadDriver()
+                    }
+                Button {
+                    loginViewModel.logOut()
+                    status = false
+                } label: {
+                    Text("Logout")
                 }
-            Button {
-                loginViewModel.logOut()
-                status = false
-            } label: {
-                Text("Logout")
             }
             
         } else {

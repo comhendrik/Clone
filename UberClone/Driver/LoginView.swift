@@ -18,8 +18,7 @@ struct LoginView: View {
             Button {
                 DispatchQueue.main.async {
                     Task {
-                        await loginViewModel.login()
-                        status = true
+                        self.status = await loginViewModel.login()
                     }
                 }
             } label: {

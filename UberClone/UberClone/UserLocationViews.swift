@@ -82,7 +82,7 @@ struct TrackingView: View {
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $lvm.region, showsUserLocation: true, annotationItems: avm.mapAnnotations) { annotation in
+            Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: avm.mapAnnotations) { annotation in
                 MapAnnotation(coordinate: annotation.location.coordinate) {
                     Button {
                         withAnimation() {
@@ -103,13 +103,46 @@ struct TrackingView: View {
                 }
 
             }
+            .onChange(of: lvm.region) { newValue in
+                region = newValue
+            }
             BottomSheet()
                 .onAppear() {
-                    let _ = lvm.getUserLocation()
+                    if let userLocation = lvm.getUserLocation() {
+                        region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+                    }
                 }
                 .environmentObject(lvm)
                 .environmentObject(avm)
                .ignoresSafeArea(.all, edges: .bottom)
         }
     }
+}
+
+
+
+//Needed to make .onChange possible Otherwise you will get an error message
+
+extension MKCoordinateRegion: Equatable {
+    public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
+        return lhs.center == rhs.center && lhs.span == rhs.span
+    }
+    
+    
+}
+
+extension MKCoordinateSpan: Equatable {
+    public static func == (lhs: MKCoordinateSpan, rhs: MKCoordinateSpan) -> Bool {
+        return lhs.latitudeDelta == rhs.latitudeDelta && lhs.longitudeDelta == rhs.longitudeDelta
+    }
+    
+    
+}
+
+extension CLLocationCoordinate2D: Equatable {
+    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+    }
+    
+    
 }

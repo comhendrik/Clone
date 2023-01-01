@@ -24,16 +24,18 @@ class LoginViewModel: ObservableObject {
     @Published var resetEmail = ""
     @Published var signUpView = false
     
-    
-    //Um sich weiter zu registrieren wird Vorname und Nachname, sowie Geburtstag und Addresse als auch ein Profilbild gebraucht.
+    //Register data
     @Published var firstName = ""
     @Published var lastName = ""
+    @Published var car: Car = Car(name: "", type: .medium)
+    @Published var definePricePerArrivingKM: String = "0.0"
+    @Published var defingePricePerKM: String = "0.0"
     
     //Um Fehler anzuzeigen, wird ein Alert verwendet
     @Published var showAlert = false
     @Published var alertMsg = ""
     
-    //Siehe Erklärung ContentView:
+    @Published var showRegisterView = false
     
     @AppStorage("current_status") var statusofregister = false
     
@@ -43,8 +45,10 @@ class LoginViewModel: ObservableObject {
     func login() async -> Bool {
 
         if email == "" || password == "" {
-            self.alertMsg = "Fill the contents properly"
-            self.showAlert.toggle()
+            await MainActor.run {
+                self.alertMsg = "Fill the contents properly"
+                self.showAlert.toggle()
+            }
             return false
         }
         
@@ -58,7 +62,9 @@ class LoginViewModel: ObservableObject {
             let userDoc = try await db.collection("Driver").whereField("id", isEqualTo: id).getDocuments()
             
             if userDoc.isEmpty {
-                registerNewUserData()
+                await MainActor.run {
+                    self.showRegisterView.toggle()
+                }
             } else {
                 print("user is registered")
             }
@@ -87,7 +93,37 @@ class LoginViewModel: ObservableObject {
     }
     
     func registerNewUserData() {
-        print("We want to register new data")
+        //Dummy data is used partially
+        if let pricePerArrivingKM = definePricePerArrivingKM.doubleValue, let pricePerKM = defingePricePerKM.doubleValue {
+            if user != nil  {
+                if user!.email != nil {
+                    let doc = db.collection("Driver").document(user!.uid)
+                    doc.setData(
+                        ["firstName"         : firstName,
+                         "lastName"           : lastName,
+                         "email"              : user!.email!,
+                         "carName"            : car.name,
+                         "carType"            : car.type.intValue,
+                         "id"                 : doc.documentID,
+                         "pricePerArrivingKM" : pricePerArrivingKM,
+                         "pricePerKm"         : pricePerKM,
+                         "isWorking"          : false,
+                         "rating"             : 0.0,
+                         //Dummy Data
+                         "geohash"            : "u1wqk8x8vtvy",
+                         "latitude"           : 54.53904,
+                         "longitude"          : 8.99736
+                        ])
+                    showRegisterView = false
+                } else {
+                    print("no email")
+                }
+            } else {
+                print("no user")
+            }
+        } else {
+            print("no double values")
+        }
     }
     
     func resetPassword() {
