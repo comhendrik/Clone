@@ -28,8 +28,8 @@ class LoginViewModel: ObservableObject {
     @Published var firstName = ""
     @Published var lastName = ""
     @Published var car: Car = Car(name: "", type: .medium)
-    @Published var definePricePerArrivingKM: String = "0.0"
-    @Published var defingePricePerKM: String = "0.0"
+    @Published var definePricePerArrivingKM: String = ""
+    @Published var defingePricePerKM: String = ""
     
     //Um Fehler anzuzeigen, wird ein Alert verwendet
     @Published var showAlert = false
@@ -54,20 +54,14 @@ class LoginViewModel: ObservableObject {
         
         
         do {
-            let res = try await Auth.auth().signIn(withEmail: email, password: password)
+            let _ = try await Auth.auth().signIn(withEmail: email, password: password)
             
-            
-            let id = res.user.uid
-            
-            let userDoc = try await db.collection("Driver").whereField("id", isEqualTo: id).getDocuments()
-            
-            if userDoc.isEmpty {
+            if  await !userIsRegistered() {
                 await MainActor.run {
                     self.showRegisterView.toggle()
                 }
-            } else {
-                print("user is registered")
             }
+            
             
             return true
             
@@ -92,7 +86,32 @@ class LoginViewModel: ObservableObject {
             
     }
     
-    func registerNewUserData() {
+    func userIsRegistered() async -> Bool {
+        let user = Auth.auth().currentUser
+        if let id = user?.uid {
+            do {
+                let userDoc = try await db.collection("Driver").whereField("id", isEqualTo: id).getDocuments()
+                
+                if userDoc.isEmpty {
+                    return false
+                }
+                return true
+            } catch {
+                return false
+            }
+        }
+        return false
+        
+    }
+    
+    func registerNewUserData() -> String {
+        
+        if firstName == "" || lastName == "" {
+            print("yeah")
+            return "Please check your name input."
+        } else if car.name == "" {
+            return "Please check your car name."
+        }
         //Dummy data is used partially
         if let pricePerArrivingKM = definePricePerArrivingKM.doubleValue, let pricePerKM = defingePricePerKM.doubleValue {
             if user != nil  {
@@ -106,7 +125,7 @@ class LoginViewModel: ObservableObject {
                          "carType"            : car.type.intValue,
                          "id"                 : doc.documentID,
                          "pricePerArrivingKM" : pricePerArrivingKM,
-                         "pricePerKm"         : pricePerKM,
+                         "pricePerKM"         : pricePerKM,
                          "isWorking"          : false,
                          "rating"             : 0.0,
                          //Dummy Data
@@ -114,15 +133,15 @@ class LoginViewModel: ObservableObject {
                          "latitude"           : 54.53904,
                          "longitude"          : 8.99736
                         ])
-                    showRegisterView = false
+                    return "Registered succesfully"
                 } else {
-                    print("no email")
+                    return "No access to an email adress."
                 }
             } else {
-                print("no user")
+                return "No user. Please reload or log out and try it again"
             }
         } else {
-            print("no double values")
+            return "Check the values for your prices"
         }
     }
     

@@ -30,12 +30,16 @@ struct UpdateProfileView: View {
                 Button {
                     accountViewModel.updateDrivingData()
                 } label: {
-                    Text("Start Driving")
+                    Text("Let the world know what you've changed")
                 }
                 .alert(accountViewModel.alertMsg, isPresented: $accountViewModel.showAlert) {
                             Button("OK", role: .cancel) { }
                         }
 
+            }
+            .onAppear() {
+                accountViewModel.changePricePerKM = String(accountViewModel.user!.pricePerKM)
+                accountViewModel.changePricePerArrivingKM = String(accountViewModel.user!.pricePerArrivingKM)
             }
         } else {
             ProgressView()

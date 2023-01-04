@@ -25,10 +25,11 @@ struct RideRequest {
         
         let queryBounds = GFUtils.queryBounds(forLocation: center,
                                               withRadius: radiusInM)
-        
     
         let queries = queryBounds.map { bound -> Query in
             return db.collection("Driver")
+                .whereField("carType", isEqualTo: drivingMode.intValue)
+                .whereField("isWorking", isEqualTo: true)
                 .order(by: "geohash")
                 .start(at: [bound.startValue])
                 .end(at: [bound.endValue])
@@ -44,44 +45,41 @@ struct RideRequest {
                 let allDocs = documents.documents
 
                 for document in allDocs {
-                    let isWorking = document.data()["isWorking"] as? Bool ?? false
-                    if isWorking {
-                        let firstName = document.data()["firstName"] as? String ?? "no firstName"
-                        let lastName = document.data()["lastName"] as? String ?? "no lastName"
-                        let rating = document.data()["rating"] as? Double ?? 0
-                        
-                        let pricePerKM = document.data()["pricePerKM"] as? Double ?? 0
-                        let pricePerArrivingKM = document.data()["pricePerArrivingKM"] as? Double ?? 0
-                        
-                        let id = document.documentID
-                        
-                        let lat = document.data()["latitude"] as? Double ?? 0
-                        let lng = document.data()["longitude"] as? Double ?? 0
-                        let coordinates = CLLocation(latitude: lat, longitude: lng)
-                        
-                        let carName = document.data()["carName"] as? String ?? "no carName"
-                        drivingOptions.append(Drive(driver: Driver(firstName: firstName,
-                                                                   lastName: lastName,
-                                                                   rating: rating,
-                                                                   location: coordinates,
-                                                                   car: Car(name: carName,
-                                                                            //TODO: Real fetching with driving Mode
-                                                                            type: drivingMode),
-                                                                   pricePerKM: pricePerKM,
-                                                                   pricePerArrivingKM: pricePerArrivingKM,
-                                                                   id: id,
-                                                                   isWorking: isWorking
-                                                                  ),
-                                                    start: start,
-                                                    destination: destination))
-                    }
+                    let firstName = document.data()["firstName"] as? String ?? "no firstName"
+                    let lastName = document.data()["lastName"] as? String ?? "no lastName"
+                    let rating = document.data()["rating"] as? Double ?? 0
+                    
+                    let pricePerKM = document.data()["pricePerKM"] as? Double ?? 0
+                    let pricePerArrivingKM = document.data()["pricePerArrivingKM"] as? Double ?? 0
+                    
+                    let id = document.documentID
+                    
+                    let lat = document.data()["latitude"] as? Double ?? 0
+                    let lng = document.data()["longitude"] as? Double ?? 0
+                    let coordinates = CLLocation(latitude: lat, longitude: lng)
+                    
+                    let carName = document.data()["carName"] as? String ?? "no carName"
+                    drivingOptions.append(Drive(driver: Driver(firstName: firstName,
+                                                               lastName: lastName,
+                                                               rating: rating,
+                                                               location: coordinates,
+                                                               car: Car(name: carName,
+                                                                        //TODO: Real fetching with driving Mode
+                                                                        type: drivingMode),
+                                                               pricePerKM: pricePerKM,
+                                                               pricePerArrivingKM: pricePerArrivingKM,
+                                                               id: id,
+                                                               isWorking: true
+                                                              ),
+                                                start: start,
+                                                destination: destination))
                     
                 }
                 
             }
             return drivingOptions
         } catch {
-            print("error")
+            print(error.localizedDescription)
             return []
         }
         

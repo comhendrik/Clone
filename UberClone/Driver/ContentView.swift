@@ -19,16 +19,24 @@ struct ContentView: View {
             } else {
                 UpdateProfileView(accountViewModel: accountViewModel)
                     .onAppear {
-                        accountViewModel.loadDriver()
+                        Task {
+                            if await !loginViewModel.userIsRegistered() {
+                                await MainActor.run {
+                                    loginViewModel.showRegisterView = true
+                                }
+                            }
+                            accountViewModel.loadDriver()
+                        }
+                        
                     }
-                Button {
-                    loginViewModel.logOut()
-                    status = false
-                } label: {
-                    Text("Logout")
-                }
+                
             }
-            
+            Button {
+                loginViewModel.logOut()
+                status = false
+            } label: {
+                Text("Logout")
+            }
         } else {
             LoginView(loginViewModel: loginViewModel)
         }
