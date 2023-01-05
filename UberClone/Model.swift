@@ -89,7 +89,11 @@ struct RideRequest {
 
 
 
-struct Drive: Identifiable {
+struct Drive: Identifiable, Equatable {
+    static func == (lhs: Drive, rhs: Drive) -> Bool {
+        lhs.id == rhs.id && lhs.driver == rhs.driver && lhs.start == rhs.destination
+    }
+    
     var id = UUID().uuidString
     var driver: Driver
     var start: CLLocation
@@ -132,7 +136,11 @@ struct Drive: Identifiable {
 }
 
 //TODO: Put Driver and DriverAccount together
-struct Driver {
+struct Driver: Equatable {
+    static func == (lhs: Driver, rhs: Driver) -> Bool {
+        lhs.firstName == rhs.firstName && lhs.lastName == rhs.lastName && lhs.rating == rhs.rating && lhs.location == rhs.location && lhs.car == rhs.car && lhs.pricePerKM == rhs.pricePerKM && lhs.pricePerArrivingKM == rhs.pricePerArrivingKM && lhs.id == rhs.id && lhs.isWorking == rhs.isWorking
+    }
+    
     var firstName: String
     var lastName: String
     var rating: Double
@@ -149,7 +157,7 @@ struct Driver {
     }
 }
 
-struct Car {
+struct Car: Equatable {
     var name: String
     var type: DrivingMode
 }
@@ -248,7 +256,11 @@ enum DrivingMode: String, CaseIterable {
 }
 
 
-struct CustomMapAnnotation: Identifiable {
+struct CustomMapAnnotation: Identifiable, Equatable {
+    static func == (lhs: CustomMapAnnotation, rhs: CustomMapAnnotation) -> Bool {
+        lhs.id == rhs.id && lhs.location == rhs.location && lhs.type == lhs.type && lhs.drive == rhs.drive
+    }
+    
     var id = UUID().uuidString
     var location: CLLocation
     var type: AnnotationType

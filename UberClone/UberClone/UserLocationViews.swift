@@ -79,10 +79,12 @@ struct TrackingView: View {
     @EnvironmentObject var avm: ApplicationViewModel
     
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+    @State private var mapAnnotations = [CustomMapAnnotation]()
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: avm.mapAnnotations) { annotation in
+            Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: mapAnnotations) { annotation in
+                //TODO: This MapAnnotation view causes a purple error. I could use MapMarker instead but I need to use MapAnnotation for this usecase.
                 MapAnnotation(coordinate: annotation.location.coordinate) {
                     Button {
                         withAnimation() {
@@ -103,8 +105,8 @@ struct TrackingView: View {
                 }
 
             }
-            .onChange(of: lvm.region) { newValue in
-                region = newValue
+            .onChange(of: avm.mapAnnotations) { newValue in
+                mapAnnotations = newValue
             }
             BottomSheet()
                 .onAppear() {
