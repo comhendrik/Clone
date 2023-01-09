@@ -87,6 +87,12 @@ struct RideRequest {
     }
 }
 
+struct PossibleDrive: Identifiable {
+    var id: String
+    var destination: CLLocation
+    var price: Double
+}
+
 
 
 struct Drive: Identifiable, Equatable {

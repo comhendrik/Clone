@@ -10,24 +10,46 @@ import SwiftUI
 struct LoginView: View {
     @StateObject var loginViewModel : LoginViewModel
     @AppStorage("log_status") var status = false
+    @State private var showSignUpView = false
     var body: some View {
         VStack {
-            Text("Login")
+            Text(showSignUpView ? "SignUp" : "Login")
             TextField("email", text: $loginViewModel.email)
             TextField("password", text: $loginViewModel.password)
+            if showSignUpView {
+                TextField("re-enter password", text: $loginViewModel.reEnterPassword)
+            }
             Button {
                 DispatchQueue.main.async {
                     Task {
-                        self.status = await loginViewModel.login()
+                        if showSignUpView {
+                            await loginViewModel.signUp()
+                        } else {
+                            self.status = await loginViewModel.login()
+                        }
                     }
                 }
             } label: {
-                Text("Login")
+                Text(showSignUpView ? "SignUp" : "Login")
             }
             .alert(loginViewModel.alertMsg, isPresented: $loginViewModel.showAlert) {
                 Button("OK", role: .cancel) { }
             }
             
+            Button {
+                withAnimation() {
+                    showSignUpView.toggle()
+                }
+            } label: {
+                Text("Change to \(showSignUpView ? "Login" : "SignUp")")
+            }
+
+
+            
         }
+        .autocorrectionDisabled(true)
+        .textInputAutocapitalization(.never)
     }
 }
+
+

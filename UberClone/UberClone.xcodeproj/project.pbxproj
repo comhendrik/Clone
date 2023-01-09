@@ -25,6 +25,8 @@
 		24C7A9E628BE469B0022105E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C7A9E528BE469B0022105E /* Preview Assets.xcassets */; };
 		24C7A9EF28BE499B0022105E /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9EE28BE499B0022105E /* BottomSheet.swift */; };
 		24E155DF28C76A6C003313E7 /* DriverInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E155DE28C76A6C003313E7 /* DriverInformation.swift */; };
+		24ED3F5A296C920A00AC8BE7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24ED3F59296C920A00AC8BE7 /* HomeView.swift */; };
+		24ED3F5C296C98C700AC8BE7 /* PossibleDrivesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24ED3F5B296C98C700AC8BE7 /* PossibleDrivesView.swift */; };
 		24F2B24C29325C9D00C39F4B /* DriverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2B24B29325C9D00C39F4B /* DriverApp.swift */; };
 		24F2B24E29325C9D00C39F4B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2B24D29325C9D00C39F4B /* ContentView.swift */; };
 		24F2B25029325C9E00C39F4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24F2B24F29325C9E00C39F4B /* Assets.xcassets */; };
@@ -58,6 +60,8 @@
 		24C7A9E528BE469B0022105E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		24C7A9EE28BE499B0022105E /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		24E155DE28C76A6C003313E7 /* DriverInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverInformation.swift; sourceTree = "<group>"; };
+		24ED3F59296C920A00AC8BE7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		24ED3F5B296C98C700AC8BE7 /* PossibleDrivesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PossibleDrivesView.swift; sourceTree = "<group>"; };
 		24F2B24929325C9D00C39F4B /* Driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Driver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F2B24B29325C9D00C39F4B /* DriverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverApp.swift; sourceTree = "<group>"; };
 		24F2B24D29325C9D00C39F4B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -159,6 +163,8 @@
 				24F2B25A2932639400C39F4B /* AccountViewModel.swift */,
 				24600C29296064310020A649 /* LoginViewModel.swift */,
 				24F2B24D29325C9D00C39F4B /* ContentView.swift */,
+				24ED3F59296C920A00AC8BE7 /* HomeView.swift */,
+				24ED3F5B296C98C700AC8BE7 /* PossibleDrivesView.swift */,
 				24665539295DBCB3000B3FA6 /* UpdateProfileView.swift */,
 				245C50882961E5A100BC4DBC /* CreateProfileView.swift */,
 				24600C2B29606C5A0020A649 /* LoginView.swift */,
@@ -404,8 +410,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				24F2B25729325DFD00C39F4B /* Model.swift in Sources */,
+				24ED3F5C296C98C700AC8BE7 /* PossibleDrivesView.swift in Sources */,
 				24600C2C29606C5A0020A649 /* LoginView.swift in Sources */,
 				245C50892961E5A100BC4DBC /* CreateProfileView.swift in Sources */,
+				24ED3F5A296C920A00AC8BE7 /* HomeView.swift in Sources */,
 				24F2B24E29325C9D00C39F4B /* ContentView.swift in Sources */,
 				24600C2A296064310020A649 /* LoginViewModel.swift in Sources */,
 				24F2B25B2932639400C39F4B /* AccountViewModel.swift in Sources */,

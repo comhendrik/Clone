@@ -14,10 +14,6 @@ class LoginViewModel: ObservableObject {
     
     @Published var email = ""
     @Published var password = ""
-    
-    //Signup
-    @Published var email_SignUp = ""
-    @Published var password_SignUp = ""
     @Published var reEnterPassword = ""
     
     //PasswordReset
@@ -39,7 +35,7 @@ class LoginViewModel: ObservableObject {
     
     @AppStorage("current_status") var statusofregister = false
     
-    let user = Auth.auth().currentUser
+    
     
     
     func login() async -> Bool {
@@ -54,7 +50,16 @@ class LoginViewModel: ObservableObject {
         
         
         do {
-            let _ = try await Auth.auth().signIn(withEmail: email, password: password)
+            let res = try await Auth.auth().signIn(withEmail: email, password: password)
+            
+            if !res.user.isEmailVerified {
+                await MainActor.run {
+                    self.alertMsg = "Please verify"
+                    self.showAlert.toggle()
+                }
+                
+                try Auth.auth().signOut()
+            }
             
             if  await !userIsRegistered() {
                 await MainActor.run {
@@ -63,26 +68,23 @@ class LoginViewModel: ObservableObject {
             }
             
             
+            
+            
             return true
             
             
         } catch {
-            print(error.localizedDescription)
+            await MainActor.run {
+                self.alertMsg = error.localizedDescription
+                self.showAlert.toggle()
+            }
             return false
         }
             
             
             
             
-//            if !user!.isEmailVerified {
-  //              self.alertMsg = "Please verify"
-    //            self.alert.toggle()
-      //          do {
-        //           try Auth.auth().signOut()
-          //      } catch {
-            //        print(error)
-                //}
-          //  }
+            
             
     }
     
@@ -105,7 +107,7 @@ class LoginViewModel: ObservableObject {
     }
     
     func registerNewUserData() -> String {
-        
+        let user = Auth.auth().currentUser
         if firstName == "" || lastName == "" {
             print("yeah")
             return "Please check your name input."
@@ -167,53 +169,58 @@ class LoginViewModel: ObservableObject {
     
     
     
-    func SignUp() {
-        //Diese Funktion ermöglicht das registieren.
-        //Überprüfung, ob Werte eingegeben wurden.
-        if email_SignUp == "" || password_SignUp == "" || reEnterPassword == "" {
-            self.alertMsg = "Fill Content properly"
-            self.showAlert.toggle()
+    func signUp() async {
+        
+        if email == "" || password == "" || reEnterPassword == "" {
+            await MainActor.run {
+                self.alertMsg = "Fill Content properly"
+                self.showAlert.toggle()
+            }
             return
         }
         //Das Passwort muss zweimal richtig eingegeben werden.
-        if password_SignUp != reEnterPassword {
-            self.alertMsg = "password missmatch"
-            self.showAlert.toggle()
+        if password != reEnterPassword {
+            await MainActor.run {
+                self.alertMsg = "password missmatch"
+                self.showAlert.toggle()
+            }
             return
         }
-        //createUser per FirebaseAuth
-        Auth.auth().createUser(withEmail: email_SignUp, password: password_SignUp) { (res, err) in
-            if err != nil {
-                self.alertMsg = err!.localizedDescription
-                self.showAlert.toggle()
-                return
-            }
-            //Es wird eine Verifizierungsemail an die verwendete Email gesendet.
-            res?.user.sendEmailVerification(completion: { (err) in
-                if err != nil {
-                    self.alertMsg = err!.localizedDescription
-                    self.showAlert.toggle()
-                    return
-                }
-                //Benachrichtigung an den Nutzer per Alert, damit dieser weiß, was er danach tun muss.
+        
+        
+        do {
+            let res = try await Auth.auth().createUser(withEmail: email, password: password)
+            
+            try await res.user.sendEmailVerification()
+            
+            await MainActor.run {
                 self.alertMsg = "Verify Link has been sent. Verify your email and login after you did it"
                 self.showAlert.toggle()
+            }
+            return
+        } catch {
+            await MainActor.run {
+                self.alertMsg = error.localizedDescription
+                self.showAlert.toggle()
                 
-            })
+            }
+            return
         }
     }
     
     func logOut() {
-        //Diese Funktion ermöglicht ein signOut. Alle Werte werden zurückgesetzt
-        try! Auth.auth().signOut()
-        
-        self.statusofregister = false
-        
-        email = ""
-        password = ""
-        email_SignUp = ""
-        password_SignUp = ""
-        reEnterPassword = ""
+        do {
+            try Auth.auth().signOut()
+            
+            self.statusofregister = false
+            
+            email = ""
+            password = ""
+            reEnterPassword = ""
+        } catch {
+            self.alertMsg = error.localizedDescription
+            self.showAlert.toggle()
+        }
         
     }
 }

@@ -17,7 +17,7 @@ struct ContentView: View {
             if loginViewModel.showRegisterView {
                 CreateProfileView(loginViewModel: loginViewModel)
             } else {
-                UpdateProfileView(accountViewModel: accountViewModel)
+                HomeView(accountViewModel: accountViewModel)
                     .onAppear {
                         Task {
                             if await !loginViewModel.userIsRegistered() {

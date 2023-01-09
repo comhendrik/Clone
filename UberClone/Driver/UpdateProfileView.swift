@@ -10,15 +10,14 @@ import FirebaseAuth
 
 struct UpdateProfileView: View {
     @StateObject var accountViewModel : AccountViewModel
+    @Binding var showUpdateProfileView: Bool
     var body: some View {
         if accountViewModel.user != nil {
             VStack {
                 Button {
-                    print(accountViewModel.user!.id)
-                    print(accountViewModel.user!.firstName)
-                    print(Auth.auth().currentUser!.uid)
+                    showUpdateProfileView.toggle()
                 } label: {
-                    Text("test")
+                    Text("Close")
                 }
 
                 Text("Set up your drive")
@@ -33,8 +32,11 @@ struct UpdateProfileView: View {
                     Text("Let the world know what you've changed")
                 }
                 .alert(accountViewModel.alertMsg, isPresented: $accountViewModel.showAlert) {
-                            Button("OK", role: .cancel) { }
+                            Button("OK", role: .cancel) {
+                                showUpdateProfileView.toggle()
+                            }
                         }
+                
 
             }
             .onAppear() {
