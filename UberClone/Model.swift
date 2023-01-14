@@ -89,8 +89,10 @@ struct RideRequest {
 
 struct PossibleDrive: Identifiable {
     var id: String
-    var destination: CLLocation
+    var userLocation: CLLocation
+    var userDestination: CLLocation
     var price: Double
+    var isDestinationAnnotation: Bool
 }
 
 
