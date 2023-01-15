@@ -79,7 +79,7 @@ struct TrackingView: View {
     @EnvironmentObject var avm: ApplicationViewModel
     
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
-    @State private var mapAnnotations = [CustomMapAnnotation]()
+    @State private var mapAnnotations: [CustomMapAnnotation] = []
     
     var body: some View {
         ZStack {
@@ -123,28 +123,4 @@ struct TrackingView: View {
 
 
 
-//Needed to make .onChange possible Otherwise you will get an error message
 
-extension MKCoordinateRegion: Equatable {
-    public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
-        return lhs.center == rhs.center && lhs.span == rhs.span
-    }
-    
-    
-}
-
-extension MKCoordinateSpan: Equatable {
-    public static func == (lhs: MKCoordinateSpan, rhs: MKCoordinateSpan) -> Bool {
-        return lhs.latitudeDelta == rhs.latitudeDelta && lhs.longitudeDelta == rhs.longitudeDelta
-    }
-    
-    
-}
-
-extension CLLocationCoordinate2D: Equatable {
-    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
-    }
-    
-    
-}

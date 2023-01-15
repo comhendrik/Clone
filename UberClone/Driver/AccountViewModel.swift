@@ -11,6 +11,7 @@ import FirebaseAuth
 
 class AccountViewModel: ObservableObject {
     @Published var user: DriverAccount? = nil
+    @Published var possibleDrives: [PossibleDrive] = []
     
     @Published var showAlert: Bool = false
     @Published var alertMsg: String = "No msg"
@@ -28,12 +29,25 @@ class AccountViewModel: ObservableObject {
                 Task {
                     self.user = await DriverAccount(id: currentUser.uid)
                     if self.user != nil {
+                        await self.loadPossibleDrives()
                         self.isWorking = self.user!.isWorking
                     }
                 }
             }
         }
         
+    }
+    
+    func loadPossibleDrives() async {
+        if user != nil {
+            let drives = await self.user!.fetchPossibleDrives(id: self.user!.id)
+            await MainActor.run {
+                self.possibleDrives = drives
+            }
+        } else {
+            alertMsg = "No current user. Please reload"
+            showAlert.toggle()
+        }
     }
     
     func updateDrivingData() {

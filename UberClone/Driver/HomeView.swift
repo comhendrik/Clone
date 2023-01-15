@@ -12,7 +12,7 @@ struct HomeView: View {
     @State private var showUpdateProfileView = false
     var body: some View {
         VStack {
-            PossibleDrivesView()
+            PossibleDrivesView(accountViewModel: accountViewModel)
             Button {
                 showUpdateProfileView.toggle()
             } label: {

@@ -25,7 +25,7 @@ struct RideRequest {
         
         let queryBounds = GFUtils.queryBounds(forLocation: center,
                                               withRadius: radiusInM)
-    
+        print(drivingMode.intValue)
         let queries = queryBounds.map { bound -> Query in
             return db.collection("Driver")
                 .whereField("carType", isEqualTo: drivingMode.intValue)
@@ -87,7 +87,7 @@ struct RideRequest {
     }
 }
 
-struct PossibleDrive: Identifiable {
+struct PossibleDrive: Identifiable, Equatable {
     var id: String
     var userLocation: CLLocation
     var userDestination: CLLocation
@@ -110,6 +110,14 @@ struct Drive: Identifiable, Equatable {
     
     func bookDrive() -> DriveStatus {
         //Logic for book Drive
+        db.collection("Driver").document(driver.id).collection("PossibleDrives").addDocument(data:
+                                                                                                ["userLatitude" : start.coordinate.latitude,
+                                                                                                 "userLongitude": start.coordinate.longitude,
+                                                                                                 "destinationLatitude": destination.coordinate.latitude,
+                                                                                                 "destinationLongitude" : destination.coordinate.longitude,
+                                                                                                 "price": calculateDriveCost()
+                                                                                                ]
+        )
         
         //Send Notification to driver and add it to user
         //Dummy data:
@@ -243,11 +251,11 @@ enum DrivingMode: String, CaseIterable {
     var intValue: Int {
         switch self {
         case .standard:
-            return 1
+            return 0
         case .medium:
-            return 2
+            return 1
         case .luxus:
-            return 3
+            return 2
         }
     }
     
@@ -367,6 +375,28 @@ struct DriverAccount {
         }
         return "Please check your input for your price changes. Those have to be numbers."
     }
+    
+    func fetchPossibleDrives(id: String) async -> [PossibleDrive] {
+        do {
+            var possibleDrives: [PossibleDrive] = []
+            let docs = try await db.collection("Driver").document(id).collection("PossibleDrives").getDocuments()
+            for doc in docs.documents {
+                let docID = doc.documentID
+                let userLatitude = doc.data()["userLatitude"] as? Double ?? 0.0
+                let userLongitude = doc.data()["userLongitude"] as? Double ?? 0.0
+                let destinationLatitude = doc.data()["destinationLatitude"] as? Double ?? 0.0
+                let destinationLongitude = doc.data()["destinationLongitude"] as? Double ?? 0.0
+                let price = doc.data()["price"] as? Double ?? 0.0
+                
+                possibleDrives.append(PossibleDrive(id: docID, userLocation: CLLocation(latitude: userLatitude, longitude: userLongitude), userDestination: CLLocation(latitude: destinationLatitude, longitude: destinationLongitude), price: price, isDestinationAnnotation: false))
+            }
+            return possibleDrives
+        } catch {
+            print(error.localizedDescription)
+            return []
+        }
+        
+    }
 }
 
 
@@ -374,5 +404,32 @@ extension String {
     
     // get double value from String or nil
     var doubleValue: Double? { return Double(self) }
+}
+
+
+//Needed to make .onChange possible 
+
+extension MKCoordinateRegion: Equatable {
+    public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
+        return lhs.center == rhs.center && lhs.span == rhs.span
+    }
+    
+    
+}
+
+extension MKCoordinateSpan: Equatable {
+    public static func == (lhs: MKCoordinateSpan, rhs: MKCoordinateSpan) -> Bool {
+        return lhs.latitudeDelta == rhs.latitudeDelta && lhs.longitudeDelta == rhs.longitudeDelta
+    }
+    
+    
+}
+
+extension CLLocationCoordinate2D: Equatable {
+    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+    }
+    
+    
 }
 

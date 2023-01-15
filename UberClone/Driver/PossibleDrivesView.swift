@@ -12,7 +12,9 @@ import MapKit
 //coding with dummy data
 
 struct PossibleDrivesView: View {
-    @State private var possiblesDrives = [PossibleDrive(id: "1", userLocation: CLLocation(latitude: 54.7709, longitude: 8.77388), userDestination: CLLocation(latitude: 54.474705, longitude: 9.048684), price: 34.99, isDestinationAnnotation: false),PossibleDrive(id: "2", userLocation: CLLocation(latitude: 54.6709, longitude: 8.77388), userDestination: CLLocation(latitude: 54.474705, longitude: 9.048684), price: 15.99, isDestinationAnnotation: false),PossibleDrive(id: "3", userLocation: CLLocation(latitude: 54.7909, longitude: 8.77388), userDestination: CLLocation(latitude: 54.474705, longitude: 9.048684), price: 29.99, isDestinationAnnotation: false)]
+    @State private var possiblesDrives: [PossibleDrive] = []
+    @State private var cachedDrives: [PossibleDrive] = []
+    @StateObject var accountViewModel: AccountViewModel
     @State private var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 54.6709, longitude: 8.77388), span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
     @State private var possibleDriveInformation: PossibleDrive?
     @State private var showMoreInformation = false
@@ -28,6 +30,7 @@ struct PossibleDrivesView: View {
                             withAnimation() {
                                 showMoreInformation = true
                             }
+                            cachedDrives = possiblesDrives
                             possiblesDrives = [drive, PossibleDrive(id: "0", userLocation: drive.userDestination, userDestination: drive.userDestination, price: drive.price, isDestinationAnnotation: true)]
                         } label: {
                             Image(systemName: "person")
@@ -36,11 +39,16 @@ struct PossibleDrivesView: View {
 
                 }
             }
+            .onChange(of: accountViewModel.possibleDrives) { newValue in
+                possiblesDrives = newValue
+            }
             VStack {
                 HStack {
                     Spacer()
                     Button {
-                        possiblesDrives = [PossibleDrive(id: "1", userLocation: CLLocation(latitude: 54.7709, longitude: 8.77388), userDestination: CLLocation(latitude: 54.474705, longitude: 9.048684), price: 34.99, isDestinationAnnotation: false),PossibleDrive(id: "2", userLocation: CLLocation(latitude: 54.6709, longitude: 8.77388), userDestination: CLLocation(latitude: 54.474705, longitude: 9.048684), price: 15.99, isDestinationAnnotation: false),PossibleDrive(id: "3", userLocation: CLLocation(latitude: 54.7909, longitude: 8.77388), userDestination: CLLocation(latitude: 54.474705, longitude: 9.048684), price: 29.99, isDestinationAnnotation: false)]
+                        Task {
+                            await accountViewModel.loadPossibleDrives()
+                        }
                     } label: {
                         Image(systemName: "arrow.counterclockwise.circle.fill")
                             .font(.largeTitle)
@@ -61,7 +69,8 @@ struct PossibleDrivesView: View {
                             showMoreInformation = false
                         }
                         possibleDriveInformation = nil
-                        possiblesDrives = [PossibleDrive(id: "1", userLocation: CLLocation(latitude: 54.7709, longitude: 8.77388), userDestination: CLLocation(latitude: 54.474705, longitude: 9.048684), price: 34.99, isDestinationAnnotation: false),PossibleDrive(id: "2", userLocation: CLLocation(latitude: 54.6709, longitude: 8.77388), userDestination: CLLocation(latitude: 54.474705, longitude: 9.048684), price: 15.99, isDestinationAnnotation: false),PossibleDrive(id: "3", userLocation: CLLocation(latitude: 54.7909, longitude: 8.77388), userDestination: CLLocation(latitude: 54.474705, longitude: 9.048684), price: 29.99, isDestinationAnnotation: false)]
+                        possiblesDrives = cachedDrives
+                        cachedDrives = []
                     }
                 }
                 .padding(.bottom)
@@ -99,8 +108,3 @@ struct PossibleDriveInformationView: View {
     }
 }
 
-struct PossibleDrivesView_Previews: PreviewProvider {
-    static var previews: some View {
-        PossibleDrivesView()
-    }
-}
