@@ -86,7 +86,7 @@ struct CustomDraggableComponent: View {
                                     HStack {
                                         Button {
                                             withAnimation() {
-                                                avm.driveState = avm.currentDrive!.bookDrive()
+                                                avm.bookDrive()
                                                 if avm.driveState != .notBooked {
                                                     avm.mapAnnotations = []
                                                     avm.mapAnnotations.append(CustomMapAnnotation(location: avm.currentDrive!.destination, type: .destination))
@@ -137,7 +137,6 @@ struct CustomDraggableComponent: View {
                                     Button {
                                         withAnimation() {
                                             avm.deleteDrive(afterBooking: false)
-                                            
                                         }
                                         avm.mapAnnotations.removeAll()
                                     } label: {
@@ -147,11 +146,11 @@ struct CustomDraggableComponent: View {
                                             .background(Color.blue.cornerRadius(30))
                                             .padding()
                                     }
-
                                 } else if avm.driveState == .arriving {
                                     Button {
                                         withAnimation() {
-                                            avm.stepIntoCar()
+                                            avm.updateDrive(with: .driving)
+                                            avm.driveState = .driving
                                         }
                                     } label: {
                                         Text("Step into car")
@@ -174,7 +173,7 @@ struct CustomDraggableComponent: View {
                                                 .padding(.horizontal)
                                         }
                                         Button {
-                                            avm.driveState = avm.currentDrive!.getNewestInformation(with: .arriving)
+                                            avm.getNewestInformation()
                                             
                                         } label: {
                                             VStack {
@@ -188,9 +187,9 @@ struct CustomDraggableComponent: View {
                                     Text("(You have to pay a fee to the driver.)")
                                         .font(.subheadline)
                                     
-                                } else if avm.driveState == .driving {
+                                } else if avm.driveState == .driving || avm.driveState == .requested {
                                     Button {
-                                        avm.driveState = avm.currentDrive!.getNewestInformation(with: .success)
+                                        avm.getNewestInformation()
                                         
                                     } label: {
                                         VStack {
@@ -202,7 +201,8 @@ struct CustomDraggableComponent: View {
                                     .padding()
                                     
                                 }
-
+                                
+                                
                                 
                             } else {
                                 SearchBottomSheet()

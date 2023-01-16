@@ -13,6 +13,8 @@ class ApplicationViewModel: ObservableObject {
     
     @Published var currentDrive: Drive? = nil
     
+    @Published var currentDriveID: String? = nil
+    
     @Published var driveState: DriveStatus = .notBooked
     
     @Published var mapAnnotations: [CustomMapAnnotation] = []
@@ -22,24 +24,59 @@ class ApplicationViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     
     
+    func bookDrive() {
+        if currentDrive != nil {
+            let res = currentDrive!.bookDrive()
+            driveState = res.0
+            currentDriveID = res.1
+        } else {
+            print("no current drive to book")
+        }
+    }
+    
+    func getNewestInformation() {
+        if currentDrive != nil {
+            if currentDriveID != nil {
+                Task {
+                    let currentStatus = await currentDrive!.getNewestInformation(id: currentDriveID!)
+                    await MainActor.run {
+                        driveState = currentStatus
+                    }
+                }
+            } else {
+                print("no currentDrive to check status")
+            }
+        } else {
+            print("no current drive to book")
+        }
+    }
+    
+    func updateDrive(with status: DriveStatus) {
+        if currentDrive != nil {
+            if currentDriveID != nil {
+                currentDrive!.updateStatus(id: currentDriveID!, status: status)
+            } else {
+                print("no currentDrive to update status")
+            }
+        } else {
+            print("no current drive to update")
+        }
+    }
+    
+    
     func setDrive(with drive: Drive) {
         currentDrive = drive
     }
-    
+    //TODO: deleteDrive function needed to be updated
     func deleteDrive(afterBooking: Bool) {
         
         if afterBooking {
             //Send some data to the driver
         }
-        
+        updateDrive(with: .success)
         currentDrive = nil
         driveState = .notBooked
     }
-    
-    func stepIntoCar() {
-        driveState = .driving
-    }
-    
     func setRouteLocations(userLocation: CLLocation?, end: String, ride: DrivingMode, radius: Int) async -> String {
         
         await MainActor.run {

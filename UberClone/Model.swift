@@ -97,36 +97,52 @@ struct PossibleDrive: Identifiable, Equatable {
 
 
 
-struct Drive: Identifiable, Equatable {
+struct Drive: Equatable {
     static func == (lhs: Drive, rhs: Drive) -> Bool {
-        lhs.id == rhs.id && lhs.driver == rhs.driver && lhs.start == rhs.destination
+        lhs.driver == rhs.driver && lhs.start == rhs.destination
     }
     
-    var id = UUID().uuidString
+    
     var driver: Driver
     var start: CLLocation
     var destination: CLLocation
     //TODO: Get the logic from avm here
     
-    func bookDrive() -> DriveStatus {
+    func bookDrive() -> (DriveStatus, String) {
         //Logic for book Drive
+        let doc =
         db.collection("Driver").document(driver.id).collection("PossibleDrives").addDocument(data:
                                                                                                 ["userLatitude" : start.coordinate.latitude,
                                                                                                  "userLongitude": start.coordinate.longitude,
                                                                                                  "destinationLatitude": destination.coordinate.latitude,
                                                                                                  "destinationLongitude" : destination.coordinate.longitude,
-                                                                                                 "price": calculateDriveCost()
+                                                                                                 "price": calculateDriveCost(),
+                                                                                                 "driveStatus" : 3
                                                                                                 ]
         )
         
         //Send Notification to driver and add it to user
         //Dummy data:
-        return .pending
+        return (.requested, doc.documentID)
     }
     
-    func getNewestInformation(with status: DriveStatus) -> DriveStatus {
-        //with status is dummy data
-        return status
+    func getNewestInformation(id: String) async -> DriveStatus {
+        do {
+            let doc = try await db.collection("Driver").document(driver.id).collection("PossibleDrives").document(id).getDocument()
+            let status = doc.data()?["driveStatus"] as? Int ?? 0
+            
+            let driveStatus = intForDriveStatus(int: status)
+            
+            return driveStatus
+        } catch {
+            print(error.localizedDescription)
+            return .notBooked
+        }
+    
+    }
+    
+    func updateStatus(id: String, status: DriveStatus) {
+        db.collection("Driver").document(driver.id).collection("PossibleDrives").document(id).updateData(["driveStatus" : status.intValue])
     }
     
     //TODO: Calculate cost with real street km data and not just a straight line over the map
@@ -179,7 +195,7 @@ struct Car: Equatable {
 }
 
 enum DriveStatus {
-    case cancelled, success, pending, arriving, notBooked, driving
+    case cancelled, success, pending, requested, arriving, notBooked, driving
     
     var responseValue: String {
         switch self {
@@ -189,6 +205,8 @@ enum DriveStatus {
             return "Drive finished"
         case .pending:
             return "pending..."
+        case .requested:
+            return "requested"
         case .arriving:
             return "Drive is arriving"
         case .notBooked:
@@ -206,6 +224,8 @@ enum DriveStatus {
             return "checkmark.seal"
         case .pending:
             return "car.fill"
+        case .requested:
+            return "person.fill.questionmark"
         case .arriving:
             return "car"
         case .notBooked:
@@ -223,12 +243,33 @@ enum DriveStatus {
             return .green
         case .pending:
             return .gray
+        case .requested:
+            return .orange
         case .arriving:
             return .green
         case .notBooked:
             return .red
         case .driving:
             return .blue
+        }
+    }
+    
+    var intValue: Int {
+        switch self {
+        case .cancelled:
+            return 0
+        case .success:
+            return 1
+        case .pending:
+            return 2
+        case .requested:
+            return 3
+        case .arriving:
+            return 4
+        case .notBooked:
+            return 5
+        case .driving:
+            return 6
         }
     }
 }
@@ -336,9 +377,9 @@ struct DriverAccount {
             let carName = document.data()?["carName"] as? String ?? "no carName"
             let carType = document.data()?["carType"] as? Int ?? 1
             
-            if carType == 1 {
+            if carType == 0 {
                 self.car = Car(name: carName, type: .standard)
-            } else if carType == 2 {
+            } else if carType == 1 {
                 self.car = Car(name: carName, type: .medium)
             } else {
                 self.car = Car(name: carName, type: .luxus)
@@ -431,5 +472,24 @@ extension CLLocationCoordinate2D: Equatable {
     }
     
     
+}
+
+func intForDriveStatus(int: Int) -> DriveStatus {
+    switch int {
+    case 1:
+        return DriveStatus.success
+    case 2:
+        return DriveStatus.pending
+    case 3:
+        return DriveStatus.requested
+    case 4:
+        return DriveStatus.arriving
+    case 5:
+        return DriveStatus.notBooked
+    case 6:
+        return DriveStatus.driving
+    default:
+        return DriveStatus.cancelled
+    }
 }
 
