@@ -13,6 +13,8 @@ class AccountViewModel: ObservableObject {
     @Published var user: DriverAccount? = nil
     @Published var possibleDrives: [PossibleDrive] = []
     
+    @Published var actualDrive: PossibleDrive? = nil
+    
     @Published var showAlert: Bool = false
     @Published var alertMsg: String = "No msg"
     
@@ -38,6 +40,21 @@ class AccountViewModel: ObservableObject {
         
     }
     
+    func acceptDrive(drive: PossibleDrive?) {
+        if drive == nil {
+            print("error")
+            return
+        }
+        if user != nil {
+            drive?.updateDriveStatus(status: .pending, driverID: user!.id)
+            actualDrive = drive
+            actualDrive?.driveStatus = .pending
+        } else {
+            print("error")
+            actualDrive = nil
+        }
+    }
+    
     func loadPossibleDrives() async {
         if user != nil {
             let drives = await self.user!.fetchPossibleDrives(id: self.user!.id)
@@ -49,6 +66,54 @@ class AccountViewModel: ObservableObject {
             showAlert.toggle()
         }
     }
+    
+    func getNewestInformationsForActualDrive() {
+        Task {
+            let newStatus =  await actualDrive!.getNewestInformation(driverID: user!.id)
+            await MainActor.run {
+                actualDrive!.driveStatus = newStatus
+            }
+        }
+    }
+    
+    func updateDriveStatus() -> Bool {
+        if user == nil {
+            print("error user is nil")
+            return false
+        }
+        if actualDrive != nil {
+            var driveStatusForChanging: DriveStatus? = nil
+            let currentDriveStatus = actualDrive!.driveStatus
+            if currentDriveStatus == .pending {
+                driveStatusForChanging = .arriving
+            } else if currentDriveStatus == .driving {
+                driveStatusForChanging = .success
+            }
+            
+            if driveStatusForChanging != nil {
+                actualDrive!.updateDriveStatus(status: driveStatusForChanging!, driverID: user!.id)
+                getNewestInformationsForActualDrive()
+            } else if currentDriveStatus == .success {
+                
+                //TODO: algorithm is needed to check wether the other user still needs the data before deleting
+                actualDrive!.deleteDrive(driverID: user!.id)
+                actualDrive = nil
+                possibleDrives = []
+                
+                return true
+            } else {
+                print("no update check reason")
+                return false
+            }
+                        
+        } else {
+            print("error")
+            return false
+        }
+        
+        return false
+    }
+    
     
     func updateDrivingData() {
         if user != nil {

@@ -93,10 +93,41 @@ struct PossibleDrive: Identifiable, Equatable {
     var userDestination: CLLocation
     var price: Double
     var isDestinationAnnotation: Bool
+    var driveStatus: DriveStatus
+    
+    
+    func getNewestInformation(driverID: String) async -> DriveStatus {
+        do {
+            let doc = try await db.collection("Driver").document(driverID).collection("PossibleDrives").document(id).getDocument()
+            let status = doc.data()?["driveStatus"] as? Int ?? 0
+            
+            let driveStatus = intForDriveStatus(int: status)
+            
+            return driveStatus
+        } catch {
+            print(error.localizedDescription)
+            return .notBooked
+        }
+    
+    }
+    
+    func deleteDrive(driverID: String) {
+        //IMPORTANT: When using this an instance of it has to be deleted
+        //eg.:
+        //actualDrive!.deleteDrive(driverID: user!.id)
+        //actualDrive = nil
+        
+        db.collection("Driver").document(driverID).collection("PossibleDrives").document(id).delete()
+    }
+    
+    
+    func updateDriveStatus(status: DriveStatus, driverID: String) {
+        db.collection("Driver").document(driverID).collection("PossibleDrives").document(id).updateData(["driveStatus" : status.intValue])
+    }
 }
 
 
-
+//TODO: Combinde different structs
 struct Drive: Equatable {
     static func == (lhs: Drive, rhs: Drive) -> Bool {
         lhs.driver == rhs.driver && lhs.start == rhs.destination
@@ -428,8 +459,11 @@ struct DriverAccount {
                 let destinationLatitude = doc.data()["destinationLatitude"] as? Double ?? 0.0
                 let destinationLongitude = doc.data()["destinationLongitude"] as? Double ?? 0.0
                 let price = doc.data()["price"] as? Double ?? 0.0
+                let driveStatus = doc.data()["driveStatus"] as? Int ?? 0
                 
-                possibleDrives.append(PossibleDrive(id: docID, userLocation: CLLocation(latitude: userLatitude, longitude: userLongitude), userDestination: CLLocation(latitude: destinationLatitude, longitude: destinationLongitude), price: price, isDestinationAnnotation: false))
+                let encodedDriveStatus = intForDriveStatus(int: driveStatus)
+                
+                possibleDrives.append(PossibleDrive(id: docID, userLocation: CLLocation(latitude: userLatitude, longitude: userLongitude), userDestination: CLLocation(latitude: destinationLatitude, longitude: destinationLongitude), price: price, isDestinationAnnotation: false, driveStatus: encodedDriveStatus))
             }
             return possibleDrives
         } catch {

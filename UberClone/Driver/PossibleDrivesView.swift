@@ -18,6 +18,7 @@ struct PossibleDrivesView: View {
     @State private var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 54.6709, longitude: 8.77388), span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
     @State private var possibleDriveInformation: PossibleDrive?
     @State private var showMoreInformation = false
+    @State private var showDrivingSheet = false
     var body: some View {
         ZStack {
             Map(coordinateRegion: $region, annotationItems: possiblesDrives) { drive in
@@ -31,7 +32,7 @@ struct PossibleDrivesView: View {
                                 showMoreInformation = true
                             }
                             cachedDrives = possiblesDrives
-                            possiblesDrives = [drive, PossibleDrive(id: "0", userLocation: drive.userDestination, userDestination: drive.userDestination, price: drive.price, isDestinationAnnotation: true)]
+                            possiblesDrives = [drive, PossibleDrive(id: "0", userLocation: drive.userDestination, userDestination: drive.userDestination, price: drive.price, isDestinationAnnotation: true, driveStatus: drive.driveStatus)]
                         } label: {
                             Image(systemName: "person")
                         }
@@ -55,23 +56,34 @@ struct PossibleDrivesView: View {
                             .foregroundColor(showMoreInformation ? .gray : .blue)
                     }
                     .disabled(showMoreInformation)
-
+                    
                 }
                 Spacer()
+                
+                Button {
+                    showDrivingSheet.toggle()
+                } label: {
+                    Text("Driving Information")
+                }
             }
             .padding()
+            .sheet(isPresented: $showDrivingSheet) {
+                DrivingView(accountViewModel: accountViewModel, showDrivingSheet: $showDrivingSheet)
+            }
             
             if showMoreInformation {
                 VStack {
                     Spacer()
-                    PossibleDriveInformationView(possibleDrive: possibleDriveInformation) {
+                    PossibleDriveInformationView(possibleDrive: possibleDriveInformation, acceptAction: {
+                        accountViewModel.acceptDrive(drive: possibleDriveInformation)
+                    }, action: {
                         withAnimation() {
                             showMoreInformation = false
                         }
                         possibleDriveInformation = nil
                         possiblesDrives = cachedDrives
                         cachedDrives = []
-                    }
+                    })
                 }
                 .padding(.bottom)
             }
@@ -81,6 +93,7 @@ struct PossibleDrivesView: View {
 
 struct PossibleDriveInformationView: View {
     var possibleDrive: PossibleDrive?
+    let acceptAction: () -> Void
     let action: () -> Void
     var body: some View {
         VStack {
@@ -88,7 +101,7 @@ struct PossibleDriveInformationView: View {
                 Text(possibleDrive!.id)
                 Text("\(possibleDrive!.price, specifier: "%.2f")")
                 Button {
-                    print("starting driving...")
+                    acceptAction()
                 } label: {
                     Text("Accept drive")
                 }
