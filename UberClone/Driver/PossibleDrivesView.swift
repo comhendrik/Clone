@@ -13,7 +13,6 @@ import MapKit
 
 struct PossibleDrivesView: View {
     @State private var possiblesDrives: [PossibleDrive] = []
-    @State private var cachedDrives: [PossibleDrive] = []
     @StateObject var accountViewModel: AccountViewModel
     @State private var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 54.6709, longitude: 8.77388), span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
     @State private var possibleDriveInformation: PossibleDrive?
@@ -31,7 +30,6 @@ struct PossibleDrivesView: View {
                             withAnimation() {
                                 showMoreInformation = true
                             }
-                            cachedDrives = possiblesDrives
                             possiblesDrives = [drive, PossibleDrive(id: "0", userLocation: drive.userDestination, userDestination: drive.userDestination, price: drive.price, isDestinationAnnotation: true, driveStatus: drive.driveStatus)]
                         } label: {
                             Image(systemName: "person")
@@ -45,8 +43,15 @@ struct PossibleDrivesView: View {
             }
             VStack {
                 HStack {
+                    Button {
+                        showDrivingSheet.toggle()
+                    } label: {
+                        Image(systemName: "car.circle.fill")
+                            .font(.largeTitle)
+                    }
                     Spacer()
                     Button {
+                        self.possiblesDrives = []
                         Task {
                             await accountViewModel.loadPossibleDrives()
                         }
@@ -60,11 +65,7 @@ struct PossibleDrivesView: View {
                 }
                 Spacer()
                 
-                Button {
-                    showDrivingSheet.toggle()
-                } label: {
-                    Text("Driving Information")
-                }
+                
             }
             .padding()
             .sheet(isPresented: $showDrivingSheet) {
@@ -76,13 +77,15 @@ struct PossibleDrivesView: View {
                     Spacer()
                     PossibleDriveInformationView(possibleDrive: possibleDriveInformation, acceptAction: {
                         accountViewModel.acceptDrive(drive: possibleDriveInformation)
-                    }, action: {
+                        showDrivingSheet = true
+                    }, closeAction: {
                         withAnimation() {
                             showMoreInformation = false
                         }
                         possibleDriveInformation = nil
-                        possiblesDrives = cachedDrives
-                        cachedDrives = []
+                        Task {
+                            await accountViewModel.loadPossibleDrives()
+                        }
                     })
                 }
                 .padding(.bottom)
@@ -94,7 +97,7 @@ struct PossibleDrivesView: View {
 struct PossibleDriveInformationView: View {
     var possibleDrive: PossibleDrive?
     let acceptAction: () -> Void
-    let action: () -> Void
+    let closeAction: () -> Void
     var body: some View {
         VStack {
             if possibleDrive != nil {
@@ -109,7 +112,7 @@ struct PossibleDriveInformationView: View {
                 Text("Problems with drive")
             }
             Button {
-                action()
+                closeAction()
             } label: {
                 Text("Close")
             }

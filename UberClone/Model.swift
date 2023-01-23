@@ -111,13 +111,9 @@ struct PossibleDrive: Identifiable, Equatable {
     
     }
     
-    func deleteDrive(driverID: String) {
-        //IMPORTANT: When using this an instance of it has to be deleted
-        //eg.:
-        //actualDrive!.deleteDrive(driverID: user!.id)
-        //actualDrive = nil
+    func setToFinished(driverID: String) {
+        db.collection("Driver").document(driverID).collection("PossibleDrives").document(id).updateData(["finishedByDriver" : true])
         
-        db.collection("Driver").document(driverID).collection("PossibleDrives").document(id).delete()
     }
     
     
@@ -148,7 +144,8 @@ struct Drive: Equatable {
                                                                                                  "destinationLatitude": destination.coordinate.latitude,
                                                                                                  "destinationLongitude" : destination.coordinate.longitude,
                                                                                                  "price": calculateDriveCost(),
-                                                                                                 "driveStatus" : 3
+                                                                                                 "driveStatus" : 3,
+                                                                                                 "finishedByDriver" : false
                                                                                                 ]
         )
         
@@ -451,7 +448,7 @@ struct DriverAccount {
     func fetchPossibleDrives(id: String) async -> [PossibleDrive] {
         do {
             var possibleDrives: [PossibleDrive] = []
-            let docs = try await db.collection("Driver").document(id).collection("PossibleDrives").getDocuments()
+            let docs = try await db.collection("Driver").document(id).collection("PossibleDrives").whereField("finishedByDriver", isEqualTo: false).getDocuments()
             for doc in docs.documents {
                 let docID = doc.documentID
                 let userLatitude = doc.data()["userLatitude"] as? Double ?? 0.0

@@ -56,6 +56,9 @@ class AccountViewModel: ObservableObject {
     }
     
     func loadPossibleDrives() async {
+        await MainActor.run {
+            self.possibleDrives = []
+        }
         if user != nil {
             let drives = await self.user!.fetchPossibleDrives(id: self.user!.id)
             await MainActor.run {
@@ -93,10 +96,8 @@ class AccountViewModel: ObservableObject {
             if driveStatusForChanging != nil {
                 actualDrive!.updateDriveStatus(status: driveStatusForChanging!, driverID: user!.id)
                 getNewestInformationsForActualDrive()
-            } else if currentDriveStatus == .success {
-                
-                //TODO: algorithm is needed to check wether the other user still needs the data before deleting
-                actualDrive!.deleteDrive(driverID: user!.id)
+            } else if currentDriveStatus == .success || currentDriveStatus == .cancelled{
+                actualDrive!.setToFinished(driverID: user!.id)
                 actualDrive = nil
                 possibleDrives = []
                 

@@ -21,7 +21,7 @@ struct SelectDrivingModeView: View {
                             Text(drivingMode.stringValue)
                                 .foregroundColor(mode == drivingMode ? .white : .black)
                                 .fontWeight(.black)
-                            Text("$ \(mode.price, specifier: "%.2f")")
+                            Text("$ \(drivingMode.price, specifier: "%.2f")")
                                 .foregroundColor(mode == drivingMode ? .white : .gray)
                                 .font(.subheadline)
                                 .fontWeight(.bold)
@@ -30,7 +30,7 @@ struct SelectDrivingModeView: View {
                         .background(mode == drivingMode ? .blue : .gray.opacity(0.1))
                         .cornerRadius(20)
                     })
-                    if mode != .luxus {
+                    if drivingMode != .luxus {
                         Spacer()
                     }
                 }

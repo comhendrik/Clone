@@ -67,13 +67,16 @@ class ApplicationViewModel: ObservableObject {
     func setDrive(with drive: Drive) {
         currentDrive = drive
     }
-    //TODO: deleteDrive function needed to be updated
+    
+    
     func deleteDrive(afterBooking: Bool) {
         
         if afterBooking {
-            //Send some data to the driver
+            updateDrive(with: .cancelled)
+        } else {
+            updateDrive(with: .success)
         }
-        updateDrive(with: .success)
+        
         currentDrive = nil
         driveState = .notBooked
     }
