@@ -11,11 +11,13 @@ import SwiftUI
 struct DrivingView: View {
     @StateObject var accountViewModel: AccountViewModel
     @Binding var showDrivingSheet: Bool
+    @Binding var showMoreInformation: Bool
     var body: some View {
         VStack {
             HStack {
                 Button {
                     showDrivingSheet.toggle()
+                    showMoreInformation = false
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                 }
@@ -26,6 +28,7 @@ struct DrivingView: View {
                 Button {
                     if accountViewModel.updateDriveStatus() {
                         showDrivingSheet.toggle()
+                        showMoreInformation.toggle()
                     }
                 } label: {
                     Text(accountViewModel.actualDrive!.driveStatus.responseValue)

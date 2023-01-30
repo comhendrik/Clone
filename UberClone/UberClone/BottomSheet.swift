@@ -75,7 +75,7 @@ struct CustomDraggableComponent: View {
                             
                             
                             if avm.currentDrive != nil {
-                                DriverInformation(userLocation: lvm.userLocation!, driver: avm.currentDrive!.driver)
+                                DriverInformation(userLocation: lvm.userLocation!, drive: avm.currentDrive!)
                                 
                                 
                                 
@@ -89,7 +89,7 @@ struct CustomDraggableComponent: View {
                                                 avm.bookDrive()
                                                 if avm.driveState != .notBooked {
                                                     avm.mapAnnotations = []
-                                                    avm.mapAnnotations.append(CustomMapAnnotation(location: avm.currentDrive!.destination, type: .destination))
+                                                    avm.mapAnnotations.append(CustomMapAnnotation(location: avm.currentDrive!.destination, isDestination: true))
                                                 }
                                                 
                                             }

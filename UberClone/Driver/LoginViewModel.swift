@@ -109,7 +109,6 @@ class LoginViewModel: ObservableObject {
     func registerNewUserData() -> String {
         let user = Auth.auth().currentUser
         if firstName == "" || lastName == "" {
-            print("yeah")
             return "Please check your name input."
         } else if car.name == "" {
             return "Please check your car name."

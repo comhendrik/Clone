@@ -69,7 +69,7 @@ struct PossibleDrivesView: View {
             }
             .padding()
             .sheet(isPresented: $showDrivingSheet) {
-                DrivingView(accountViewModel: accountViewModel, showDrivingSheet: $showDrivingSheet)
+                DrivingView(accountViewModel: accountViewModel, showDrivingSheet: $showDrivingSheet, showMoreInformation: $showMoreInformation)
             }
             
             if showMoreInformation {

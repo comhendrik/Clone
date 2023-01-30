@@ -25,7 +25,6 @@ struct RideRequest {
         
         let queryBounds = GFUtils.queryBounds(forLocation: center,
                                               withRadius: radiusInM)
-        print(drivingMode.intValue)
         let queries = queryBounds.map { bound -> Query in
             return db.collection("Driver")
                 .whereField("carType", isEqualTo: drivingMode.intValue)
@@ -59,18 +58,16 @@ struct RideRequest {
                     let coordinates = CLLocation(latitude: lat, longitude: lng)
                     
                     let carName = document.data()["carName"] as? String ?? "no carName"
-                    drivingOptions.append(Drive(driver: Driver(firstName: firstName,
-                                                               lastName: lastName,
-                                                               rating: rating,
-                                                               location: coordinates,
-                                                               car: Car(name: carName,
-                                                                        //TODO: Real fetching with driving Mode
-                                                                        type: drivingMode),
-                                                               pricePerKM: pricePerKM,
-                                                               pricePerArrivingKM: pricePerArrivingKM,
-                                                               id: id,
-                                                               isWorking: true
-                                                              ),
+                    drivingOptions.append(Drive(firstName: firstName,
+                                                lastName: lastName,
+                                                rating: rating,
+                                                location: coordinates,
+                                                //TODO: real fetching of driving mode
+                                                car: Car(name: carName,type: drivingMode),
+                                                pricePerKM: pricePerKM,
+                                                pricePerArrivingKM: pricePerArrivingKM,
+                                                id: id,
+                                                isWorking: true,
                                                 start: start,
                                                 destination: destination))
                     
@@ -119,101 +116,6 @@ struct PossibleDrive: Identifiable, Equatable {
     
     func updateDriveStatus(status: DriveStatus, driverID: String) {
         db.collection("Driver").document(driverID).collection("PossibleDrives").document(id).updateData(["driveStatus" : status.intValue])
-    }
-}
-
-
-//TODO: Combinde different structs
-struct Drive: Equatable {
-    static func == (lhs: Drive, rhs: Drive) -> Bool {
-        lhs.driver == rhs.driver && lhs.start == rhs.destination
-    }
-    
-    
-    var driver: Driver
-    var start: CLLocation
-    var destination: CLLocation
-    //TODO: Get the logic from avm here
-    
-    func bookDrive() -> (DriveStatus, String) {
-        //Logic for book Drive
-        let doc =
-        db.collection("Driver").document(driver.id).collection("PossibleDrives").addDocument(data:
-                                                                                                ["userLatitude" : start.coordinate.latitude,
-                                                                                                 "userLongitude": start.coordinate.longitude,
-                                                                                                 "destinationLatitude": destination.coordinate.latitude,
-                                                                                                 "destinationLongitude" : destination.coordinate.longitude,
-                                                                                                 "price": calculateDriveCost(),
-                                                                                                 "driveStatus" : 3,
-                                                                                                 "finishedByDriver" : false
-                                                                                                ]
-        )
-        
-        //Send Notification to driver and add it to user
-        //Dummy data:
-        return (.requested, doc.documentID)
-    }
-    
-    func getNewestInformation(id: String) async -> DriveStatus {
-        do {
-            let doc = try await db.collection("Driver").document(driver.id).collection("PossibleDrives").document(id).getDocument()
-            let status = doc.data()?["driveStatus"] as? Int ?? 0
-            
-            let driveStatus = intForDriveStatus(int: status)
-            
-            return driveStatus
-        } catch {
-            print(error.localizedDescription)
-            return .notBooked
-        }
-    
-    }
-    
-    func updateStatus(id: String, status: DriveStatus) {
-        db.collection("Driver").document(driver.id).collection("PossibleDrives").document(id).updateData(["driveStatus" : status.intValue])
-    }
-    
-    //TODO: Calculate cost with real street km data and not just a straight line over the map
-    
-    func calculateDrivingDistance() -> Double {
-         return destination.distance(from: start) / 1000
-    }
-    
-    func calculateCostForRide() -> Double {
-        
-        return calculateDrivingDistance() * driver.pricePerKM
-    }
-    
-    func calculateCostForArriving() -> Double {
-        let distanceInKM = driver.getDistanceFromUser(userLocation: start)
-        return distanceInKM * driver.pricePerArrivingKM
-    }
-    
-    func calculateDriveCost() -> Double {
-        return  driver.car.type.price + calculateCostForArriving() + calculateCostForRide()
-    }
-    
-}
-
-//TODO: Put Driver and DriverAccount together
-struct Driver: Equatable {
-    static func == (lhs: Driver, rhs: Driver) -> Bool {
-        lhs.firstName == rhs.firstName && lhs.lastName == rhs.lastName && lhs.rating == rhs.rating && lhs.location == rhs.location && lhs.car == rhs.car && lhs.pricePerKM == rhs.pricePerKM && lhs.pricePerArrivingKM == rhs.pricePerArrivingKM && lhs.id == rhs.id && lhs.isWorking == rhs.isWorking
-    }
-    
-    var firstName: String
-    var lastName: String
-    var rating: Double
-    var location: CLLocation
-    var car: Car
-    var pricePerKM: Double
-    var pricePerArrivingKM: Double
-    var id: String
-    var isWorking: Bool
-    
-    func getDistanceFromUser(userLocation: CLLocation) -> Double {
-        let distanceInMeters = location.distance(from: userLocation)
-        return distanceInMeters / 1000
     }
 }
 
@@ -340,38 +242,111 @@ enum DrivingMode: String, CaseIterable {
     }
 }
 
-
 struct CustomMapAnnotation: Identifiable, Equatable {
-    static func == (lhs: CustomMapAnnotation, rhs: CustomMapAnnotation) -> Bool {
-        lhs.id == rhs.id && lhs.location == rhs.location && lhs.type == lhs.type && lhs.drive == rhs.drive
-    }
     
     var id = UUID().uuidString
     var location: CLLocation
-    var type: AnnotationType
+    var isDestination: Bool
     var drive: Drive?
-}
-
-enum AnnotationType {
-    case drive, destination
     
     var systemImage: String {
-        switch self {
-        case .drive:
-            return "car.circle"
-        case .destination:
+        if self.isDestination {
             return "mappin.circle.fill"
         }
+        return "car.circle"
     }
-    
+
     var imageColor: Color {
-        switch self {
-        case .drive:
-            return .blue
-        case .destination:
+        if self.isDestination {
             return .green
         }
+        return .blue
     }
+    
+}
+
+struct Drive: Equatable {
+    static func == (lhs: Drive, rhs: Drive) -> Bool {
+        lhs.start == rhs.start && lhs.destination == rhs.destination && lhs.location == rhs.location
+    }
+    
+    
+    //driver data
+    var firstName: String
+    var lastName: String
+    var rating: Double
+    var location: CLLocation
+    var car: Car
+    var pricePerKM: Double
+    var pricePerArrivingKM: Double
+    var id: String
+    var isWorking: Bool
+    
+    func getDistanceFromUser(userLocation: CLLocation) -> Double {
+        let distanceInMeters = location.distance(from: userLocation)
+        return distanceInMeters / 1000
+    }
+    
+    var start: CLLocation
+    var destination: CLLocation
+    //TODO: Get the logic from avm here
+    
+    func bookDrive() -> (DriveStatus, String) {
+        //Logic for book Drive
+        let doc =
+        db.collection("Driver").document(id).collection("PossibleDrives").addDocument(data:
+                                                                                                ["userLatitude" : start.coordinate.latitude,
+                                                                                                 "userLongitude": start.coordinate.longitude,
+                                                                                                 "destinationLatitude": destination.coordinate.latitude,
+                                                                                                 "destinationLongitude" : destination.coordinate.longitude,
+                                                                                                 "price": calculateDriveCost(),
+                                                                                                 "driveStatus" : 3,
+                                                                                                 "finishedByDriver" : false
+                                                                                                ]
+        )
+        
+        //Send Notification to driver and add it to user
+        //Dummy data:
+        return (.requested, doc.documentID)
+    }
+    
+    func getNewestInformation(driveID: String) async -> DriveStatus {
+        do {
+            let doc = try await db.collection("Driver").document(id).collection("PossibleDrives").document(driveID).getDocument()
+            let status = doc.data()?["driveStatus"] as? Int ?? 0
+            let driveStatus = intForDriveStatus(int: status)
+            return driveStatus
+        } catch {
+            print(error.localizedDescription)
+            return .notBooked
+        }
+    
+    }
+    
+    func updateStatus(driveID: String, status: DriveStatus) {
+        db.collection("Driver").document(id).collection("PossibleDrives").document(driveID).updateData(["driveStatus" : status.intValue])
+    }
+    
+    //TODO: Calculate cost with real street km data and not just a straight line over the map
+    
+    func calculateDrivingDistance() -> Double {
+         return destination.distance(from: start) / 1000
+    }
+    
+    func calculateCostForRide() -> Double {
+        
+        return calculateDrivingDistance() * pricePerKM
+    }
+    
+    func calculateCostForArriving() -> Double {
+        let distanceInKM = getDistanceFromUser(userLocation: start)
+        return distanceInKM * pricePerArrivingKM
+    }
+    
+    func calculateDriveCost() -> Double {
+        return  car.type.price + calculateCostForArriving() + calculateCostForRide()
+    }
+    
 }
 
 struct DriverAccount {
@@ -470,6 +445,9 @@ struct DriverAccount {
         
     }
 }
+
+
+//extensions and functions for general use
 
 
 extension String {

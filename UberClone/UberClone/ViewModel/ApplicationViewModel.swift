@@ -38,7 +38,7 @@ class ApplicationViewModel: ObservableObject {
         if currentDrive != nil {
             if currentDriveID != nil {
                 Task {
-                    let currentStatus = await currentDrive!.getNewestInformation(id: currentDriveID!)
+                    let currentStatus = await currentDrive!.getNewestInformation(driveID: currentDriveID!)
                     await MainActor.run {
                         driveState = currentStatus
                     }
@@ -54,7 +54,7 @@ class ApplicationViewModel: ObservableObject {
     func updateDrive(with status: DriveStatus) {
         if currentDrive != nil {
             if currentDriveID != nil {
-                currentDrive!.updateStatus(id: currentDriveID!, status: status)
+                currentDrive!.updateStatus(driveID: currentDriveID!, status: status)
             } else {
                 print("no currentDrive to update status")
             }
@@ -106,10 +106,10 @@ class ApplicationViewModel: ObservableObject {
             } else {
                 await MainActor.run {
                     for option in driveOptions {
-                        mapAnnotations.append(CustomMapAnnotation(location: option.driver.location, type: .drive, drive: option))
+                        mapAnnotations.append(CustomMapAnnotation(location: option.location, isDestination: false, drive: option))
                     }
                     
-                    mapAnnotations.append(CustomMapAnnotation(location: endLocation!, type: .destination))
+                    mapAnnotations.append(CustomMapAnnotation(location: endLocation!, isDestination: true))
                 }
                 
                 

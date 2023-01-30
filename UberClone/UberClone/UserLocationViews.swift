@@ -92,16 +92,16 @@ struct TrackingView: View {
                         }
                     } label: {
                         VStack(spacing: 0) {
-                            Image(systemName: annotation.type.systemImage)
+                            Image(systemName: annotation.systemImage)
                                 .font(.title)
-                                .foregroundColor(annotation.type.imageColor)
+                                .foregroundColor(annotation.imageColor)
                               
                               Image(systemName: "arrowtriangle.down.fill")
                                 .font(.caption)
-                                .foregroundColor(annotation.type.imageColor)
+                                .foregroundColor(annotation.imageColor)
                                 .offset(x: 0, y: -5)
                             }
-                    }.disabled(annotation.type == .destination)
+                    }.disabled(annotation.isDestination == true)
                 }
 
             }

@@ -9,6 +9,8 @@ import SwiftUI
 import Foundation
 import FirebaseAuth
 
+
+//TODO: Error handling in interaction between driver and user. Now a user can cancel a drive and when the driver haven't refreshed he can still change states, although the user dont need the drive anymore: func updateDriveStatus()
 class AccountViewModel: ObservableObject {
     @Published var user: DriverAccount? = nil
     @Published var possibleDrives: [PossibleDrive] = []
