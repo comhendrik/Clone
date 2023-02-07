@@ -18,7 +18,7 @@ struct RideRequest {
     var start: CLLocation
     var destination: CLLocation
     
-    func sendRequest(radius: Int) async -> [Drive] {
+    func sendRequest(radius: Int) async -> [PossibleDriver] {
         let center = CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude)
         let radiusInM = Double(radius) * 1000
         
@@ -36,7 +36,7 @@ struct RideRequest {
         }
         
         do {
-            var drivingOptions: [Drive] = []
+            var drivingOptions: [PossibleDriver] = []
             for query in queries {
                 let documents = try await query.getDocuments()
                 
@@ -58,7 +58,7 @@ struct RideRequest {
                     let coordinates = CLLocation(latitude: lat, longitude: lng)
                     
                     let carName = document.data()["carName"] as? String ?? "no carName"
-                    drivingOptions.append(Drive(firstName: firstName,
+                    drivingOptions.append(PossibleDriver(firstName: firstName,
                                                 lastName: lastName,
                                                 rating: rating,
                                                 location: coordinates,
@@ -84,7 +84,7 @@ struct RideRequest {
     }
 }
 
-struct PossibleDrive: Identifiable, Equatable {
+struct Drive: Identifiable, Equatable {
     var id: String
     var userLocation: CLLocation
     var userDestination: CLLocation
@@ -93,11 +93,10 @@ struct PossibleDrive: Identifiable, Equatable {
     var driveStatus: DriveStatus
     
     
-    func getNewestInformation(driverID: String) async -> DriveStatus {
+    func getNewestInformation() async -> DriveStatus {
         do {
-            let doc = try await db.collection("Driver").document(driverID).collection("PossibleDrives").document(id).getDocument()
+            let doc = try await db.collection("PossibleDrives").document(id).getDocument()
             let status = doc.data()?["driveStatus"] as? Int ?? 0
-            
             let driveStatus = intForDriveStatus(int: status)
             
             return driveStatus
@@ -109,13 +108,18 @@ struct PossibleDrive: Identifiable, Equatable {
     }
     
     func setToFinished(driverID: String) {
-        db.collection("Driver").document(driverID).collection("PossibleDrives").document(id).updateData(["finishedByDriver" : true])
+        db.collection("PossibleDrives").document(id).updateData(["finishedByDriver" : true])
         
     }
     
     
-    func updateDriveStatus(status: DriveStatus, driverID: String) {
-        db.collection("Driver").document(driverID).collection("PossibleDrives").document(id).updateData(["driveStatus" : status.intValue])
+    func updateDriveStatus(status: DriveStatus) {
+        db.collection("PossibleDrives").document(id).updateData(["driveStatus" : status.intValue])
+    }
+    
+    func assignDriver(driverID: String) {
+        self.updateDriveStatus(status: .pending)
+        db.collection("PossibleDrives").document(id).updateData(["driverID" : driverID])
     }
 }
 
@@ -247,7 +251,7 @@ struct CustomMapAnnotation: Identifiable, Equatable {
     var id = UUID().uuidString
     var location: CLLocation
     var isDestination: Bool
-    var drive: Drive?
+    var possibleDriver: PossibleDriver?
     
     var systemImage: String {
         if self.isDestination {
@@ -265,8 +269,8 @@ struct CustomMapAnnotation: Identifiable, Equatable {
     
 }
 
-struct Drive: Equatable {
-    static func == (lhs: Drive, rhs: Drive) -> Bool {
+struct PossibleDriver: Equatable {
+    static func == (lhs: PossibleDriver, rhs: PossibleDriver) -> Bool {
         lhs.start == rhs.start && lhs.destination == rhs.destination && lhs.location == rhs.location
     }
     
@@ -294,37 +298,22 @@ struct Drive: Equatable {
     func bookDrive() -> (DriveStatus, String) {
         //Logic for book Drive
         let doc =
-        db.collection("Driver").document(id).collection("PossibleDrives").addDocument(data:
+        db.collection("PossibleDrives").addDocument(data:
                                                                                                 ["userLatitude" : start.coordinate.latitude,
                                                                                                  "userLongitude": start.coordinate.longitude,
                                                                                                  "destinationLatitude": destination.coordinate.latitude,
                                                                                                  "destinationLongitude" : destination.coordinate.longitude,
                                                                                                  "price": calculateDriveCost(),
                                                                                                  "driveStatus" : 3,
-                                                                                                 "finishedByDriver" : false
+                                                                                                 "finishedByDriver" : false,
+                                                                                                 "userID": id,
+                                                                                                 "driverID":"",
                                                                                                 ]
         )
         
         //Send Notification to driver and add it to user
         //Dummy data:
         return (.requested, doc.documentID)
-    }
-    
-    func getNewestInformation(driveID: String) async -> DriveStatus {
-        do {
-            let doc = try await db.collection("Driver").document(id).collection("PossibleDrives").document(driveID).getDocument()
-            let status = doc.data()?["driveStatus"] as? Int ?? 0
-            let driveStatus = intForDriveStatus(int: status)
-            return driveStatus
-        } catch {
-            print(error.localizedDescription)
-            return .notBooked
-        }
-    
-    }
-    
-    func updateStatus(driveID: String, status: DriveStatus) {
-        db.collection("Driver").document(id).collection("PossibleDrives").document(driveID).updateData(["driveStatus" : status.intValue])
     }
     
     //TODO: Calculate cost with real street km data and not just a straight line over the map
@@ -346,10 +335,11 @@ struct Drive: Equatable {
     func calculateDriveCost() -> Double {
         return  car.type.price + calculateCostForArriving() + calculateCostForRide()
     }
-    
 }
 
-struct DriverAccount {
+
+//class because there is only one document
+class DriverAccount {
     var firstName: String
     var lastName: String
     var rating: Double
@@ -420,10 +410,10 @@ struct DriverAccount {
         return "Please check your input for your price changes. Those have to be numbers."
     }
     
-    func fetchPossibleDrives(id: String) async -> [PossibleDrive] {
+    func fetchPossibleDrives() async -> [Drive] {
         do {
-            var possibleDrives: [PossibleDrive] = []
-            let docs = try await db.collection("Driver").document(id).collection("PossibleDrives").whereField("finishedByDriver", isEqualTo: false).getDocuments()
+            var possibleDrives: [Drive] = []
+            let docs = try await db.collection("PossibleDrives").whereField("finishedByDriver", isEqualTo: false).whereField("driverID", isEqualTo: "").getDocuments()
             for doc in docs.documents {
                 let docID = doc.documentID
                 let userLatitude = doc.data()["userLatitude"] as? Double ?? 0.0
@@ -435,7 +425,7 @@ struct DriverAccount {
                 
                 let encodedDriveStatus = intForDriveStatus(int: driveStatus)
                 
-                possibleDrives.append(PossibleDrive(id: docID, userLocation: CLLocation(latitude: userLatitude, longitude: userLongitude), userDestination: CLLocation(latitude: destinationLatitude, longitude: destinationLongitude), price: price, isDestinationAnnotation: false, driveStatus: encodedDriveStatus))
+                possibleDrives.append(Drive(id: docID, userLocation: CLLocation(latitude: userLatitude, longitude: userLongitude), userDestination: CLLocation(latitude: destinationLatitude, longitude: destinationLongitude), price: price, isDestinationAnnotation: false, driveStatus: encodedDriveStatus))
             }
             return possibleDrives
         } catch {

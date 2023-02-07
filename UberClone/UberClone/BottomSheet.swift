@@ -74,14 +74,14 @@ struct CustomDraggableComponent: View {
                             
                             
                             
-                            if avm.currentDrive != nil {
-                                DriverInformation(userLocation: lvm.userLocation!, drive: avm.currentDrive!)
+                            if avm.currentPossibleDriver != nil {
+                                DriverInformation(userLocation: lvm.userLocation!, possibleDriver: avm.currentPossibleDriver!)
                                 
                                 
                                 
                                 if avm.driveState == .notBooked {
                                     
-                                    MoneyInformationView(drive: avm.currentDrive!)
+                                    MoneyInformationView(possibleDriver: avm.currentPossibleDriver!)
                                     
                                     HStack {
                                         Button {
@@ -89,14 +89,14 @@ struct CustomDraggableComponent: View {
                                                 avm.bookDrive()
                                                 if avm.driveState != .notBooked {
                                                     avm.mapAnnotations = []
-                                                    avm.mapAnnotations.append(CustomMapAnnotation(location: avm.currentDrive!.destination, isDestination: true))
+                                                    avm.mapAnnotations.append(CustomMapAnnotation(location: avm.currentPossibleDriver!.destination, isDestination: true))
                                                 }
                                                 
                                             }
                                         } label: {
                                             HStack {
                                                 Spacer()
-                                                Text("Book \(String(format: "%.02f", avm.currentDrive!.calculateDriveCost()))$")
+                                                Text("Book \(String(format: "%.02f", avm.currentPossibleDriver!.calculateDriveCost()))$")
                                                     .foregroundColor(.white)
                                                     .padding()
                                                 Spacer()
@@ -149,7 +149,7 @@ struct CustomDraggableComponent: View {
                                 } else if avm.driveState == .arriving {
                                     Button {
                                         withAnimation() {
-                                            avm.updateDrive(with: .driving)
+                                            avm.currentDrive?.updateDriveStatus(status: .driving)
                                             avm.driveState = .driving
                                         }
                                     } label: {
@@ -173,7 +173,7 @@ struct CustomDraggableComponent: View {
                                                 .padding(.horizontal)
                                         }
                                         Button {
-                                            avm.getNewestInformation()
+                                            avm.getNewestInformations()
                                             
                                         } label: {
                                             VStack {
@@ -189,7 +189,7 @@ struct CustomDraggableComponent: View {
                                     
                                 } else if avm.driveState == .driving || avm.driveState == .requested {
                                     Button {
-                                        avm.getNewestInformation()
+                                        avm.getNewestInformations()
                                         
                                     } label: {
                                         VStack {

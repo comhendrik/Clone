@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct MoneyInformationView: View {
-    let drive: Drive
+    let possibleDriver: PossibleDriver
     var body: some View {
         VStack(alignment: .leading) {
             
-            CostTextView(title: "Base fee: ", costCalculation: "\(String(format: "%.02f", drive.car.type.price))$")
-            CostTextView(title: "Arriving fee: ", costCalculation: "\(String(format: "%.02f", drive.getDistanceFromUser(userLocation: drive.start))) km  * \(String(format: "%.02f", drive.pricePerArrivingKM))$ = \(String(format: "%.02f", drive.calculateCostForArriving()))$")
-            CostTextView(title: "Travelling fee: ", costCalculation: "\(String(format: "%.02f", drive.calculateDrivingDistance())) km * \(String(format: "%.02f", drive.pricePerKM))$ = \(String(format: "%.02f", drive.calculateCostForRide()))$")
+            CostTextView(title: "Base fee: ", costCalculation: "\(String(format: "%.02f", possibleDriver.car.type.price))$")
+            CostTextView(title: "Arriving fee: ", costCalculation: "\(String(format: "%.02f", possibleDriver.getDistanceFromUser(userLocation: possibleDriver.start))) km  * \(String(format: "%.02f", possibleDriver.pricePerArrivingKM))$ = \(String(format: "%.02f", possibleDriver.calculateCostForArriving()))$")
+            CostTextView(title: "Travelling fee: ", costCalculation: "\(String(format: "%.02f", possibleDriver.calculateDrivingDistance())) km * \(String(format: "%.02f", possibleDriver.pricePerKM))$ = \(String(format: "%.02f", possibleDriver.calculateCostForRide()))$")
             
             
         }

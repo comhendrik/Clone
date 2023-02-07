@@ -11,9 +11,7 @@ import CoreLocation
 
 class ApplicationViewModel: ObservableObject {
     
-    @Published var currentDrive: Drive? = nil
-    
-    @Published var currentDriveID: String? = nil
+    @Published var currentPossibleDriver: PossibleDriver? = nil
     
     @Published var driveState: DriveStatus = .notBooked
     
@@ -23,44 +21,92 @@ class ApplicationViewModel: ObservableObject {
     
     @Published var showAlert: Bool = false
     
+    @Published var currentDrive: Drive? = nil
+    
+    @AppStorage("currentDriveID") var currentDriveID: String = ""
+    
+    
+    //TODO: error alert for all functions
+    
+    
+    func fetchCurrentDrive() async {
+        do {
+            if currentDriveID != "" {
+                let doc = try await db.collection("PossibleDrives").document(currentDriveID).getDocument()
+                let docID = doc.documentID
+                let userLatitude = doc.data()?["userLatitude"] as? Double ?? 0.0
+                let userLongitude = doc.data()?["userLongitude"] as? Double ?? 0.0
+                let destinationLatitude = doc.data()?["destinationLatitude"] as? Double ?? 0.0
+                let destinationLongitude = doc.data()?["destinationLongitude"] as? Double ?? 0.0
+                let price = doc.data()?["price"] as? Double ?? 0.0
+                let driveStatus = doc.data()?["driveStatus"] as? Int ?? 0
+                
+                let encodedDriveStatus = intForDriveStatus(int: driveStatus)
+                
+                currentDrive = Drive(id: docID, userLocation: CLLocation(latitude: userLatitude, longitude: userLongitude), userDestination: CLLocation(latitude: destinationLatitude, longitude: destinationLongitude), price: price, isDestinationAnnotation: false, driveStatus: encodedDriveStatus)
+            } else {
+                print("no current drive")
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    init() {
+        if currentDriveID != "" {
+            Task {
+                await fetchCurrentDrive()
+            }
+        }
+    }
     
     func bookDrive() {
-        if currentDrive != nil {
-            let res = currentDrive!.bookDrive()
+        if currentPossibleDriver != nil {
+            let res = currentPossibleDriver!.bookDrive()
             driveState = res.0
             currentDriveID = res.1
-        } else {
-            print("no current drive to book")
-        }
-    }
-    
-    func getNewestInformation() {
-        if currentDrive != nil {
-            if currentDriveID != nil {
-                Task {
-                    let currentStatus = await currentDrive!.getNewestInformation(driveID: currentDriveID!)
-                    await MainActor.run {
-                        driveState = currentStatus
-                    }
-                }
-            } else {
-                print("no currentDrive to check status")
+            Task {
+                await fetchCurrentDrive()
             }
         } else {
             print("no current drive to book")
         }
     }
     
-    func updateDrive(with status: DriveStatus) {
-        if currentDrive != nil {
-            if currentDriveID != nil {
-                currentDrive!.updateStatus(driveID: currentDriveID!, status: status)
-            } else {
-                print("no currentDrive to update status")
+    func getNewestInformations() {
+        
+        Task {
+            if currentDrive == nil {
+                print("error")
+                return
             }
-        } else {
-            print("no current drive to update")
+            let newStatus =  await currentDrive!.getNewestInformation()
+            await MainActor.run {
+                currentDrive!.driveStatus = newStatus
+            }
         }
+    }
+    
+    
+    func updateDriveStatus() -> Bool {
+        if currentDrive != nil {
+            if currentDrive!.driveStatus == .arriving {
+                currentDrive!.updateDriveStatus(status: .driving)
+                currentDrive!.driveStatus = .driving
+                getNewestInformations()
+            } else if currentDrive!.driveStatus == .success {
+                deleteDrive(afterBooking: false)
+            } else {
+                print("no update check reason")
+                return false
+            }
+                        
+        } else {
+            print("error")
+            return false
+        }
+        
+        return false
     }
     
     
@@ -70,15 +116,19 @@ class ApplicationViewModel: ObservableObject {
     
     
     func deleteDrive(afterBooking: Bool) {
-        
+        if currentDrive == nil {
+            print("no current drive")
+            return
+        }
         if afterBooking {
-            updateDrive(with: .cancelled)
-        } else {
-            updateDrive(with: .success)
+            currentDrive!.updateDriveStatus(status: .cancelled)
         }
         
+        currentPossibleDriver = nil
+        currentDriveID = ""
         currentDrive = nil
         driveState = .notBooked
+        
     }
     func setRouteLocations(userLocation: CLLocation?, end: String, ride: DrivingMode, radius: Int) async -> String {
         
@@ -106,7 +156,7 @@ class ApplicationViewModel: ObservableObject {
             } else {
                 await MainActor.run {
                     for option in driveOptions {
-                        mapAnnotations.append(CustomMapAnnotation(location: option.location, isDestination: false, drive: option))
+                        mapAnnotations.append(CustomMapAnnotation(location: option.location, isDestination: false, possibleDriver: option))
                     }
                     
                     mapAnnotations.append(CustomMapAnnotation(location: endLocation!, isDestination: true))

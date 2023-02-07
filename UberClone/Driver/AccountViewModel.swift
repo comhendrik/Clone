@@ -13,9 +13,9 @@ import FirebaseAuth
 //TODO: Error handling in interaction between driver and user. Now a user can cancel a drive and when the driver haven't refreshed he can still change states, although the user dont need the drive anymore: func updateDriveStatus()
 class AccountViewModel: ObservableObject {
     @Published var user: DriverAccount? = nil
-    @Published var possibleDrives: [PossibleDrive] = []
+    @Published var possibleDrives: [Drive] = []
     
-    @Published var actualDrive: PossibleDrive? = nil
+    @Published var actualDrive: Drive? = nil
     
     @Published var showAlert: Bool = false
     @Published var alertMsg: String = "No msg"
@@ -42,13 +42,13 @@ class AccountViewModel: ObservableObject {
         
     }
     
-    func acceptDrive(drive: PossibleDrive?) {
+    func acceptDrive(drive: Drive?) {
         if drive == nil {
             print("error")
             return
         }
         if user != nil {
-            drive?.updateDriveStatus(status: .pending, driverID: user!.id)
+            drive?.assignDriver(driverID: user!.id)
             actualDrive = drive
             actualDrive?.driveStatus = .pending
         } else {
@@ -62,7 +62,7 @@ class AccountViewModel: ObservableObject {
             self.possibleDrives = []
         }
         if user != nil {
-            let drives = await self.user!.fetchPossibleDrives(id: self.user!.id)
+            let drives = await self.user!.fetchPossibleDrives()
             await MainActor.run {
                 self.possibleDrives = drives
             }
@@ -74,7 +74,7 @@ class AccountViewModel: ObservableObject {
     
     func getNewestInformationsForActualDrive() {
         Task {
-            let newStatus =  await actualDrive!.getNewestInformation(driverID: user!.id)
+            let newStatus =  await actualDrive!.getNewestInformation()
             await MainActor.run {
                 actualDrive!.driveStatus = newStatus
             }
@@ -96,7 +96,7 @@ class AccountViewModel: ObservableObject {
             }
             
             if driveStatusForChanging != nil {
-                actualDrive!.updateDriveStatus(status: driveStatusForChanging!, driverID: user!.id)
+                actualDrive!.updateDriveStatus(status: driveStatusForChanging!)
                 getNewestInformationsForActualDrive()
             } else if currentDriveStatus == .success || currentDriveStatus == .cancelled{
                 actualDrive!.setToFinished(driverID: user!.id)

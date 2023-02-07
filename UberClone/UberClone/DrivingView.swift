@@ -1,40 +1,38 @@
 //
 //  DrivingView.swift
-//  Driver
+//  UberClone
 //
-//  Created by Hendrik Steen on 18.01.23.
+//  Created by Hendrik Steen on 07.02.23.
 //
 
 import SwiftUI
 
-//TODO: Add option when user canceled Drive
+//TODO: Maybe add the two DrivingView.swift files together
+
 struct DrivingView: View {
-    @StateObject var accountViewModel: AccountViewModel
+    @StateObject var applicationViewModel: ApplicationViewModel
     @Binding var showDrivingSheet: Bool
-    @Binding var showMoreInformation: Bool
     var body: some View {
         VStack {
             HStack {
                 Button {
                     showDrivingSheet.toggle()
-                    showMoreInformation = false
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                 }
             }
             .padding()
             Spacer()
-            if accountViewModel.actualDrive != nil {
+            if applicationViewModel.currentDrive != nil {
                 Button {
-                    if accountViewModel.updateDriveStatus() {
+                    if applicationViewModel.updateDriveStatus() {
                         showDrivingSheet.toggle()
-                        showMoreInformation.toggle()
                     }
                 } label: {
-                    Text(accountViewModel.actualDrive!.driveStatus.responseValue)
+                    Text(applicationViewModel.currentDrive!.driveStatus.responseValue)
                 }
                 Button {
-                    accountViewModel.getNewestInformationsForActualDrive()
+                    applicationViewModel.getNewestInformations()
                 } label: {
                     Text("Refresh")
                 }

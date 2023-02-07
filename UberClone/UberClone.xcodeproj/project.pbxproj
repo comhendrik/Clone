@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		242F5F112992936E00E23CFA /* DrivingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242F5F102992936E00E23CFA /* DrivingView.swift */; };
 		2457858528F40326001AF31D /* CoreLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2457858428F40326001AF31D /* CoreLocationViewModel.swift */; };
 		245B5DA228FB164C00F4FD10 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245B5DA128FB164C00F4FD10 /* Model.swift */; };
 		245B5DA428FB168F00F4FD10 /* ApplicationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245B5DA328FB168F00F4FD10 /* ApplicationViewModel.swift */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		14D642F801E064AAE2F4C2B3 /* Pods-UberClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberClone.debug.xcconfig"; path = "Target Support Files/Pods-UberClone/Pods-UberClone.debug.xcconfig"; sourceTree = "<group>"; };
+		242F5F102992936E00E23CFA /* DrivingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivingView.swift; sourceTree = "<group>"; };
 		2457858428F40326001AF31D /* CoreLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreLocationViewModel.swift; sourceTree = "<group>"; };
 		245B5DA128FB164C00F4FD10 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		245B5DA328FB168F00F4FD10 /* ApplicationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationViewModel.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				247CC80C291679AF00A3857C /* MoneyInformationView.swift */,
 				246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */,
 				24F54AAF291938B200FC5938 /* SettingsView.swift */,
+				242F5F102992936E00E23CFA /* DrivingView.swift */,
 				24F2B25C2932651800C39F4B /* GoogleService-Info.plist */,
 				24C7A9E228BE469B0022105E /* Assets.xcassets */,
 				24C7A9E428BE469B0022105E /* Preview Content */,
@@ -404,6 +407,7 @@
 				24C452EC28F6C9E400A362F8 /* UserLocationViews.swift in Sources */,
 				24C7A9DF28BE46990022105E /* UberCloneApp.swift in Sources */,
 				246D3FD128C4CA3700A71BF4 /* SelectRideView.swift in Sources */,
+				242F5F112992936E00E23CFA /* DrivingView.swift in Sources */,
 				24F54AB0291938B200FC5938 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

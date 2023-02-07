@@ -81,6 +81,8 @@ struct TrackingView: View {
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     @State private var mapAnnotations: [CustomMapAnnotation] = []
     
+    @State private var showDrivingView: Bool = false
+    
     var body: some View {
         ZStack {
             Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: mapAnnotations) { annotation in
@@ -88,7 +90,7 @@ struct TrackingView: View {
                 MapAnnotation(coordinate: annotation.location.coordinate) {
                     Button {
                         withAnimation() {
-                            avm.currentDrive = annotation.drive!
+                            avm.currentPossibleDriver = annotation.possibleDriver!
                         }
                     } label: {
                         VStack(spacing: 0) {
@@ -108,6 +110,7 @@ struct TrackingView: View {
             .onChange(of: avm.mapAnnotations) { newValue in
                 mapAnnotations = newValue
             }
+            
             BottomSheet()
                 .onAppear() {
                     if let userLocation = lvm.getUserLocation() {
@@ -117,6 +120,20 @@ struct TrackingView: View {
                 .environmentObject(lvm)
                 .environmentObject(avm)
                .ignoresSafeArea(.all, edges: .bottom)
+            
+            VStack {
+                Button {
+                    showDrivingView.toggle()
+                } label: {
+                    Text("Show driving view")
+                }
+
+                Spacer()
+            }
+            
+        }
+        .sheet(isPresented: $showDrivingView) {
+            DrivingView(applicationViewModel: avm, showDrivingSheet: $showDrivingView)
         }
     }
 }

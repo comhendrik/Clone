@@ -12,10 +12,10 @@ import MapKit
 //coding with dummy data
 
 struct PossibleDrivesView: View {
-    @State private var possiblesDrives: [PossibleDrive] = []
+    @State private var possiblesDrives: [Drive] = []
     @StateObject var accountViewModel: AccountViewModel
     @State private var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 54.6709, longitude: 8.77388), span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
-    @State private var possibleDriveInformation: PossibleDrive?
+    @State private var possibleDriveInformation: Drive?
     @State private var showMoreInformation = false
     @State private var showDrivingSheet = false
     var body: some View {
@@ -30,7 +30,7 @@ struct PossibleDrivesView: View {
                             withAnimation() {
                                 showMoreInformation = true
                             }
-                            possiblesDrives = [drive, PossibleDrive(id: "0", userLocation: drive.userDestination, userDestination: drive.userDestination, price: drive.price, isDestinationAnnotation: true, driveStatus: drive.driveStatus)]
+                            possiblesDrives = [drive, Drive(id: "0", userLocation: drive.userDestination, userDestination: drive.userDestination, price: drive.price, isDestinationAnnotation: true, driveStatus: drive.driveStatus)]
                         } label: {
                             Image(systemName: "person")
                         }
@@ -95,7 +95,7 @@ struct PossibleDrivesView: View {
 }
 
 struct PossibleDriveInformationView: View {
-    var possibleDrive: PossibleDrive?
+    var possibleDrive: Drive?
     let acceptAction: () -> Void
     let closeAction: () -> Void
     var body: some View {

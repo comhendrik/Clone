@@ -10,7 +10,7 @@ import CoreLocation
 
 struct DriverInformation: View {
     let userLocation: CLLocation
-    let drive: Drive
+    let possibleDriver: PossibleDriver
     
     var body: some View {
         VStack {
@@ -28,13 +28,13 @@ struct DriverInformation: View {
                     .cornerRadius(15)
                     .padding(.leading)
                 VStack(alignment: .leading) {
-                    Text("\(drive.firstName) \(drive.lastName)")
+                    Text("\(possibleDriver.firstName) \(possibleDriver.lastName)")
                         .fontWeight(.bold)
-                    Text("\(String(format:"%.02f", drive.getDistanceFromUser(userLocation: userLocation))) KMs away")
+                    Text("\(String(format:"%.02f", possibleDriver.getDistanceFromUser(userLocation: userLocation))) KMs away")
                         .foregroundColor(.gray)
-                    Text("Rating: \(String(format: "%.01f", drive.rating))")
+                    Text("Rating: \(String(format: "%.01f", possibleDriver.rating))")
                         .foregroundColor(.gray)
-                    Text("\(drive.car.name)")
+                    Text("\(possibleDriver.car.name)")
                         .foregroundColor(.gray)
                 }
                 
