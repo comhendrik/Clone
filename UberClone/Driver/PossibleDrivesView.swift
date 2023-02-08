@@ -14,10 +14,17 @@ import MapKit
 struct PossibleDrivesView: View {
     @State private var possiblesDrives: [Drive] = []
     @StateObject var accountViewModel: AccountViewModel
+    @StateObject var loginViewModel: LoginViewModel
     @State private var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 54.6709, longitude: 8.77388), span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
     @State private var possibleDriveInformation: Drive?
     @State private var showMoreInformation = false
     @State private var showDrivingSheet = false
+    @Binding var showUpdateProfileView: Bool
+    @AppStorage("log_status") var status = false
+    
+    let buttonColor: Color = .blue
+    let textButtonColor: Color = .white
+    
     var body: some View {
         ZStack {
             Map(coordinateRegion: $region, annotationItems: possiblesDrives) { drive in
@@ -48,6 +55,7 @@ struct PossibleDrivesView: View {
                     } label: {
                         Image(systemName: "car.circle.fill")
                             .font(.largeTitle)
+                            .foregroundColor(buttonColor)
                     }
                     Spacer()
                     Button {
@@ -58,9 +66,29 @@ struct PossibleDrivesView: View {
                     } label: {
                         Image(systemName: "arrow.counterclockwise.circle.fill")
                             .font(.largeTitle)
-                            .foregroundColor(showMoreInformation ? .gray : .blue)
+                            .foregroundColor(showMoreInformation ? .gray : buttonColor)
                     }
                     .disabled(showMoreInformation)
+                    Button {
+                        showUpdateProfileView.toggle()
+                    } label: {
+                        Image(systemName: "gear.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(buttonColor)
+                    }
+                    Button {
+                        loginViewModel.logOut()
+                        status = false
+                    } label: {
+                        Text("Sign Out")
+                            .font(.footnote)
+                            .fontWeight(.bold)
+                            .foregroundColor(textButtonColor)
+                            .padding(10)
+                            .background(buttonColor)
+                            .cornerRadius(20)
+                    }
+
                     
                 }
                 Spacer()

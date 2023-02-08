@@ -16,8 +16,14 @@ struct ContentView: View {
         if status {
             if loginViewModel.showRegisterView {
                 CreateProfileView(loginViewModel: loginViewModel)
+                Button {
+                    loginViewModel.logOut()
+                    status = false
+                } label: {
+                    Text("Logout")
+                }
             } else {
-                HomeView(accountViewModel: accountViewModel)
+                HomeView(accountViewModel: accountViewModel, loginViewModel: loginViewModel)
                     .onAppear {
                         Task {
                             if await !loginViewModel.userIsRegistered() {
@@ -31,12 +37,7 @@ struct ContentView: View {
                     }
                 
             }
-            Button {
-                loginViewModel.logOut()
-                status = false
-            } label: {
-                Text("Logout")
-            }
+            
         } else {
             LoginView(loginViewModel: loginViewModel)
         }

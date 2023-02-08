@@ -81,7 +81,7 @@ struct TrackingView: View {
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     @State private var mapAnnotations: [CustomMapAnnotation] = []
     
-    @State private var showDrivingView: Bool = false
+    @State private var showDrivingSheet: Bool = false
     
     var body: some View {
         ZStack {
@@ -111,7 +111,7 @@ struct TrackingView: View {
                 mapAnnotations = newValue
             }
             
-            BottomSheet()
+            BottomSheet(showDrivingSheet: $showDrivingSheet)
                 .onAppear() {
                     if let userLocation = lvm.getUserLocation() {
                         region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
@@ -122,18 +122,25 @@ struct TrackingView: View {
                .ignoresSafeArea(.all, edges: .bottom)
             
             VStack {
-                Button {
-                    showDrivingView.toggle()
-                } label: {
-                    Text("Show driving view")
+                HStack {
+                    Button {
+                        showDrivingSheet.toggle()
+                    } label: {
+                        Image(systemName: "car.circle.fill")
+                            .font(.largeTitle)
+                    }
+                    Spacer()
+                    
                 }
-
                 Spacer()
+                
+                
             }
+            .padding()
             
         }
-        .sheet(isPresented: $showDrivingView) {
-            DrivingView(applicationViewModel: avm, showDrivingSheet: $showDrivingView)
+        .sheet(isPresented: $showDrivingSheet) {
+            DrivingView(applicationViewModel: avm, showDrivingSheet: $showDrivingSheet)
         }
     }
 }

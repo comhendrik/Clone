@@ -188,6 +188,25 @@ enum DriveStatus {
         }
     }
     
+    var updateText: String {
+        switch self {
+        case .cancelled:
+            return "Delete drive"
+        case .success:
+            return "complete drive"
+        case .pending:
+            return "start driving"
+        case .requested:
+            return "accept drive"
+        case .arriving:
+            return "step into car"
+        case .notBooked:
+            return "book drive"
+        case .driving:
+            return "arrive"
+        }
+    }
+    
     var intValue: Int {
         switch self {
         case .cancelled:

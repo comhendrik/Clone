@@ -11,10 +11,11 @@ import MapKit
 struct BottomSheet: View {
     @EnvironmentObject var lvm: LocationViewModel
     @EnvironmentObject var avm: ApplicationViewModel
+    @Binding var showDrivingSheet: Bool
     var body: some View {
         VStack {
             Spacer()
-            CustomDraggableComponent()
+            CustomDraggableComponent(showDrivingSheet: $showDrivingSheet)
                 .environmentObject(lvm)
                 .environmentObject(avm)
             
@@ -31,6 +32,7 @@ struct CustomDraggableComponent: View {
     @State var height: CGFloat = MIN_HEIGHT
     @EnvironmentObject var lvm: LocationViewModel
     @EnvironmentObject var avm: ApplicationViewModel
+    @Binding var showDrivingSheet: Bool
     
   var body: some View {
       VStack(spacing: 0) {
@@ -76,10 +78,9 @@ struct CustomDraggableComponent: View {
                             
                             if avm.currentPossibleDriver != nil {
                                 DriverInformation(userLocation: lvm.userLocation!, possibleDriver: avm.currentPossibleDriver!)
-                                
-                                
-                                
-                                if avm.driveState == .notBooked {
+                                if avm.currentDrive == nil {
+                                    
+                                    
                                     
                                     MoneyInformationView(possibleDriver: avm.currentPossibleDriver!)
                                     
@@ -119,89 +120,26 @@ struct CustomDraggableComponent: View {
                                                 .padding(.horizontal)
                                         }
                                     }
-                                }
-                                
-                                
-                                
-                                
-                                HStack {
-                                    Image(systemName: avm.driveState.systemImage)
-                                        .font(.largeTitle)
-                                        .foregroundColor(avm.driveState.systemImageColor)
-                                    Text(avm.driveState.responseValue)
-                                        .fontWeight(.bold)
-                                }
-                                .padding()
-                                
-                                if avm.driveState == .success {
+                                    
+                                    
+                                    
+                                } else {
+                                    Spacer()
+                                    Text("Drive started...")
+                                    
                                     Button {
-                                        withAnimation() {
-                                            avm.deleteDrive(afterBooking: false)
-                                        }
-                                        avm.mapAnnotations.removeAll()
+                                        showDrivingSheet.toggle()
                                     } label: {
-                                        Text("Get Next Ride")
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .background(Color.blue.cornerRadius(30))
-                                            .padding()
-                                    }
-                                } else if avm.driveState == .arriving {
-                                    Button {
-                                        withAnimation() {
-                                            avm.currentDrive?.updateDriveStatus(status: .driving)
-                                            avm.driveState = .driving
-                                        }
-                                    } label: {
-                                        Text("Step into car")
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .background(Color.blue.cornerRadius(30))
-                                            .padding()
-                                    }
-                                } else if avm.driveState == .pending {
-                                    HStack {
-                                        Button {
-                                            withAnimation() {
-                                                avm.deleteDrive(afterBooking: true)
-                                            }
-                                        } label: {
-                                            Text("Cancel Booking")
+                                        Text("Access current Drive")
                                                 .foregroundColor(.white)
                                                 .padding()
-                                                .background(Color.red.cornerRadius(20))
-                                                .padding(.horizontal)
-                                        }
-                                        Button {
-                                            avm.getNewestInformations()
-                                            
-                                        } label: {
-                                            VStack {
-                                                Image(systemName: "arrow.counterclockwise")
-                                                    .font(.title)
-                                                Text("Refresh")
-                                            }
-                                        }
-                                        .padding(.horizontal)
+                                                .background(Color.blue.cornerRadius(30))
+                                                .padding()
                                     }
-                                    Text("(You have to pay a fee to the driver.)")
-                                        .font(.subheadline)
-                                    
-                                } else if avm.driveState == .driving || avm.driveState == .requested {
-                                    Button {
-                                        avm.getNewestInformations()
-                                        
-                                    } label: {
-                                        VStack {
-                                            Image(systemName: "arrow.counterclockwise")
-                                                .font(.title)
-                                            Text("Refresh")
-                                        }
-                                    }
-                                    .padding()
-                                    
+                                    Spacer()
                                 }
                                 
+
                                 
                                 
                             } else {

@@ -9,16 +9,12 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var accountViewModel: AccountViewModel
+    @StateObject var loginViewModel: LoginViewModel
     @State private var showUpdateProfileView = false
     var body: some View {
         VStack {
-            PossibleDrivesView(accountViewModel: accountViewModel)
-            Button {
-                showUpdateProfileView.toggle()
-            } label: {
-                Text("Settings")
-            }
-
+            PossibleDrivesView(accountViewModel: accountViewModel, loginViewModel: loginViewModel, showUpdateProfileView: $showUpdateProfileView)
+            
         }
         .sheet(isPresented: $showUpdateProfileView) {
             UpdateProfileView(accountViewModel: accountViewModel, showUpdateProfileView: $showUpdateProfileView)

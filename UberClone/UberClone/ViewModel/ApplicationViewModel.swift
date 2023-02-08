@@ -43,7 +43,9 @@ class ApplicationViewModel: ObservableObject {
                 
                 let encodedDriveStatus = intForDriveStatus(int: driveStatus)
                 
-                currentDrive = Drive(id: docID, userLocation: CLLocation(latitude: userLatitude, longitude: userLongitude), userDestination: CLLocation(latitude: destinationLatitude, longitude: destinationLongitude), price: price, isDestinationAnnotation: false, driveStatus: encodedDriveStatus)
+                await MainActor.run {
+                    currentDrive = Drive(id: docID, userLocation: CLLocation(latitude: userLatitude, longitude: userLongitude), userDestination: CLLocation(latitude: destinationLatitude, longitude: destinationLongitude), price: price, isDestinationAnnotation: false, driveStatus: encodedDriveStatus)
+                }
             } else {
                 print("no current drive")
             }
@@ -96,6 +98,7 @@ class ApplicationViewModel: ObservableObject {
                 getNewestInformations()
             } else if currentDrive!.driveStatus == .success {
                 deleteDrive(afterBooking: false)
+                return true
             } else {
                 print("no update check reason")
                 return false

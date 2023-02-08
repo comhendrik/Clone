@@ -24,12 +24,13 @@ struct DrivingView: View {
             .padding()
             Spacer()
             if applicationViewModel.currentDrive != nil {
+                Text(applicationViewModel.currentDrive!.driveStatus.responseValue)
                 Button {
                     if applicationViewModel.updateDriveStatus() {
                         showDrivingSheet.toggle()
                     }
                 } label: {
-                    Text(applicationViewModel.currentDrive!.driveStatus.responseValue)
+                    Text(applicationViewModel.currentDrive!.driveStatus.updateText)
                 }
                 Button {
                     applicationViewModel.getNewestInformations()
@@ -43,3 +44,5 @@ struct DrivingView: View {
         }
     }
 }
+
+
