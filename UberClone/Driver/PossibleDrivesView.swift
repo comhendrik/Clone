@@ -2,14 +2,11 @@
 //  PossibleDrivesView.swift
 //  Driver
 //
-//  Created by Hendrik Steen on 09.01.23.
+//  Created by Hendrik Steen on 13.02.23.
 //
-
 import SwiftUI
 import CoreLocation
 import MapKit
-
-//coding with dummy data
 
 struct PossibleDrivesView: View {
     @State private var possiblesDrives: [Drive] = []
@@ -97,7 +94,18 @@ struct PossibleDrivesView: View {
             }
             .padding()
             .sheet(isPresented: $showDrivingSheet) {
-                DrivingView(accountViewModel: accountViewModel, showDrivingSheet: $showDrivingSheet, showMoreInformation: $showMoreInformation)
+                DrivingView(drive: accountViewModel.actualDrive) {
+                    showDrivingSheet.toggle()
+                    showMoreInformation = false
+                } updateAction: {
+                    if accountViewModel.updateDriveStatus() {
+                        showDrivingSheet.toggle()
+                        showMoreInformation.toggle()
+                    }
+                } refreshAction: {
+                    accountViewModel.getNewestInformationsForActualDrive()
+                }
+
             }
             
             if showMoreInformation {
@@ -151,4 +159,3 @@ struct PossibleDriveInformationView: View {
         .background(Color.white.cornerRadius(25))
     }
 }
-

@@ -1,39 +1,37 @@
 //
 //  DrivingView.swift
-//  UberClone
+//  UberClone, Driver
 //
 //  Created by Hendrik Steen on 07.02.23.
 //
 
 import SwiftUI
 
-//TODO: Maybe add the two DrivingView.swift files together
-
 struct DrivingView: View {
-    @StateObject var applicationViewModel: ApplicationViewModel
-    @Binding var showDrivingSheet: Bool
+    var drive: Drive?
+    var closeAction: () -> Void
+    var updateAction: () -> Void
+    var refreshAction: () -> Void
     var body: some View {
         VStack {
             HStack {
                 Button {
-                    showDrivingSheet.toggle()
+                    closeAction()
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                 }
             }
             .padding()
             Spacer()
-            if applicationViewModel.currentDrive != nil {
-                Text(applicationViewModel.currentDrive!.driveStatus.responseValue)
+            if drive != nil {
+                Text(drive!.driveStatus.responseValue)
                 Button {
-                    if applicationViewModel.updateDriveStatus() {
-                        showDrivingSheet.toggle()
-                    }
+                    updateAction()
                 } label: {
-                    Text(applicationViewModel.currentDrive!.driveStatus.updateText)
+                    Text(drive!.driveStatus.updateText)
                 }
                 Button {
-                    applicationViewModel.getNewestInformations()
+                    refreshAction()
                 } label: {
                     Text("Refresh")
                 }

@@ -140,7 +140,15 @@ struct TrackingView: View {
             
         }
         .sheet(isPresented: $showDrivingSheet) {
-            DrivingView(applicationViewModel: avm, showDrivingSheet: $showDrivingSheet)
+            DrivingView(drive: avm.currentDrive) {
+                showDrivingSheet.toggle()
+            } updateAction: {
+                if avm.updateDriveStatus() {
+                    showDrivingSheet.toggle()
+                }
+            } refreshAction: {
+                avm.getNewestInformations()
+            }
         }
     }
 }
