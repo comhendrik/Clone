@@ -96,7 +96,7 @@ class ApplicationViewModel: ObservableObject {
                 currentDrive!.updateDriveStatus(status: .driving)
                 currentDrive!.driveStatus = .driving
                 getNewestInformations()
-            } else if currentDrive!.driveStatus == .success {
+            } else if currentDrive!.driveStatus == .success || currentDrive!.driveStatus == .cancelled {
                 deleteDrive(afterBooking: false)
                 return true
             } else {
@@ -126,7 +126,6 @@ class ApplicationViewModel: ObservableObject {
         if afterBooking {
             currentDrive!.updateDriveStatus(status: .cancelled)
         }
-        
         currentPossibleDriver = nil
         currentDriveID = ""
         currentDrive = nil

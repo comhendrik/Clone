@@ -105,8 +105,15 @@ struct PossibleDrivesView: View {
                 } refreshAction: {
                     accountViewModel.getNewestInformationsForActualDrive()
                 }
+                .onAppear {
+                    print("snapshot listener started")
+                    accountViewModel.actualDrive?.getNewestInformation()
+                }
+                
+                
 
             }
+            
             
             if showMoreInformation {
                 VStack {

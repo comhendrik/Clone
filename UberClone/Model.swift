@@ -92,6 +92,21 @@ struct Drive: Identifiable, Equatable {
     var isDestinationAnnotation: Bool
     var driveStatus: DriveStatus
     
+    func getNewestInformation() {
+        print("started snapshot")
+        db.collection("PossibleDrives").document(id).addSnapshotListener { snap, err in
+            if err == nil {
+                let status = snap?.data()?["driveStatus"] as? Int ?? 0
+                print("It was updated and you got an live update from firebase \n\n\n\n\n\n\n")
+                print(status)
+            } else {
+                print("error is not nil")
+                print(err?.localizedDescription)
+                return
+            }
+        }
+    }
+    
     
     func getNewestInformation() async -> DriveStatus {
         do {
