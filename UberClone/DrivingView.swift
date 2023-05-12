@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DrivingView: View {
+    
     var drive: Drive?
     var closeAction: () -> Void
     var updateAction: () -> Void
@@ -20,20 +21,31 @@ struct DrivingView: View {
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                 }
+                Spacer()
             }
             .padding()
             Spacer()
             if drive != nil {
-                Text(drive!.driveStatus.responseValue)
-                Button {
-                    updateAction()
-                } label: {
-                    Text(drive!.driveStatus.updateText)
+                HStack {
+                    Image(systemName: drive!.driveStatus.systemImage)
+                    Text(drive!.driveStatus.responseValue)
                 }
-                Button {
-                    refreshAction()
-                } label: {
-                    Text("Refresh")
+                HStack {
+                    Button {
+                        refreshAction()
+                    } label: {
+                        Image(systemName: "arrow.counterclockwise.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(.blue)
+                    }
+                    Button {
+                        updateAction()
+                    } label: {
+                        Text(drive!.driveStatus.updateText)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue.cornerRadius(30))
+                    }
                 }
             } else {
                 Text("Accept a drive to start driving!")

@@ -22,7 +22,7 @@ struct RideRequest {
         let center = CLLocationCoordinate2D(latitude: start.coordinate.latitude, longitude: start.coordinate.longitude)
         let radiusInM = Double(radius) * 1000
         
-        
+        print(drivingMode.intValue)
         let queryBounds = GFUtils.queryBounds(forLocation: center,
                                               withRadius: radiusInM)
         let queries = queryBounds.map { bound -> Query in
