@@ -42,9 +42,9 @@ struct DrivingView: View {
                         updateAction()
                     } label: {
                         Text(drive!.driveStatus.updateText)
-                            .foregroundColor(.white)
+                            .foregroundColor(textButtonColor)
                             .padding()
-                            .background(Color.blue.cornerRadius(30))
+                            .background(buttonColor.cornerRadius(30))
                     }
                 }
             } else {

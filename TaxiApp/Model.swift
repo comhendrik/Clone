@@ -11,6 +11,9 @@ import SwiftUI
 import GeoFire
 import FirebaseFirestore
 
+let buttonColor: Color = .blue
+let textButtonColor: Color = .white
+
 let db = Firestore.firestore()
 
 struct RideRequest {

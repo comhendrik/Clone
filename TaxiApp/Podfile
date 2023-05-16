@@ -1,6 +1,6 @@
 use_frameworks! :linkage => :static
 
-target 'UberClone' do
+target 'TaxiApp' do
 
 pod 'FirebaseFirestore'
 pod 'FirebaseStorage'

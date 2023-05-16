@@ -19,8 +19,8 @@ struct PossibleDrivesView: View {
     @Binding var showUpdateProfileView: Bool
     @AppStorage("log_status") var status = false
     
-    let buttonColor: Color = .blue
-    let textButtonColor: Color = .white
+    
+    
     
     var body: some View {
         ZStack {

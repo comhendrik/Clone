@@ -22,7 +22,7 @@
 		24ABD320299AB90600A29DA1 /* DrivingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242F5F102992936E00E23CFA /* DrivingView.swift */; };
 		24ABD322299ABAC500A29DA1 /* PossibleDrivesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24ABD321299ABAC500A29DA1 /* PossibleDrivesView.swift */; };
 		24C452EC28F6C9E400A362F8 /* UserLocationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C452EB28F6C9E400A362F8 /* UserLocationViews.swift */; };
-		24C7A9DF28BE46990022105E /* UberCloneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9DE28BE46990022105E /* UberCloneApp.swift */; };
+		24C7A9DF28BE46990022105E /* TaxiAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9DE28BE46990022105E /* TaxiAppApp.swift */; };
 		24C7A9E128BE46990022105E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7A9E028BE46990022105E /* ContentView.swift */; };
 		24C7A9E328BE469B0022105E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C7A9E228BE469B0022105E /* Assets.xcassets */; };
 		24C7A9E628BE469B0022105E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C7A9E528BE469B0022105E /* Preview Assets.xcassets */; };
@@ -38,7 +38,7 @@
 		24F2B25D2932651800C39F4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24F2B25C2932651800C39F4B /* GoogleService-Info.plist */; };
 		24F2B25F2932655000C39F4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24F2B25E2932655000C39F4B /* GoogleService-Info.plist */; };
 		24F54AB0291938B200FC5938 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F54AAF291938B200FC5938 /* SettingsView.swift */; };
-		331FE098826D6361F60772F4 /* Pods_UberClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACBA9B99B7972D92873E0B91 /* Pods_UberClone.framework */; };
+		39C7EE10C4B17D9B69EA25DD /* Pods_TaxiApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BE98C67C9DA921AC1249BF2 /* Pods_TaxiApp.framework */; };
 		D42054DD3D187BF286AA48E3 /* Pods_Driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48DC25B97BB0658CC93F2557 /* Pods_Driver.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,17 +53,17 @@
 		24600C29296064310020A649 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		24600C2B29606C5A0020A649 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		24665539295DBCB3000B3FA6 /* UpdateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileView.swift; sourceTree = "<group>"; };
-		246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRideView.swift; sourceTree = "<group>"; };
-		247CC80C291679AF00A3857C /* MoneyInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyInformationView.swift; sourceTree = "<group>"; };
+		246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SelectRideView.swift; path = TaxiApp/SelectRideView.swift; sourceTree = "<group>"; };
+		247CC80C291679AF00A3857C /* MoneyInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MoneyInformationView.swift; path = TaxiApp/MoneyInformationView.swift; sourceTree = "<group>"; };
 		24ABD321299ABAC500A29DA1 /* PossibleDrivesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PossibleDrivesView.swift; sourceTree = "<group>"; };
-		24C452EB28F6C9E400A362F8 /* UserLocationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocationViews.swift; sourceTree = "<group>"; };
-		24C7A9DB28BE46980022105E /* UberClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		24C7A9DE28BE46990022105E /* UberCloneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UberCloneApp.swift; sourceTree = "<group>"; };
-		24C7A9E028BE46990022105E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		24C7A9E228BE469B0022105E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		24C452EB28F6C9E400A362F8 /* UserLocationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserLocationViews.swift; path = TaxiApp/UserLocationViews.swift; sourceTree = "<group>"; };
+		24C7A9DB28BE46980022105E /* TaxiApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaxiApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		24C7A9DE28BE46990022105E /* TaxiAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TaxiAppApp.swift; path = /Users/hendriksteen/development/Privat/iOS/Projects/TaxiApp/TaxiApp/TaxiApp/TaxiAppApp.swift; sourceTree = "<absolute>"; };
+		24C7A9E028BE46990022105E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = TaxiApp/ContentView.swift; sourceTree = "<group>"; };
+		24C7A9E228BE469B0022105E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = TaxiApp/Assets.xcassets; sourceTree = "<group>"; };
 		24C7A9E528BE469B0022105E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		24C7A9EE28BE499B0022105E /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
-		24E155DE28C76A6C003313E7 /* DriverInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverInformation.swift; sourceTree = "<group>"; };
+		24C7A9EE28BE499B0022105E /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BottomSheet.swift; path = TaxiApp/BottomSheet.swift; sourceTree = "<group>"; };
+		24E155DE28C76A6C003313E7 /* DriverInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DriverInformation.swift; path = TaxiApp/DriverInformation.swift; sourceTree = "<group>"; };
 		24ED3F59296C920A00AC8BE7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		24F2B24929325C9D00C39F4B /* Driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Driver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F2B24B29325C9D00C39F4B /* DriverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverApp.swift; sourceTree = "<group>"; };
@@ -71,13 +71,15 @@
 		24F2B24F29325C9E00C39F4B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		24F2B25229325C9E00C39F4B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		24F2B25A2932639400C39F4B /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
-		24F2B25C2932651800C39F4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		24F2B25C2932651800C39F4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "TaxiApp/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		24F2B25E2932655000C39F4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		24F54AAF291938B200FC5938 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		24F54AAF291938B200FC5938 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = TaxiApp/SettingsView.swift; sourceTree = "<group>"; };
+		2BE98C67C9DA921AC1249BF2 /* Pods_TaxiApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaxiApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48DC25B97BB0658CC93F2557 /* Pods_Driver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Driver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D2890F25F1C2C704A7E4787 /* Pods-UberClone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberClone.release.xcconfig"; path = "Target Support Files/Pods-UberClone/Pods-UberClone.release.xcconfig"; sourceTree = "<group>"; };
 		848492516C1C7588866B642E /* Pods-Driver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Driver.debug.xcconfig"; path = "Target Support Files/Pods-Driver/Pods-Driver.debug.xcconfig"; sourceTree = "<group>"; };
-		ACBA9B99B7972D92873E0B91 /* Pods_UberClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UberClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		97E96D190CF16E2996DF7C8A /* Pods-TaxiApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiApp.release.xcconfig"; path = "Target Support Files/Pods-TaxiApp/Pods-TaxiApp.release.xcconfig"; sourceTree = "<group>"; };
+		BA50C7DD26D1C7E7C3617DD0 /* Pods-TaxiApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiApp.debug.xcconfig"; path = "Target Support Files/Pods-TaxiApp/Pods-TaxiApp.debug.xcconfig"; sourceTree = "<group>"; };
 		BDBAA7EEAE90AD0046201000 /* Pods-Driver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Driver.release.xcconfig"; path = "Target Support Files/Pods-Driver/Pods-Driver.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,7 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				331FE098826D6361F60772F4 /* Pods_UberClone.framework in Frameworks */,
+				39C7EE10C4B17D9B69EA25DD /* Pods_TaxiApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,7 +109,8 @@
 				2457858428F40326001AF31D /* CoreLocationViewModel.swift */,
 				245B5DA328FB168F00F4FD10 /* ApplicationViewModel.swift */,
 			);
-			path = ViewModel;
+			name = ViewModel;
+			path = TaxiApp/ViewModel;
 			sourceTree = "<group>";
 		};
 		24C7A9D228BE46980022105E = {
@@ -116,7 +119,7 @@
 				245B5DA128FB164C00F4FD10 /* Model.swift */,
 				245C508A2961E7B400BC4DBC /* SelectDrivingModeView.swift */,
 				242F5F102992936E00E23CFA /* DrivingView.swift */,
-				24C7A9DD28BE46980022105E /* UberClone */,
+				24C7A9DD28BE46980022105E /* TaxiApp */,
 				24F2B24A29325C9D00C39F4B /* Driver */,
 				24C7A9DC28BE46980022105E /* Products */,
 				3C586ED49C7D87CF192964E3 /* Pods */,
@@ -127,16 +130,16 @@
 		24C7A9DC28BE46980022105E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				24C7A9DB28BE46980022105E /* UberClone.app */,
+				24C7A9DB28BE46980022105E /* TaxiApp.app */,
 				24F2B24929325C9D00C39F4B /* Driver.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		24C7A9DD28BE46980022105E /* UberClone */ = {
+		24C7A9DD28BE46980022105E /* TaxiApp */ = {
 			isa = PBXGroup;
 			children = (
-				24C7A9DE28BE46990022105E /* UberCloneApp.swift */,
+				24C7A9DE28BE46990022105E /* TaxiAppApp.swift */,
 				245B5DA028FB163600F4FD10 /* ViewModel */,
 				24C7A9E028BE46990022105E /* ContentView.swift */,
 				24C7A9EE28BE499B0022105E /* BottomSheet.swift */,
@@ -149,7 +152,7 @@
 				24C7A9E228BE469B0022105E /* Assets.xcassets */,
 				24C7A9E428BE469B0022105E /* Preview Content */,
 			);
-			path = UberClone;
+			name = TaxiApp;
 			sourceTree = "<group>";
 		};
 		24C7A9E428BE469B0022105E /* Preview Content */ = {
@@ -157,7 +160,8 @@
 			children = (
 				24C7A9E528BE469B0022105E /* Preview Assets.xcassets */,
 			);
-			path = "Preview Content";
+			name = "Preview Content";
+			path = "TaxiApp/Preview Content";
 			sourceTree = "<group>";
 		};
 		24F2B24A29325C9D00C39F4B /* Driver */ = {
@@ -194,6 +198,8 @@
 				7D2890F25F1C2C704A7E4787 /* Pods-UberClone.release.xcconfig */,
 				848492516C1C7588866B642E /* Pods-Driver.debug.xcconfig */,
 				BDBAA7EEAE90AD0046201000 /* Pods-Driver.release.xcconfig */,
+				BA50C7DD26D1C7E7C3617DD0 /* Pods-TaxiApp.debug.xcconfig */,
+				97E96D190CF16E2996DF7C8A /* Pods-TaxiApp.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -201,8 +207,8 @@
 		524FE0B387913153945D2FD6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				ACBA9B99B7972D92873E0B91 /* Pods_UberClone.framework */,
 				48DC25B97BB0658CC93F2557 /* Pods_Driver.framework */,
+				2BE98C67C9DA921AC1249BF2 /* Pods_TaxiApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -210,9 +216,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		24C7A9DA28BE46980022105E /* UberClone */ = {
+		24C7A9DA28BE46980022105E /* TaxiApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 24C7A9E928BE469B0022105E /* Build configuration list for PBXNativeTarget "UberClone" */;
+			buildConfigurationList = 24C7A9E928BE469B0022105E /* Build configuration list for PBXNativeTarget "TaxiApp" */;
 			buildPhases = (
 				C4261DF28A10195A61EC4002 /* [CP] Check Pods Manifest.lock */,
 				24C7A9D728BE46980022105E /* Sources */,
@@ -224,9 +230,9 @@
 			);
 			dependencies = (
 			);
-			name = UberClone;
+			name = TaxiApp;
 			productName = UberClone;
-			productReference = 24C7A9DB28BE46980022105E /* UberClone.app */;
+			productReference = 24C7A9DB28BE46980022105E /* TaxiApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 		24F2B24829325C9D00C39F4B /* Driver */ = {
@@ -266,7 +272,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 24C7A9D628BE46980022105E /* Build configuration list for PBXProject "UberClone" */;
+			buildConfigurationList = 24C7A9D628BE46980022105E /* Build configuration list for PBXProject "TaxiApp" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -279,7 +285,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				24C7A9DA28BE46980022105E /* UberClone */,
+				24C7A9DA28BE46980022105E /* TaxiApp */,
 				24F2B24829325C9D00C39F4B /* Driver */,
 			);
 		};
@@ -324,7 +330,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-UberClone-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-TaxiApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -354,15 +360,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-UberClone/Pods-UberClone-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-TaxiApp/Pods-TaxiApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-UberClone/Pods-UberClone-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-TaxiApp/Pods-TaxiApp-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-UberClone/Pods-UberClone-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TaxiApp/Pods-TaxiApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F723162CFD6AF6A89F6F4280 /* [CP] Check Pods Manifest.lock */ = {
@@ -403,7 +409,7 @@
 				245B5DA228FB164C00F4FD10 /* Model.swift in Sources */,
 				24C7A9EF28BE499B0022105E /* BottomSheet.swift in Sources */,
 				24C452EC28F6C9E400A362F8 /* UserLocationViews.swift in Sources */,
-				24C7A9DF28BE46990022105E /* UberCloneApp.swift in Sources */,
+				24C7A9DF28BE46990022105E /* TaxiAppApp.swift in Sources */,
 				246D3FD128C4CA3700A71BF4 /* SelectRideView.swift in Sources */,
 				242F5F112992936E00E23CFA /* DrivingView.swift in Sources */,
 				24F54AB0291938B200FC5938 /* SettingsView.swift in Sources */,
@@ -548,23 +554,23 @@
 		};
 		24C7A9EA28BE469B0022105E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 14D642F801E064AAE2F4C2B3 /* Pods-UberClone.debug.xcconfig */;
+			baseConfigurationReference = BA50C7DD26D1C7E7C3617DD0 /* Pods-TaxiApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"UberClone/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"TaxiApp/Preview Content\"";
 				DEVELOPMENT_TEAM = B6Q547G5NL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = UberClone/Info.plist;
+				INFOPLIST_FILE = TaxiApp/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to offer you some rides";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -580,23 +586,23 @@
 		};
 		24C7A9EB28BE469B0022105E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7D2890F25F1C2C704A7E4787 /* Pods-UberClone.release.xcconfig */;
+			baseConfigurationReference = 97E96D190CF16E2996DF7C8A /* Pods-TaxiApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"UberClone/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"TaxiApp/Preview Content\"";
 				DEVELOPMENT_TEAM = B6Q547G5NL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = UberClone/Info.plist;
+				INFOPLIST_FILE = TaxiApp/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to offer you some rides";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -673,7 +679,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		24C7A9D628BE46980022105E /* Build configuration list for PBXProject "UberClone" */ = {
+		24C7A9D628BE46980022105E /* Build configuration list for PBXProject "TaxiApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				24C7A9E728BE469B0022105E /* Debug */,
@@ -682,7 +688,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		24C7A9E928BE469B0022105E /* Build configuration list for PBXNativeTarget "UberClone" */ = {
+		24C7A9E928BE469B0022105E /* Build configuration list for PBXNativeTarget "TaxiApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				24C7A9EA28BE469B0022105E /* Debug */,

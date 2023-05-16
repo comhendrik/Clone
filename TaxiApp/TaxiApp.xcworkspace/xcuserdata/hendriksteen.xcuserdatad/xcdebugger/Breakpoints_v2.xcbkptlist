@@ -140,8 +140,8 @@
             filePath = "Model.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "506"
-            endingLineNumber = "506"
+            startingLineNumber = "509"
+            endingLineNumber = "509"
             landmarkName = "CLLocationCoordinate2D"
             landmarkType = "21">
          </BreakpointContent>

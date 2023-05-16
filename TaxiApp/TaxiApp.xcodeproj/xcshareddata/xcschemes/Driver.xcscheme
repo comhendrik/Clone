@@ -17,7 +17,7 @@
                BlueprintIdentifier = "24F2B24829325C9D00C39F4B"
                BuildableName = "Driver.app"
                BlueprintName = "Driver"
-               ReferencedContainer = "container:UberClone.xcodeproj">
+               ReferencedContainer = "container:TaxiApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,7 +47,7 @@
             BlueprintIdentifier = "24F2B24829325C9D00C39F4B"
             BuildableName = "Driver.app"
             BlueprintName = "Driver"
-            ReferencedContainer = "container:UberClone.xcodeproj">
+            ReferencedContainer = "container:TaxiApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "24F2B24829325C9D00C39F4B"
             BuildableName = "Driver.app"
             BlueprintName = "Driver"
-            ReferencedContainer = "container:UberClone.xcodeproj">
+            ReferencedContainer = "container:TaxiApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -16,7 +16,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 }
 
 @main
-struct UberCloneApp: App {
+struct TaxiAppApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
