@@ -35,8 +35,6 @@
 		24F2B25329325C9E00C39F4B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24F2B25229325C9E00C39F4B /* Preview Assets.xcassets */; };
 		24F2B25729325DFD00C39F4B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245B5DA128FB164C00F4FD10 /* Model.swift */; };
 		24F2B25B2932639400C39F4B /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2B25A2932639400C39F4B /* AccountViewModel.swift */; };
-		24F2B25D2932651800C39F4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24F2B25C2932651800C39F4B /* GoogleService-Info.plist */; };
-		24F2B25F2932655000C39F4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24F2B25E2932655000C39F4B /* GoogleService-Info.plist */; };
 		24F54AB0291938B200FC5938 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F54AAF291938B200FC5938 /* SettingsView.swift */; };
 		39C7EE10C4B17D9B69EA25DD /* Pods_TaxiApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BE98C67C9DA921AC1249BF2 /* Pods_TaxiApp.framework */; };
 		D42054DD3D187BF286AA48E3 /* Pods_Driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48DC25B97BB0658CC93F2557 /* Pods_Driver.framework */; };
@@ -71,8 +69,6 @@
 		24F2B24F29325C9E00C39F4B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		24F2B25229325C9E00C39F4B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		24F2B25A2932639400C39F4B /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
-		24F2B25C2932651800C39F4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "TaxiApp/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		24F2B25E2932655000C39F4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		24F54AAF291938B200FC5938 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = TaxiApp/SettingsView.swift; sourceTree = "<group>"; };
 		2BE98C67C9DA921AC1249BF2 /* Pods_TaxiApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaxiApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48DC25B97BB0658CC93F2557 /* Pods_Driver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Driver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -148,7 +144,6 @@
 				247CC80C291679AF00A3857C /* MoneyInformationView.swift */,
 				246D3FD028C4CA3700A71BF4 /* SelectRideView.swift */,
 				24F54AAF291938B200FC5938 /* SettingsView.swift */,
-				24F2B25C2932651800C39F4B /* GoogleService-Info.plist */,
 				24C7A9E228BE469B0022105E /* Assets.xcassets */,
 				24C7A9E428BE469B0022105E /* Preview Content */,
 			);
@@ -176,7 +171,6 @@
 				24665539295DBCB3000B3FA6 /* UpdateProfileView.swift */,
 				245C50882961E5A100BC4DBC /* CreateProfileView.swift */,
 				24600C2B29606C5A0020A649 /* LoginView.swift */,
-				24F2B25E2932655000C39F4B /* GoogleService-Info.plist */,
 				24F2B24F29325C9E00C39F4B /* Assets.xcassets */,
 				24F2B25129325C9E00C39F4B /* Preview Content */,
 			);
@@ -298,7 +292,6 @@
 			files = (
 				24C7A9E628BE469B0022105E /* Preview Assets.xcassets in Resources */,
 				24C7A9E328BE469B0022105E /* Assets.xcassets in Resources */,
-				24F2B25D2932651800C39F4B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,7 +300,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				24F2B25329325C9E00C39F4B /* Preview Assets.xcassets in Resources */,
-				24F2B25F2932655000C39F4B /* GoogleService-Info.plist in Resources */,
 				24F2B25029325C9E00C39F4B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -576,7 +568,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = HendrikSteen.de.UberClone;
+				PRODUCT_BUNDLE_IDENTIFIER = name.land.TaxiApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -608,7 +600,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = HendrikSteen.de.UberClone;
+				PRODUCT_BUNDLE_IDENTIFIER = name.land.TaxiApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -638,7 +630,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = HendrikSteen.de.Driver;
+				PRODUCT_BUNDLE_IDENTIFIER = name.land.Driver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -668,7 +660,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = HendrikSteen.de.Driver;
+				PRODUCT_BUNDLE_IDENTIFIER = name.land.Driver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

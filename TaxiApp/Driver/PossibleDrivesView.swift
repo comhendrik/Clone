@@ -142,23 +142,38 @@ struct PossibleDriveInformationView: View {
     let acceptAction: () -> Void
     let closeAction: () -> Void
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             if possibleDrive != nil {
+                HStack {
+                    Text("Drive:")
+                        .fontWeight(.bold)
+                    Spacer()
+                    
+                }
                 Text(possibleDrive!.id)
-                Text("\(possibleDrive!.price, specifier: "%.2f")")
-                Button {
-                    acceptAction()
-                } label: {
-                    Text("Accept drive")
+                Text("\(possibleDrive!.price, specifier: "%.2f")$")
+                HStack {
+                    Spacer()
+                    Button {
+                        closeAction()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(.red)
+                    }
+                    Button {
+                        acceptAction()
+                    } label: {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(buttonColor)
+                    }
+                    Spacer()
                 }
             } else {
                 Text("Problems with drive")
             }
-            Button {
-                closeAction()
-            } label: {
-                Text("Close")
-            }
+            
 
         }
         .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 10))
