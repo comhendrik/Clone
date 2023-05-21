@@ -1,7 +1,7 @@
 # TaxiApp
 
 Description:<br/>
-Taxi application for the iOS platform, developed in SwiftUI. You can order a taxi without creating an account. While you can create an account to be a taxi driver<br/>
+Taxi application for the iOS platform, developed in SwiftUI. You can order a taxi based on your Location(GeoFire and Firebase) without creating an account. While you can create an account to be a taxi driver<br/>
 
 Why I have built this project:<br/>
 I created this project to learn more about reproducing some UI Designs and how to handle the communication between apps.<br/>
